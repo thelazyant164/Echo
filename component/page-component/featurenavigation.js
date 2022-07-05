@@ -1,10 +1,12 @@
 import React from 'react';
 import { Files } from '../files';
-import { Homepage } from '../homepage';
+import { Record} from '../homepage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const  Tab = createBottomTabNavigator();
+const  Stack= createStackNavigator();
 export default function Navigation() {
   return (
     <NavigationContainer>

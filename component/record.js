@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { PermissionsAndroid } from "react-native";
 import Recording from "react-native-recording";
 
-export const RecordPage = () =>
+export const RecordPage = ({navigation}) =>
 {
     return (
         <View>
