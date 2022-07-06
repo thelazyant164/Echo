@@ -7,7 +7,7 @@ export const Filebutton = (props) =>{
     const {type,name} = props;
     return(
         <View>
-            <Text></Text>
+            <Text>{name}</Text>
             <Image></Image>
         </View>
     );

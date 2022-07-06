@@ -1,6 +1,7 @@
 import {React,useState,useEffect} from 'react';
 import { StyleSheet, Text, View,FlatList,TouchableOpacity} from 'react-native';
 import { Featurebutton } from './page-component/feature-button';
+import { Header } from './page-component/header';
 //import RNFS from 'react-native-fs';
 
 
@@ -13,7 +14,10 @@ export const Files = ({navigation}) =>
     })
 
     return(
-        <View >
+        <View>
+            <Header></Header>
+        <View style= {{marginTop:60}}>
+            <Text style={{textAlign: "center",fontSize:20}}>File Storage</Text>
             <TouchableOpacity style={style.addbutton} onPress={() =>{
             
             }}>
@@ -34,7 +38,6 @@ export const Files = ({navigation}) =>
                     )
                     }
                 }
-               
                 />
                 </View>
             </View>
@@ -54,13 +57,10 @@ export const Files = ({navigation}) =>
                         }
                     }
                     >
-
                     </FlatList>
-
                 </View>
-
             </View>
-            
+        </View>
         </View>
     )
 }

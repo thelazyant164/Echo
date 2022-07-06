@@ -1,9 +1,6 @@
-import {React, useState} from 'react';
+import {React} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import { BorderlessButton } from 'react-native-gesture-handler';
 
 export const Featurebutton=(props)=>
 {
@@ -13,7 +10,19 @@ export const Featurebutton=(props)=>
     return(
         <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button }>
             <View style={style.content}>
-            <MaterialCommunityIcons name={feature.toLowerCase()} size={20}/>
+            <MaterialCommunityIcons name={
+                ()=>{
+                    if(feature.toLowerCase()=="Noise cancelling"){
+                        return ""
+
+                    }
+                    else{
+                        return ""
+                    }
+                }
+                }
+
+                size={20}/>
             <Text>{feature}</Text>
             </View>
         </TouchableOpacity>
