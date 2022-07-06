@@ -4,9 +4,11 @@ import { FileUploadForm } from './page-component/file-upload-form';
 
 export const SpeedToTextPage = ({navigation}) =>{
 return (
-    <View>
-        <Text>Speed to text works !!!</Text>
+   
+        <View style={{marginTop:60}}>
+        <Text style={{textAlign: 'center', fontSize:20}}>Speech to text</Text>
         <FileUploadForm></FileUploadForm>
-    </View>
+        </View>
+  
 )
 };
