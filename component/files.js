@@ -13,7 +13,6 @@ export const Files = ({navigation}) => {
     })
 
     return(
-<<<<<<< HEAD
         <View>
             <Header></Header>
         <View style= {{marginTop:60}}>
@@ -21,16 +20,11 @@ export const Files = ({navigation}) => {
             <TouchableOpacity style={style.addbutton} onPress={() =>{
             
             }}>
-=======
-        <View >
-            <TouchableOpacity style={style.addbutton} onPress={() => {}}>
->>>>>>> aa829a1eace25df28073de501b7a68cf1f2432fb
                 <Text style={{fontSize:30,textAlign:"center",marginTop:2}}>+</Text>
             </TouchableOpacity>
             <View style={style.feature_container}>
                 <Text>Recently</Text>
                 <View style={style.container}>
-<<<<<<< HEAD
                 <FlatList
                     numColumns={4}
                     
@@ -44,15 +38,6 @@ export const Files = ({navigation}) => {
                     }
                 }
                 />
-=======
-                    <FlatList
-                        numColumns={4}
-                        data={data}
-                        renderItem={({item, key}) =>
-                            <Featurebutton feature={item} navigation={navigation}></Featurebutton>
-                        }
-                    />
->>>>>>> aa829a1eace25df28073de501b7a68cf1f2432fb
                 </View>
             </View>
 
@@ -69,10 +54,7 @@ export const Files = ({navigation}) => {
                     </FlatList>
                 </View>
             </View>
-<<<<<<< HEAD
         </View>
-=======
->>>>>>> aa829a1eace25df28073de501b7a68cf1f2432fb
         </View>
     )
 }
