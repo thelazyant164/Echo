@@ -1,31 +1,29 @@
 import { React, useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Modal} from 'react-native';
-import RNFS from 'react-native-fs';
+import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
+// Requires Expo-compatible RNFS -> to be done last
 
-export const FolderInput= () =>{
-
+export const FolderInput = ({ setShowModal }) =>{
   const [activeFolderName, setActiveFolderName] = useState(null);
-  useEffect(() => {
-      setActiveFolderName(RNFS.DocumentDirectoryPath); // Run on first render to identify platform-specific directory name
-  }, [])
+  // useEffect(() => {
+  //     setActiveFolderName(RNFS.DocumentDirectoryPath); // Run on first render to identify platform-specific directory name
+  // }, [])
 
   const [files, setFiles] = useState([]);
 
-  const getFileContent = async (path) => {
-    const reader = await RNFS.readDir(path);
-    setFiles(reader);
-  };
+  // const getFileContent = async (path) => {
+  //   const reader = await RNFS.readDir(path);
+  //   setFiles(reader);
+  // };
 
-  useEffect(() => {
-    getFileContent(activeFolderName); // Read content of current active directory
-  }, [activeFolderName]);
+  // useEffect(() => {
+  //   getFileContent(activeFolderName); // Read content of current active directory
+  // }, [activeFolderName]);
 
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType="slide"
+//        animationType="slide"
         transparent={true}
-        visible={modalVisible}
         onRequestClose={() => {
           Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
@@ -36,7 +34,7 @@ export const FolderInput= () =>{
             <Text style={styles.modalText}>Hello World!</Text>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
+              onPress={() => setShowModal(false)}
             >
               <Text style={styles.textStyle}>Hide Modal</Text>
             </Pressable>
@@ -53,7 +51,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: "center",
       alignItems: "center",
-      marginTop: 22
+      marginTop: 22,
     },
     modalView: {
       margin: 20,

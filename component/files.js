@@ -1,19 +1,22 @@
 import { React,useState,useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import { Featurebutton } from './page-component/feature-button';
-//import RNFS from 'react-native-fs';
+import { FolderInput } from './page-component/newfolder-input';
 
 
-export const Files = ({navigation}) => {
+
+export const Files = ({ navigation }) => {
     
     const [data, setData] = useState("");
+    const [showModal, setShowModal] = useState(false);
     useEffect(() => {
     // setData(RNFS.DocumentDirectoryPath)
     })
 
     return(
         <View >
-            <TouchableOpacity style={style.addbutton} onPress={() => {}}>
+            {showModal && <FolderInput setShowModal={ setShowModal }></FolderInput>}
+            <TouchableOpacity style={style.addbutton} onPress={() => {setShowModal(true)}}>
                 <Text style={{fontSize:30,textAlign:"center",marginTop:2}}>+</Text>
             </TouchableOpacity>
             <View style={style.feature_container}>
