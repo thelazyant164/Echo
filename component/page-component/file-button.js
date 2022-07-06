@@ -1,17 +1,16 @@
-import {React,useState} from 'react';
-import { StyleSheet, Text, View,Image } from 'react-native';
+import { React, useState } from 'react';
+import {
+  StyleSheet, Text, View, Image,
+} from 'react-native';
 
-
-export const Filebutton = (props) =>{
-
-    const {type,name} = props;
-    return(
-        <View>
-            <Text>{name}</Text>
-            <Image></Image>
-        </View>
-    );
-
+export function Filebutton(props) {
+  const { type, name } = props;
+  return (
+    <View>
+      <Text>{name}</Text>
+      <Image />
+    </View>
+  );
 }
 
 const style = StyleSheet.create({
