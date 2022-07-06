@@ -20,6 +20,7 @@ export const FileUploadForm = () =>
 
 const styles = StyleSheet.create({
     container: {
+        alignItems:"center",
         borderRadius:12,
         marginTop:80,
         backgroundColor:"#D9D9D9",
