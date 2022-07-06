@@ -1,34 +1,43 @@
 import { React,useState,useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import { Featurebutton } from './page-component/feature-button';
-import { FolderInput } from './page-component/newfolder-input';
+import { Header } from './page-component/header';
+//import RNFS from 'react-native-fs';
 
 
-
-export const Files = ({ navigation }) => {
+export const Files = ({navigation}) => {
     
     const [data, setData] = useState("");
-    const [showModal, setShowModal] = useState(false);
     useEffect(() => {
     // setData(RNFS.DocumentDirectoryPath)
     })
 
     return(
-        <View >
-            {showModal && <FolderInput setShowModal={ setShowModal }></FolderInput>}
-            <TouchableOpacity style={style.addbutton} onPress={() => {setShowModal(true)}}>
+        <View>
+            <Header></Header>
+        <View style= {{marginTop:60}}>
+            <Text style={{textAlign: "center",fontSize:20}}>File Storage</Text>
+            <TouchableOpacity style={style.addbutton} onPress={() =>{
+            
+            }}>
                 <Text style={{fontSize:30,textAlign:"center",marginTop:2}}>+</Text>
             </TouchableOpacity>
             <View style={style.feature_container}>
                 <Text>Recently</Text>
                 <View style={style.container}>
-                    <FlatList
-                        numColumns={4}
-                        data={data}
-                        renderItem={({item, key}) =>
-                            <Featurebutton feature={item} navigation={navigation}></Featurebutton>
-                        }
-                    />
+                <FlatList
+                    numColumns={4}
+                    
+                    data={data}
+                    renderItem={
+                    ({item,key}) => 
+                    {
+                    return(
+                        <Featurebutton feature={item} navigation={navigation}></Featurebutton>
+                    )
+                    }
+                }
+                />
                 </View>
             </View>
 
@@ -45,6 +54,7 @@ export const Files = ({ navigation }) => {
                     </FlatList>
                 </View>
             </View>
+        </View>
         </View>
     )
 }
