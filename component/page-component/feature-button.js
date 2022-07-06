@@ -2,13 +2,10 @@ import {React} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export const Featurebutton=(props)=>
-{
-    const {feature,navigation} = props;
-    if( feature!=null)
-    {
-    return(
-        <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button }>
+export const Featurebutton = props => {
+    const { feature, navigation } = props;
+    if (feature != null) {
+        return <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button }>
             <View style={style.content}>
             <MaterialCommunityIcons name={
                 ()=>{
@@ -26,17 +23,11 @@ export const Featurebutton=(props)=>
             <Text>{feature}</Text>
             </View>
         </TouchableOpacity>
-    )
-    }
-    else {
-        return(
-            <View>
-            </View>
-        )
-
+    } else {
+        return <View>
+        </View>
     }
 }
-
 
 const style = StyleSheet.create({
     button:{
@@ -54,6 +45,4 @@ const style = StyleSheet.create({
         textAlign:"center",
         justifyContent:"center"
     }
-
 })
-

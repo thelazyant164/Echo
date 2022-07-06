@@ -1,15 +1,26 @@
-import {React,useState,useEffect} from 'react';
-import { StyleSheet, Text, View,Modal} from 'react-native';
-////import RNFS from 'react-native-fs';
+import { React, useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Modal} from 'react-native';
+import RNFS from 'react-native-fs';
 
-export const FolderInput= () =>{_
+export const FolderInput= () =>{
 
+  const [activeFolderName, setActiveFolderName] = useState(null);
+  useEffect(() => {
+      setActiveFolderName(RNFS.DocumentDirectoryPath); // Run on first render to identify platform-specific directory name
+  }, [])
 
-const [foldername,setName]=useState("newfolder")
-useEffect(()=>{_
-    
-})
-return (
+  const [files, setFiles] = useState([]);
+
+  const getFileContent = async (path) => {
+    const reader = await RNFS.readDir(path);
+    setFiles(reader);
+  };
+
+  useEffect(() => {
+    getFileContent(activeFolderName); // Read content of current active directory
+  }, [activeFolderName]);
+
+  return (
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
@@ -33,7 +44,7 @@ return (
         </View>
       </Modal>
     </View>
-)
+  )
 }
 
 
@@ -79,4 +90,4 @@ const styles = StyleSheet.create({
       marginBottom: 15,
       textAlign: "center"
     }
-  });
+});
