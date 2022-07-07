@@ -5,6 +5,9 @@ import {
 import { FileUploadForm } from './page-component/file-upload-form';
 
 export function SpeechToTextPage({ navigation }) {
+  const Speedtotext = (audiofile) => {
+
+  };
   return (
     <View style={{ marginTop: 60 }}>
       <Text style={{ textAlign: 'center', fontSize: 20 }}>Speech to text</Text>

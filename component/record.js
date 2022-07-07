@@ -10,18 +10,15 @@ export function RecordPage({ navigation }) {
 
   async function startRecording() {
     try {
-      console.log('Requesting permissions..');
       await Audio.requestPermissionsAsync();
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
-      console.log('Starting recording..');
-      const { recording } = await Audio.Recording.createAsync(
+      const { newrecording } = await Audio.Recording.createAsync(
         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
       );
-      setRecording(recording);
-      console.log('Recording started');
+      setRecording(newrecording);
     } catch (err) {
       console.error('Failed to start recording', err);
     }
@@ -41,6 +38,7 @@ export function RecordPage({ navigation }) {
 
       <TouchableOpacity onPress={() => {
         setRecording(!recording);
+        // eslint-disable-next-line no-unused-expressions
         recording ? stopRecording() : startRecording();
       }}
       >

@@ -33,9 +33,11 @@ const styles = StyleSheet.create({
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
+    width: 100,
   },
   buttonClose: {
     backgroundColor: '#2196F3',
+    width: 100,
   },
   textStyle: {
     color: 'white',
@@ -46,24 +48,28 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
-  modalInput: {
-    height: 20,
-    margin: 15,
+  input: {
+    borderColor: 'gray',
+    width: 150,
     borderWidth: 1,
+    borderRadius: 10,
     padding: 10,
+    marginTop: 10,
+    marginBottom: 10,
   },
 });
 
 export function FolderInput({ setShowModal }) {
   const [files, setFiles] = useState([]);
   // Read all files in current active directory
+  const [activeDirectory, setActiveDirectory] = useState('');
+  const createNewFolder = async () => {
+    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + activeDirectory, false);
+  };
   const getFileContent = async (path) => {
     const reader = await FileSystem.readDirectoryAsync(path);
     reader.forEach((file) => { setFiles(files.concat(file)); });
   };
-
-  const [activeDirectory, setActiveDirectory] = useState('');
-
   // Re-read content of current active directory when folder name changed
   useEffect(() => {
     setFiles([]);
@@ -83,16 +89,20 @@ export function FolderInput({ setShowModal }) {
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Hello World!</Text>
             <TextInput
-              style={styles.modalInput}
-              onSubmitEditing={setActiveDirectory}
+              style={styles.input}
+              onChangeText={setActiveDirectory}
               value={activeDirectory}
-              placeholder="Name your new export folder..."
+              placeholder="Folder name"
             />
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setShowModal(false)}
+              onPress={() => {
+                createNewFolder()
+                  .then(setShowModal(false))
+                  .catch((error) => { console.log(error); });
+              }}
             >
-              <Text style={styles.textStyle}>Hide Modal</Text>
+              <Text style={styles.textStyle}>Save</Text>
             </Pressable>
           </View>
         </View>

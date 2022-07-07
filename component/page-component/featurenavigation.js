@@ -17,26 +17,26 @@ export default function FeatureNavigation() {
         component={Homepage}
         options={{ headerShown: false }}
       />
-      {allfeature.map((feature) => (
-        <Stack.Screen
-          key={feature}
-          name={feature}
-          component={() => {
-            switch (feature) {
-              case 'Noise cancelling':
-                return <NoisecancellingPage />;
-              case 'Volume adjust':
-                return <VolumeAdjustPage />;
-              case 'Speech to text':
-                return <SpeechToTextPage />;
-              case 'Noise reduction record':
-                return <RecordPage />;
-              default:
-                return <Homepage />;
-            }
-          }}
-        />
-      ))}
+      <Stack.Screen
+        key="Volume adjust"
+        name="Volume adjust"
+        component={VolumeAdjustPage}
+      />
+      <Stack.Screen
+        key="Noise cancelling"
+        name="Noise cancelling"
+        component={NoisecancellingPage}
+      />
+      <Stack.Screen
+        key="Speech to text"
+        name="Speech to text"
+        component={SpeechToTextPage}
+      />
+      <Stack.Screen
+        key="Noise reduction record"
+        name="Noise reduction record"
+        component={RecordPage}
+      />
     </Stack.Navigator>
   );
 }
