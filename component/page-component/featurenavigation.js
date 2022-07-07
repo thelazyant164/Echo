@@ -19,27 +19,20 @@ export default function FeatureNavigation() {
       />
       {allfeature.map((feature) => (
         <Stack.Screen
+          key={feature}
           name={feature}
           component={() => {
-            if (feature === 'Noise cancelling') {
-              return (
-                <NoisecancellingPage />
-              );
-            }
-            if (feature === 'Volume adjust') {
-              return (
-                <VolumeAdjustPage />
-              );
-            }
-            if (feature === 'Speech to text') {
-              return (
-                <SpeechToTextPage />
-              );
-            }
-            if (feature === 'Noise reduction record') {
-              return (
-                <RecordPage />
-              );
+            switch (feature) {
+              case 'Noise cancelling':
+                return <NoisecancellingPage />;
+              case 'Volume adjust':
+                return <VolumeAdjustPage />;
+              case 'Speech to text':
+                return <SpeechToTextPage />;
+              case 'Noise reduction record':
+                return <RecordPage />;
+              default:
+                return <Homepage />;
             }
           }}
         />

@@ -30,14 +30,14 @@ export function Featurebutton(props) {
         <View style={style.content}>
           <MaterialCommunityIcons
             name={
-                () => {
-                  if (feature.toLowerCase() === 'noise cancelling') {
-                    return '';
-                  }
-
+              () => {
+                if (feature.toLowerCase() === 'noise cancelling') {
                   return '';
                 }
-                }
+
+                return '';
+              }
+            }
             size={20}
           />
           <Text>{feature}</Text>

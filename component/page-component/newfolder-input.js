@@ -1,8 +1,8 @@
 import { React, useState, useEffect } from 'react';
 import {
-  StyleSheet, Text, View, Modal, Pressable, Alert,
+  StyleSheet, Text, TextInput, View, Modal, Pressable, Alert,
 } from 'react-native';
-// Requires Expo-compatible RNFS -> to be done last
+import * as FileSystem from 'expo-file-system';
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -46,25 +46,29 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
+  modalInput: {
+    height: 20,
+    margin: 15,
+    borderWidth: 1,
+    padding: 10,
+  },
 });
 
 export function FolderInput({ setShowModal }) {
-  const [activeFolderName, setActiveFolderName] = useState(null);
-  // useEffect(() => {
-  //     setActiveFolderName(RNFS.DocumentDirectoryPath);
-  // Run on first render to identify platform-specific directory name
-  // }, [])
-
   const [files, setFiles] = useState([]);
+  // Read all files in current active directory
+  const getFileContent = async (path) => {
+    const reader = await FileSystem.readDirectoryAsync(path);
+    reader.forEach((file) => { setFiles(files.concat(file)); });
+  };
 
-  // const getFileContent = async (path) => {
-  //   const reader = await RNFS.readDir(path);
-  //   setFiles(reader);
-  // };
+  const [activeDirectory, setActiveDirectory] = useState('');
 
-  // useEffect(() => {
-  //   getFileContent(activeFolderName); // Read content of current active directory
-  // }, [activeFolderName]);
+  // Re-read content of current active directory when folder name changed
+  useEffect(() => {
+    setFiles([]);
+    getFileContent(FileSystem.documentDirectory + activeDirectory);
+  }, [activeDirectory]);
 
   return (
     <View style={styles.centeredView}>
@@ -78,6 +82,12 @@ export function FolderInput({ setShowModal }) {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Hello World!</Text>
+            <TextInput
+              style={styles.modalInput}
+              onSubmitEditing={setActiveDirectory}
+              value={activeDirectory}
+              placeholder="Name your new export folder..."
+            />
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => setShowModal(false)}
