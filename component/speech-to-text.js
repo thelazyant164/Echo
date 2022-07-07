@@ -2,11 +2,13 @@ import { React, useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
 } from 'react-native';
+import { FileUploadForm } from './page-component/file-upload-form';
 
-export function SpeedToTextPage({ navigation }) {
+export function SpeechToTextPage({ navigation }) {
   return (
-    <View>
-      <Text>Speed to text works !!!</Text>
+    <View style={{ marginTop: 60 }}>
+      <Text style={{ textAlign: 'center', fontSize: 20 }}>Speech to text</Text>
+      <FileUploadForm />
     </View>
   );
 }

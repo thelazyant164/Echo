@@ -5,7 +5,7 @@ import { Homepage } from '../homepage';
 import { RecordPage } from '../record';
 import { VolumeAdjustPage } from '../volume-adjust';
 import { NoisecancellingPage } from '../noisecancelling';
-import { SpeedToTextPage } from '../speech-to-text';
+import { SpeechToTextPage } from '../speech-to-text';
 
 const Stack = createStackNavigator();
 export default function FeatureNavigation() {
@@ -33,7 +33,7 @@ export default function FeatureNavigation() {
             }
             if (feature === 'Speech to text') {
               return (
-                <SpeedToTextPage />
+                <SpeechToTextPage />
               );
             }
             if (feature === 'Noise reduction record') {
