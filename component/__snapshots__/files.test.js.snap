@@ -1,0 +1,176 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Files /> Renders correctly 1`] = `
+<View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#D9D9D9",
+        "height": 60,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "fontSize": 24,
+          "justifyContent": "center",
+          "marginLeft": 20,
+          "marginTop": 10,
+        }
+      }
+    >
+      Echo
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "marginTop": 60,
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "fontSize": 20,
+          "textAlign": "center",
+        }
+      }
+    >
+      File Storage
+    </Text>
+    <View
+      style={
+        Object {
+          "marginLeft": 10,
+          "marginRight": 10,
+          "marginTop": 100,
+        }
+      }
+    >
+      <Text>
+        Recently
+      </Text>
+      <View
+        style={
+          Object {
+            "backgroundColor": "#F8F5F5",
+            "borderRadius": 12,
+          }
+        }
+      >
+        <RCTScrollView
+          data=""
+          disableVirtualization={false}
+          getItem={[Function]}
+          getItemCount={[Function]}
+          horizontal={false}
+          initialNumToRender={10}
+          keyExtractor={[Function]}
+          maxToRenderPerBatch={10}
+          onContentSizeChange={[Function]}
+          onEndReachedThreshold={2}
+          onLayout={[Function]}
+          onMomentumScrollEnd={[Function]}
+          onScroll={[Function]}
+          onScrollBeginDrag={[Function]}
+          onScrollEndDrag={[Function]}
+          removeClippedSubviews={false}
+          renderItem={[Function]}
+          scrollEventThrottle={50}
+          stickyHeaderIndices={Array []}
+          updateCellsBatchingPeriod={50}
+          viewabilityConfigCallbackPairs={Array []}
+          windowSize={21}
+        >
+          <View />
+        </RCTScrollView>
+      </View>
+    </View>
+    <View
+      style={
+        Object {
+          "marginLeft": 10,
+          "marginRight": 10,
+          "marginTop": 100,
+        }
+      }
+    >
+      <Text>
+        Feature
+      </Text>
+      <View
+        style={
+          Object {
+            "backgroundColor": "#F8F5F5",
+            "borderRadius": 12,
+          }
+        }
+      >
+        <RCTScrollView
+          data=""
+          disableVirtualization={false}
+          getItem={[Function]}
+          getItemCount={[Function]}
+          horizontal={false}
+          initialNumToRender={10}
+          keyExtractor={[Function]}
+          maxToRenderPerBatch={10}
+          onContentSizeChange={[Function]}
+          onEndReachedThreshold={2}
+          onLayout={[Function]}
+          onMomentumScrollEnd={[Function]}
+          onScroll={[Function]}
+          onScrollBeginDrag={[Function]}
+          onScrollEndDrag={[Function]}
+          removeClippedSubviews={false}
+          renderItem={[Function]}
+          scrollEventThrottle={50}
+          stickyHeaderIndices={Array []}
+          updateCellsBatchingPeriod={50}
+          viewabilityConfigCallbackPairs={Array []}
+          windowSize={21}
+        >
+          <View />
+        </RCTScrollView>
+      </View>
+    </View>
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "backgroundColor": "#D9D5D5",
+          "borderRadius": 30,
+          "height": 50,
+          "marginLeft": 350,
+          "marginTop": 700,
+          "opacity": 1,
+          "position": "absolute",
+          "width": 50,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "fontSize": 30,
+            "marginTop": 2,
+            "textAlign": "center",
+          }
+        }
+      >
+        +
+      </Text>
+    </View>
+  </View>
+</View>
+`;

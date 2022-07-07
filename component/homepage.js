@@ -11,7 +11,6 @@ const style = StyleSheet.create({
     marginTop: 100,
     marginLeft: 10,
     marginRight: 10,
-
   },
   container: {
     backgroundColor: '#F8F5F5',
@@ -21,7 +20,6 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-
 });
 
 const Stack = createNativeStackNavigator();
@@ -41,10 +39,10 @@ export function Homepage({ navigation }) {
               numColumns={4}
               data={data}
               renderItem={
-                    ({ item, key }) => (
-                      <Featurebutton feature={item} navigation={navigation} />
-                    )
-                }
+                ({ item, key }) => (
+                  <Featurebutton feature={item} navigation={navigation} />
+                )
+              }
             />
           </View>
         </View>
@@ -56,12 +54,11 @@ export function Homepage({ navigation }) {
               numColumns={4}
               data={allfeature}
               renderItem={
-                        ({ item, key }) => (
-                          <Featurebutton feature={item} navigation={navigation} />
-                        )
-                    }
+                ({ item, key }) => (
+                  <Featurebutton feature={item} navigation={navigation} />
+                )
+              }
             />
-
           </View>
 
         </View>

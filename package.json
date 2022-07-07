@@ -7,7 +7,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "test": "eslint ./component/ index.js App.js"
+    "lint": "eslint ./component/ index.js App.js",
+    "test": "jest"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.3.1",
@@ -37,11 +38,18 @@
     "eslint": "^8.19.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.5.3",
     "eslint-plugin-jsx-a11y": "^6.6.0",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-native": "^4.0.0",
-    "expo-dev-client": "^1.0.0"
+    "expo-dev-client": "^1.0.0",
+    "jest": "^27.5.1",
+    "jest-expo": "^45.0.1",
+    "react-test-renderer": "^17.0.2"
   },
-  "private": true
+  "private": true,
+  "jest": {
+    "preset": "jest-expo"
+  }
 }

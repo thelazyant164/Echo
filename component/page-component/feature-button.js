@@ -34,7 +34,6 @@ export function Featurebutton(props) {
                 if (feature.toLowerCase() === 'noise cancelling') {
                   return '';
                 }
-
                 return '';
               }
             }

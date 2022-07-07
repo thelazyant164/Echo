@@ -3,7 +3,6 @@ import {
   StyleSheet, Text, View, TouchableOpacity, Image, PermissionsAndroid,
 } from 'react-native';
 import { Audio } from 'expo-av';
-
 import Feather from 'react-native-vector-icons/Feather';
 
 export function RecordPage({ navigation }) {
