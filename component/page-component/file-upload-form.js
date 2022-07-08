@@ -28,7 +28,10 @@ export function FileUploadForm() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Choosing your file from</Text>
-      <View style={{ display: 'flex', flexDirection: 'row', marginTop: 100 }}>
+      <View style={{
+        display: 'flex', flexDirection: 'row', marginTop: 100, marginLeft: 40,
+      }}
+      >
         <TouchableOpacity style={{ marginLeft: 20, marginRight: 20 }}>
           <Entypo name="mobile" size={30} />
         </TouchableOpacity>

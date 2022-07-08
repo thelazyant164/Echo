@@ -16,7 +16,7 @@ const style = StyleSheet.create({
     borderRadius: 12,
   },
   content: {
-    margin: 3,
+    margin: 5,
     textAlign: 'center',
     justifyContent: 'center',
   },
@@ -32,10 +32,15 @@ export function Featurebutton(props) {
             name={
               () => {
                 if (feature.toLowerCase() === 'noise cancelling') {
-                  return '';
+                  return 'headphones';
+                } if (feature.toLowerCase() === 'volume adjust') {
+                  return 'volume-plus';
+                } if (feature.toLowerCase() === 'speech to text') {
+                  return 'file-document-online';
                 }
-                return '';
+                return 'mic';
               }
+
             }
             size={20}
           />

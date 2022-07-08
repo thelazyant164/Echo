@@ -4,9 +4,11 @@ import {
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
+import Timer from './page-component/timer';
 
 export function RecordPage({ navigation }) {
   const [recording, setRecording] = useState(false);
+  const [start, setStart] = useState(false);
 
   async function startRecording() {
     try {
@@ -25,7 +27,6 @@ export function RecordPage({ navigation }) {
   }
 
   async function stopRecording() {
-    console.log('Stopping recording..');
     setRecording(undefined);
     await recording.stopAndUnloadAsync();
     const uri = recording.getURI();
@@ -38,11 +39,12 @@ export function RecordPage({ navigation }) {
 
       <TouchableOpacity onPress={() => {
         setRecording(!recording);
+        setStart(!start);
         // eslint-disable-next-line no-unused-expressions
         recording ? stopRecording() : startRecording();
       }}
       >
-        { recording ? <Feather name="play" size={50} style={{ marginTop: 200 }} /> : <Feather name="pause" size={50} style={{ marginTop: 200 }} />}
+        { recording ? <Feather name="play" size={50} style={{ marginTop: 250 }} /> : <Feather name="pause" size={50} style={{ marginTop: 200 }} />}
       </TouchableOpacity>
     </View>
   );

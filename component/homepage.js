@@ -24,7 +24,7 @@ const style = StyleSheet.create({
 
 const Stack = createNativeStackNavigator();
 export function Homepage({ navigation }) {
-  const [data, setData] = useState(['Home', 'Files storage']);
+  const [data, setData] = useState(['Noise cancelling', 'Volume adjust']);
   const allfeature = ['Noise cancelling', 'Volume adjust', 'Speech to text', 'Noise reduction record'];
   return (
     <View>
