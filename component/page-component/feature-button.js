@@ -24,24 +24,36 @@ const style = StyleSheet.create({
 
 export function Featurebutton(props) {
   const { feature, navigation } = props;
-  if (feature != null) {
+  if (feature.toLowerCase() === 'noise cancelling') {
     return (
       <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
         <View style={style.content}>
           <MaterialCommunityIcons
-            name={
-              () => {
-                if (feature.toLowerCase() === 'noise cancelling') {
-                  return 'headphones';
-                } if (feature.toLowerCase() === 'volume adjust') {
-                  return 'volume-plus';
-                } if (feature.toLowerCase() === 'speech to text') {
-                  return 'file-document-online';
-                }
-                return 'mic';
-              }
-
-            }
+            name="headphones"
+            size={20}
+          />
+          <Text>{feature}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  } if (feature.toLowerCase() === 'volume adjust') {
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+        <View style={style.content}>
+          <MaterialCommunityIcons
+            name="volume-plus"
+            size={20}
+          />
+          <Text>{feature}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  } if (feature.toLowerCase() === 'speech to text') {
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+        <View style={style.content}>
+          <MaterialCommunityIcons
+            name="file-document-online"
             size={20}
           />
           <Text>{feature}</Text>
