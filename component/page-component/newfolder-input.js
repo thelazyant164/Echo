@@ -87,7 +87,7 @@ export function FolderInput({ setShowModal }) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
+            <Text style={styles.modalText}>Create new folder</Text>
             <TextInput
               style={styles.input}
               onChangeText={setActiveDirectory}
