@@ -16,7 +16,7 @@ const style = StyleSheet.create({
     borderRadius: 12,
   },
   content: {
-    margin: 5,
+    margin: 10,
     textAlign: 'center',
     justifyContent: 'center',
   },
@@ -53,7 +53,19 @@ export function Featurebutton(props) {
       <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
         <View style={style.content}>
           <MaterialCommunityIcons
-            name="file-document-online"
+            name="file-document-outline"
+            size={20}
+          />
+          <Text>{feature}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  } if (feature.toLowerCase() === 'noise reduction record') {
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+        <View style={style.content}>
+          <MaterialCommunityIcons
+            name="microphone-outline"
             size={20}
           />
           <Text>{feature}</Text>
