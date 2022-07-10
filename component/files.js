@@ -33,27 +33,33 @@ const style = StyleSheet.create({
 });
 
 export function Files({ navigation }) {
-  const [data, setData] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [activeDirectory, setActiveDirectory] = useState('');
+  const getFileContent = async (path) => {
+    const reader = await FileSystem.readDirectoryAsync(path);
+    reader.forEach((file) => { setFiles(files.concat(file)); });
+  };
   useEffect(() => {
-    // setData(RNFS.DocumentDirectoryPath)
-  }, []);
+    setFiles([]);
+    getFileContent(FileSystem.documentDirectory + activeDirectory);
+  }, [activeDirectory]);
 
   return (
     <View>
       <Header />
       <View style={{ marginTop: 60 }}>
 
-        <Text style={{ textAlign: 'center', fontSize: 20 }}>File Storage</Text>
+        <Text style={{ textAlign: 'center', fontSize: 20 }}>Files Storage</Text>
 
         <View style={style.feature_container}>
-          <Text>Recently</Text>
+          <Text>Files in current directory</Text>
           <View style={style.container}>
             <FlatList
-              numColumns={4}
-              data={data}
-              renderItem={({ item, key }) =>
-                <Featurebutton feature={item} navigation={navigation} />}
+              numColumns={1}
+              data={files}
+              renderItem={({ item }) =>
+                <Text key={item}>{item}</Text>}
             />
           </View>
         </View>
@@ -63,7 +69,7 @@ export function Files({ navigation }) {
           <View style={style.container}>
             <FlatList
               numColumns={4}
-              data={data}
+              data={files}
               renderItem={({ item, key }) =>
                 <Featurebutton feature={item} navigation={navigation} />}
             />
@@ -77,7 +83,12 @@ export function Files({ navigation }) {
           <Text style={{ fontSize: 30, textAlign: 'center', marginTop: 2 }}>+</Text>
         </TouchableOpacity>
 
-        {showModal && <FolderInput setShowModal={setShowModal} />}
+        {showModal && (
+        <FolderInput
+          setShowModal={setShowModal}
+          setActiveDirectory={setActiveDirectory}
+        />
+        )}
 
       </View>
     </View>

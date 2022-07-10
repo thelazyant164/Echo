@@ -3,6 +3,9 @@ import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import * as Google from 'expo-google-app-auth';
+import GDrive from 'expo-google-drive-api-wrapper';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,9 +25,19 @@ const styles = StyleSheet.create({
 });
 
 export function FileUploadForm() {
+  const [accesstoken, setAccessToken] = useState('');
   const getFileDrive = () => {};
-  const getFileDevice = () => {};
-  const getFileICloud = () => {};
+  const getFileDevice = () => {
+    /*  const getFileContent = async (path) => {
+    const reader = await FileSystem.readDirectoryAsync(path);
+    reader.forEach((file) => { setFiles(files.concat(file)); });
+  }; */
+  };
+  const getFileICloud = () => {
+    if (GDrive.isInitialized) {
+      GDrive.setAccessToken(accesstoken);
+    }
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Choosing your file from</Text>

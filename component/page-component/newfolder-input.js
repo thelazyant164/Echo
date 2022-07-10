@@ -3,6 +3,7 @@ import {
   StyleSheet, Text, TextInput, View, Modal, Pressable, Alert,
 } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+import { StorageAccessFramework } from 'expo-file-system';
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -59,22 +60,29 @@ const styles = StyleSheet.create({
   },
 });
 
-export function FolderInput({ setShowModal }) {
-  const [files, setFiles] = useState([]);
-  // Read all files in current active directory
-  const [activeDirectory, setActiveDirectory] = useState('');
+export function FolderInput({ setShowModal, setActiveDirectory }) {
+  // Create new folder in current active directory
+  const [newDirectory, setNewDirectory] = useState('');
   const createNewFolder = async () => {
-    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + activeDirectory, false);
+    // Requests permissions for external directory
+    const permissions = await StorageAccessFramework
+      .requestDirectoryPermissionsAsync(`${FileSystem.documentDirectory}/Echo`);
+
+    if (!permissions.granted) {
+      return '';
+    }
+
+    // Gets SAF URI from response
+    const uri = permissions.directoryUri;
+    // await StorageAccessFramework.makeDirectoryAsync(uri, {
+    //   intermediates: true,
+    // });
+    const message = await StorageAccessFramework.makeDirectoryAsync(
+      FileSystem.documentDirectory,
+      newDirectory,
+    );
+    return message;
   };
-  const getFileContent = async (path) => {
-    const reader = await FileSystem.readDirectoryAsync(path);
-    reader.forEach((file) => { setFiles(files.concat(file)); });
-  };
-  // Re-read content of current active directory when folder name changed
-  useEffect(() => {
-    setFiles([]);
-    getFileContent(FileSystem.documentDirectory + activeDirectory);
-  }, [activeDirectory]);
 
   return (
     <View style={styles.centeredView}>
@@ -90,8 +98,8 @@ export function FolderInput({ setShowModal }) {
             <Text style={styles.modalText}>Create new folder</Text>
             <TextInput
               style={styles.input}
-              onChangeText={setActiveDirectory}
-              value={activeDirectory}
+              onChangeText={setNewDirectory}
+              value={newDirectory}
               placeholder="Folder name"
             />
             <Pressable
@@ -99,7 +107,7 @@ export function FolderInput({ setShowModal }) {
               onPress={() => {
                 createNewFolder()
                   .then(setShowModal(false))
-                  .catch((error) => { console.log(error); });
+                  .catch(({ message }) => { console.log(message); });
               }}
             >
               <Text style={styles.textStyle}>Save</Text>
