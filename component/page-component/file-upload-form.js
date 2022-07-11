@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 WebBrowser.maybeCompleteAuthSession();
 
 export default function FileUploadForm() {
-  const [accesstoken, setAccesstoken] = useState('');
+  const [accesstoken, setAccesstoken] = useState('something');
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: '407037809807-d11u5dn0pvfm4ar2bi88ev0gc1qd6deg.apps.googleusercontent.com',
     androidClientId: '407037809807-97hgildkbh4b5qgbcca1qrqugnsnb5ff.apps.googleusercontent.com',
@@ -36,10 +36,9 @@ export default function FileUploadForm() {
 
   useEffect(() => {
     if (response?.type === 'success') {
-      const { authentication } = response;
-      setAccesstoken(authentication.accessToken);
+      setAccesstoken(response.authentication.accessToken);
     }
-  }, [response]);
+  }, [accesstoken]);
 
   const getFileDevice = () => {
     /*  const getFileContent = async (path) => {
@@ -47,14 +46,14 @@ export default function FileUploadForm() {
     reader.forEach((file) => { setFiles(files.concat(file)); });
   }; */
   };
-  const getFileDrive = async () => {
+  const getFileDrive = async (res) => {
     GDrive.init();
     if (GDrive.isInitialized) {
-      console.log('Start');
-      GDrive.setAccessToken(accesstoken);
+      GDrive.setAccessToken(res.authentication.accessToken);
       const result = await GDrive.files.list({ q: "'root' in parents" });
-      console.log(result);
-      console.log('Success');
+      result.json()
+        .then((results) => { console.log(results); })
+        .catch((er) => { console.log(er); });
     }
   };
 
@@ -71,10 +70,9 @@ export default function FileUploadForm() {
         <TouchableOpacity
           style={{ marginLeft: 20, marginRight: 20 }}
           onPress={async () => {
-            if (!accesstoken) {
-              await promptAsync();
-            }
-            getFileDrive();
+            promptAsync().then((res) => {
+              getFileDrive(res);
+            });
           }}
         >
           <Entypo name="google-drive" size={30} />
