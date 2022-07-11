@@ -1,6 +1,6 @@
 import { React } from 'react';
 import renderer from 'react-test-renderer';
-import { FileUploadForm } from './file-upload-form';
+import FileUploadForm from './file-upload-form';
 
 describe('<FileUploadForm />', () => {
   let fileUploadForm;

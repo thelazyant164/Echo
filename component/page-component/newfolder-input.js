@@ -66,22 +66,18 @@ export function FolderInput({ setShowModal, setActiveDirectory }) {
   const createNewFolder = async () => {
     // Requests permissions for external directory
     const permissions = await StorageAccessFramework
-      .requestDirectoryPermissionsAsync(`${FileSystem.documentDirectory}/Echo`);
+      .requestDirectoryPermissionsAsync(FileSystem.documentDirectory);
 
-    if (!permissions.granted) {
-      return '';
+    if (permissions.granted) {
+      // Gets SAF URI from response
+      const uri = permissions.directoryUri;
+      const message = await StorageAccessFramework.makeDirectoryAsync(
+        uri,
+        newDirectory,
+      );
+      return message;
     }
-
-    // Gets SAF URI from response
-    const uri = permissions.directoryUri;
-    // await StorageAccessFramework.makeDirectoryAsync(uri, {
-    //   intermediates: true,
-    // });
-    const message = await StorageAccessFramework.makeDirectoryAsync(
-      FileSystem.documentDirectory,
-      newDirectory,
-    );
-    return message;
+    return '';
   };
 
   return (
