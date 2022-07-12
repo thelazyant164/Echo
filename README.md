@@ -28,11 +28,12 @@ $ git clone https://github.com/thelazyant164/Echo.git
 $ npm install
 ```
 
-3. Setup .env in root directory for port configuration & database credentials
+3. Setup .env in root directory for port configuration, database credentials & secret digital signature
 
 ```
-MONGODB_URI = "..."
-PORT = 3001
+MONGODB_URI=...
+PORT=3001
+SECRET=...
 ```
 
 4. Start the project
@@ -83,6 +84,8 @@ npm run lint
 
 * [Express](http://expressjs.com/en/4x/api.html) - Backend framework for defining API endpoints
 * [Mongoose](https://mongoosejs.com/docs/guide.html) - High-level integration library for MongoDB
+* [Bcrypt](https://github.com/kelektiv/node.bcrypt.js) - Password hashing
+* [JsonWebToken](https://github.com/auth0/node-jsonwebtoken) - JSON Web Token authorization
 
 ### Testing
 
