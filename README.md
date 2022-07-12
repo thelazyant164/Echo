@@ -28,13 +28,28 @@ $ git clone https://github.com/thelazyant164/Echo.git
 $ npm install
 ```
 
-3. Start the project
+3. Setup .env in root directory for port configuration & database credentials
+
+```
+MONGODB_URI = "..."
+PORT = 3001
+```
+
+4. Start the project
+
+Run the frontend
 
 ```
 $ npm start
 ```
 
 Follow the CLI prompts to run the app on a web server or on a virtual device. Note that the web mock-up will not have access to native features such as accessing the device storage and writing/reading data to disk.
+
+Run the backend
+
+```
+$ npm run server
+```
 
 ## Running tests
 
@@ -57,11 +72,17 @@ npm run lint
 
 ## Built With
 
-### Core
+### Client-side
 
 * [React](https://reactjs.org/docs/getting-started.html) - Core library for React
 * [React Native](https://reactnative.dev/) - View-layer library for cross-platform compatibility
 * [Expo](https://docs.expo.dev/) - Framework & SDK for streamlining development build & ease of access platform-specific API
+* [Axios](https://docs.expo.dev/) - High-level library for making HTTP requests to API endpoints
+
+### Server-side
+
+* [Express](http://expressjs.com/en/4x/api.html) - Backend framework for defining API endpoints
+* [Mongoose](https://mongoosejs.com/docs/guide.html) - High-level integration library for MongoDB
 
 ### Testing
 
@@ -70,13 +91,14 @@ npm run lint
 ### Development tool
 
 * [ESlint](https://eslint.org/docs/latest/) - Used to enforce consistent coding style & perform static code analysis
+* [Nodemon](https://github.com/remy/nodemon) - Live reload for backend development
+* [Cross-env](https://github.com/kentcdodds/cross-env) - Set NODE_ENV for Window users
+* [Dotenv](https://github.com/motdotla/dotenv#readme) - Setup environment variables (credentials etc...)
 
 ## Authors
 
 * **Trung Kien Nguyen** - *Initial idea, developer, designer* - [kiennguyen2403](https://github.com/kiennguyen2403)
 * **Aly** -  *Developer, tester* - [thelazyant164](https://github.com/thelazyant164)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
