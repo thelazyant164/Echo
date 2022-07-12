@@ -6,6 +6,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import GDrive from 'expo-google-drive-api-wrapper';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 
 const styles = StyleSheet.create({
@@ -29,6 +30,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function FileUploadForm() {
   const [accesstoken, setAccesstoken] = useState('something');
+  const [files, setFiles] = useState([]);
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: '407037809807-d11u5dn0pvfm4ar2bi88ev0gc1qd6deg.apps.googleusercontent.com',
     androidClientId: '407037809807-97hgildkbh4b5qgbcca1qrqugnsnb5ff.apps.googleusercontent.com',
@@ -41,19 +43,18 @@ export default function FileUploadForm() {
   }, [accesstoken]);
 
   const getFileDevice = () => {
-    /*  const getFileContent = async (path) => {
-    const reader = await FileSystem.readDirectoryAsync(path);
-    reader.forEach((file) => { setFiles(files.concat(file)); });
-  }; */
+    const getFileContent = async (path) => {
+      const reader = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+      reader.forEach((file) => { setFiles(files.concat(file)); });
+    };
   };
   const getFileDrive = async (res) => {
     GDrive.init();
     if (GDrive.isInitialized) {
       GDrive.setAccessToken(res.authentication.accessToken);
       const result = await GDrive.files.list({ q: "'root' in parents" });
-      result.json()
-        .then((results) => { console.log(results); })
-        .catch((er) => { console.log(er); });
+      const finalresult = await result.json();
+      console.log(finalresult);
     }
   };
 
