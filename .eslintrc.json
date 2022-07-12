@@ -27,6 +27,10 @@
     "react/jsx-filename-extension": "off",
     "import/prefer-default-export": "off",
     "react/prop-types": "off",
-    "implicit-arrow-linebreak": "off"
+    "implicit-arrow-linebreak": "off",
+    "no-underscore-dangle": "off",
+    "no-param-reassign": "off",
+    "consistent-return": "off",
+    "prefer-destructuring": "off"
   }
 }
