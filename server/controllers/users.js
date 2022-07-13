@@ -8,7 +8,7 @@ usersRouter.get('/', async (request, response) => {
 });
 
 usersRouter.get('/:id', async (request, response, next) => {
-  const user = await User.findById(request.params.id);
+  const user = await User.findById(request.params.id).populate('audios', { name: 1, date: 1 });
   if (user) {
     response.json(user);
   } else {
@@ -41,6 +41,8 @@ usersRouter.delete('/:id', async (request, response, next) => {
 
 usersRouter.put('/:id', async (request, response, next) => {
   const { name, premium } = request.body;
+
+  // confirm billing here
 
   const user = {
     name,

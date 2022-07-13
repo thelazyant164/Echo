@@ -1,55 +1,47 @@
 const audiosRouter = require('express').Router();
-const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const Audio = require('../models/audio');
-
-const getTokenFrom = (request) => {
-  const authorization = request.get('authorization');
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7);
-  }
-  return null;
-};
+const { getLoggedInUser, authorizeRequest } = require('../utils/authHelper');
 
 audiosRouter.get('/', async (request, response) => {
-  const audios = await Audio.find({});
+  const { username } = await getLoggedInUser(request);
+  const populated = await User.find({ username }).populate('audios', { name: 1, date: 1 });
+  const { audios } = populated[0];
   response.json(audios);
 });
 
 audiosRouter.get('/:id', async (request, response, next) => {
+  await authorizeRequest(request, response);
   const audio = await Audio.findById(request.params.id);
   if (audio) {
-    response.json(audio);
+    response.json(audio); // placeholder -> return file
   } else {
     response.status(404).end();
   }
 });
 
+audiosRouter.delete('/:id', async (request, response, next) => {
+  await authorizeRequest(request, response);
+  await Audio.findByIdAndRemove(request.params.id);
+  response.status(204).end();
+});
+
 audiosRouter.post('/', async (request, response, next) => {
   const { name, content } = request.body;
-  const token = getTokenFrom(request);
-  const decodedToken = jwt.verify(token, process.env.SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token missing or invalid' });
-  }
-  const user = await User.findById(decodedToken.id);
+  const user = await getLoggedInUser(request);
 
   const audio = new Audio({
     name,
     content, // placeholder -> clone & apply audio processing here
     user: user._id,
+    date: new Date(),
   });
 
   const savedAudio = await audio.save();
-  user.notes = user.notes.concat(savedAudio._id);
+  user.audios = user.audios.concat(savedAudio._id);
   await user.save();
 
   response.json(savedAudio);
-});
-
-audiosRouter.delete('/:id', async (request, response, next) => {
-  await Audio.findByIdAndRemove(request.params.id);
-  response.status(204).end();
 });
 
 module.exports = audiosRouter;

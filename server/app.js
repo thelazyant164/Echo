@@ -7,8 +7,9 @@ const config = require('./utils/config');
 const app = express();
 const loginRouter = require('./controllers/login');
 const usersRouter = require('./controllers/users');
+const userLoggedInRouter = require('./controllers/usersLoggedIn');
 const audiosRouter = require('./controllers/audios');
-
+const authenticate = require('./utils/authenticate');
 const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');
 
@@ -27,8 +28,9 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 
 app.use('/login', loginRouter);
+app.use('/api/me', authenticate, userLoggedInRouter);
+app.use('/api/audios', authenticate, audiosRouter);
 app.use('/management/users', usersRouter);
-app.use('/management/audios', audiosRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
