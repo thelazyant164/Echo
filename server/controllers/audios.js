@@ -1,7 +1,10 @@
+const multer = require('multer');
 const audiosRouter = require('express').Router();
 const User = require('../models/user');
 const Audio = require('../models/audio');
 const { getLoggedInUser, authorizeRequest } = require('../utils/authHelper');
+
+const upload = multer();
 
 audiosRouter.get('/', async (request, response) => {
   const { username } = await getLoggedInUser(request);
@@ -26,13 +29,14 @@ audiosRouter.delete('/:id', async (request, response, next) => {
   response.status(204).end();
 });
 
-audiosRouter.post('/', async (request, response, next) => {
-  const { name, content } = request.body;
+audiosRouter.post('/', upload.single('test'), async (request, response, next) => {
+  const { name } = request.body;
+  const { file } = request;
   const user = await getLoggedInUser(request);
 
   const audio = new Audio({
     name,
-    content, // placeholder -> clone & apply audio processing here
+    content: file,
     user: user._id,
     date: new Date(),
   });

@@ -8,7 +8,7 @@ const audioSchema = new mongoose.Schema({
   },
   date: Date,
   content: { // placeholder for audio stream data
-    type: String,
+    type: JSON,
     required: true,
   },
   user: {

@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
-const { getTokenFrom } = require('./authHelper');
+const { getTokenFrom, getLoggedInUser } = require('./authHelper');
 
 const authenticate = async (request, response, next) => {
   const token = getTokenFrom(request);
@@ -9,7 +9,7 @@ const authenticate = async (request, response, next) => {
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' });
   }
-  const user = await User.findById(decodedToken.id);
+  const user = getLoggedInUser(request);
   if (!user) {
     return response.status(401).json({ error: 'invalid user' });
   }

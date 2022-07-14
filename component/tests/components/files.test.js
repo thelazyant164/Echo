@@ -1,6 +1,6 @@
 import { React } from 'react';
 import renderer from 'react-test-renderer';
-import { Files } from './files';
+import { Files } from '../../files';
 
 describe('<Files />', () => {
   let filesPage;

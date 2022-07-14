@@ -1,6 +1,6 @@
 import { React } from 'react';
 import renderer from 'react-test-renderer';
-import { Featurebutton } from './feature-button';
+import { Featurebutton } from '../../page-component/feature-button';
 
 describe('<Featurebutton />', () => {
   let featureButton;

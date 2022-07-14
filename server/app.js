@@ -9,6 +9,7 @@ const loginRouter = require('./controllers/login');
 const usersRouter = require('./controllers/users');
 const userLoggedInRouter = require('./controllers/usersLoggedIn');
 const audiosRouter = require('./controllers/audios');
+
 const authenticate = require('./utils/authenticate');
 const middleware = require('./utils/middleware');
 const logger = require('./utils/logger');

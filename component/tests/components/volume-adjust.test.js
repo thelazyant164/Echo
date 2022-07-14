@@ -1,6 +1,6 @@
 import { React } from 'react';
 import renderer from 'react-test-renderer';
-import { VolumeAdjustPage } from './volume-adjust';
+import { VolumeAdjustPage } from '../../volume-adjust';
 
 describe('<VolumeAdjustPage />', () => {
   let volumeAdjustPage;
