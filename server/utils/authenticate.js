@@ -9,7 +9,7 @@ const authenticate = async (request, response, next) => {
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' });
   }
-  const user = getLoggedInUser(request);
+  const user = getLoggedInUser(request, response);
   if (!user) {
     return response.status(401).json({ error: 'invalid user' });
   }

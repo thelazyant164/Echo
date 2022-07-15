@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const usersRouter = require('express').Router();
 const User = require('../models/user');
+const Audio = require('../models/audio');
 
 usersRouter.get('/', async (request, response) => {
   const users = await User.find({}).populate('audios', { name: 1, date: 1 });
@@ -35,6 +36,10 @@ usersRouter.post('/', async (request, response, next) => {
 });
 
 usersRouter.delete('/:id', async (request, response, next) => {
+  // Delete all audio submitted by user
+  await Audio.deleteMany({ user: request.params.id });
+
+  // Delete user
   await User.findByIdAndRemove(request.params.id);
   response.status(204).end();
 });

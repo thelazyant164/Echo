@@ -41,11 +41,13 @@ describe('getLoggedInUser function', async () => {
       process.env.SECRET,
     );
     const mockRequest = { authorization: `Bearer ${token}` };
+    // Refactor broken test: getLoggedInUser(request, response)
     const user = await getLoggedInUser(mockRequest);
     expect(user).toEqual(mockUserDatabase[1]);
   });
   test('Returns null if not found', async () => {
     const mockRequest = { authorization: 'Bearer bogusToken' };
+    // Refactor broken test: getLoggedInUser(request, response)
     const user = await getLoggedInUser(mockRequest);
     expect(user).toBeNull();
   });

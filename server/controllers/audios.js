@@ -1,4 +1,5 @@
 const multer = require('multer');
+const _ = require('lodash');
 const audiosRouter = require('express').Router();
 const User = require('../models/user');
 const Audio = require('../models/audio');
@@ -25,14 +26,23 @@ audiosRouter.get('/:id', async (request, response, next) => {
 
 audiosRouter.delete('/:id', async (request, response, next) => {
   await authorizeRequest(request, response);
-  await Audio.findByIdAndRemove(request.params.id);
+
+  // Delete reference to audio from user
+  const audio = await Audio.findById(request.params.id);
+  const userId = audio.user;
+  const user = await User.findById(userId);
+  _.remove(user.audios, (audioID) => audioID === audio.id);
+  await user.save(user);
+
+  // Delete audio
+  await Audio.findByIdAndRemove(audio.id);
   response.status(204).end();
 });
 
 audiosRouter.post('/', upload.single('test'), async (request, response, next) => {
   const { name } = request.body;
   const { file } = request;
-  const user = await getLoggedInUser(request);
+  const user = await getLoggedInUser(request, response);
 
   const audio = new Audio({
     name,

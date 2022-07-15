@@ -3,7 +3,7 @@ const User = require('../models/user');
 const { getLoggedInUser } = require('../utils/authHelper');
 
 userLoggedInRouter.get('/', async (request, response) => {
-  const { name, id, premium } = await getLoggedInUser(request);
+  const { name, id, premium } = await getLoggedInUser(request, response);
 
   const user = {
     name,
