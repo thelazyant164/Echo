@@ -18,10 +18,25 @@ audiosRouter.get('/:id', async (request, response, next) => {
   await authorizeRequest(request, response);
   const audio = await Audio.findById(request.params.id);
   if (audio) {
-    response.json(audio); // placeholder -> return file
+    response.json(audio);
   } else {
     response.status(404).end();
   }
+});
+
+audiosRouter.put('/:id', upload.single('test'), async (request, response, next) => {
+  const { name } = request.body;
+  const { file } = request;
+  await authorizeRequest(request, response);
+
+  const audio = {
+    name,
+    content: file,
+    date: new Date(),
+  };
+
+  await Audio.findByIdAndUpdate(request.params.id, audio, { new: true });
+  response.json(request.params.id);
 });
 
 audiosRouter.delete('/:id', async (request, response, next) => {
@@ -40,7 +55,7 @@ audiosRouter.delete('/:id', async (request, response, next) => {
 });
 
 audiosRouter.post('/', upload.single('test'), async (request, response, next) => {
-  const { name } = request.body;
+  const { name, id } = request.body;
   const { file } = request;
   const user = await getLoggedInUser(request, response);
 
@@ -55,7 +70,7 @@ audiosRouter.post('/', upload.single('test'), async (request, response, next) =>
   user.audios = user.audios.concat(savedAudio._id);
   await user.save();
 
-  response.json(savedAudio);
+  response.json(savedAudio._id);
 });
 
 module.exports = audiosRouter;
