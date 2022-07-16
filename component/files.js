@@ -3,6 +3,7 @@ import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
 } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+import { StorageAccessFramework } from 'expo-file-system';
 import { Featurebutton } from './page-component/feature-button';
 import { Header } from './page-component/header';
 import { FolderInput } from './page-component/newfolder-input';
@@ -36,15 +37,32 @@ export function Files({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const [files, setFiles] = useState([]);
   const [activeDirectory, setActiveDirectory] = useState('');
-  const getFileContent = async (path) => {
-    const reader = await FileSystem.readDirectoryAsync(path);
-    reader.forEach((file) => { setFiles(files.concat(file)); });
+  let permissions;
+  const readAllFiles = async () => {
+    // Gets SAF URI from response
+    const uri = permissions.directoryUri;
+    // Gets all files inside of selected directory
+    const localfile = await StorageAccessFramework.readDirectoryAsync(uri);
+    setFiles(localfile);
   };
-  useEffect(() => {
+  const getFileContent = async (path) => {
+    if (path === FileSystem.documentDirectory) {
+      permissions = await
+      StorageAccessFramework.requestDirectoryPermissionsAsync(path);
+    }
+    if (permissions.granted) {
+      await readAllFiles();
+    }
+  };
+  useEffect(async () => {
+    await getFileContent(FileSystem.documentDirectory + activeDirectory);
+  }, []);
+  useEffect(async () => {
     setFiles([]);
-    getFileContent(FileSystem.documentDirectory + activeDirectory);
+    console.log(`Files:${files}`);
+    console.log(`URL:${FileSystem.documentDirectory}${activeDirectory}`);
+    await getFileContent(FileSystem.documentDirectory);
   }, [activeDirectory]);
-
   return (
     <View>
       <Header />
@@ -58,8 +76,7 @@ export function Files({ navigation }) {
             <FlatList
               numColumns={1}
               data={files}
-              renderItem={({ item }) =>
-                <Text key={item}>{item}</Text>}
+              renderItem={({ item }) => <Text key={item}>{item}</Text>}
             />
           </View>
         </View>
@@ -84,10 +101,11 @@ export function Files({ navigation }) {
         </TouchableOpacity>
 
         {showModal && (
-        <FolderInput
-          setShowModal={setShowModal}
-          setActiveDirectory={setActiveDirectory}
-        />
+          <FolderInput
+            setShowModal={setShowModal}
+            activeDirectory={activeDirectory}
+            setActiveDirectory={setActiveDirectory}
+          />
         )}
 
       </View>

@@ -1,6 +1,6 @@
 import { React } from 'react';
 import renderer from 'react-test-renderer';
-import { Filebutton } from './file-button';
+import Filebutton from './file-button';
 
 describe('<Filebutton />', () => {
   let fileButton;

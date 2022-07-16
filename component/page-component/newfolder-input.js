@@ -60,9 +60,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export function FolderInput({ setShowModal, setActiveDirectory }) {
+export function FolderInput({ setShowModal, activeDirectory, setActiveDirectory }) {
+  const [newDirectory, setNewDirectory] = useState('New folder');
   // Create new folder in current active directory
-  const [newDirectory, setNewDirectory] = useState('');
   const createNewFolder = async () => {
     // Requests permissions for external directory
     const permissions = await StorageAccessFramework
@@ -73,7 +73,7 @@ export function FolderInput({ setShowModal, setActiveDirectory }) {
       const uri = permissions.directoryUri;
       const message = await StorageAccessFramework.makeDirectoryAsync(
         uri,
-        newDirectory,
+        activeDirectory,
       );
       return message;
     }
@@ -102,6 +102,7 @@ export function FolderInput({ setShowModal, setActiveDirectory }) {
               style={[styles.button, styles.buttonClose]}
               onPress={() => {
                 createNewFolder()
+                  .then(setActiveDirectory(newDirectory))
                   .then(setShowModal(false))
                   .catch(({ message }) => { console.log(message); });
               }}

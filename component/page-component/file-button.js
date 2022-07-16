@@ -1,18 +1,39 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import {
-  StyleSheet, Text, View, Image,
+  StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
+import axios from 'axios';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-export function Filebutton(props) {
-  const { type, name } = props;
+const styles = StyleSheet.create({
+  container: {
+    margin: 30,
+    borderColor: 'gray',
+    borderRadius: 12,
+    borderWidth: 2,
+    width: '20%',
+    height: '60%',
+  },
+  content: {
+    margin: 4,
+  },
+});
+export default function Filebutton(props) {
+  const { file } = props;
+  const SendFileInformation = () => {
+    console.log(file.id);
+    axios.post('', { fileid: file.id });
+  };
   return (
-    <View>
-      <Text>{name}</Text>
-      <Image />
+    <View style={styles.container}>
+      <TouchableOpacity onPress={SendFileInformation} style={styles.content}>
+
+        <FontAwesome name="file-audio-o" size={40} />
+
+        <View>
+          <Text>{`${file.name.slice(0, 6)}...`}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 }
-
-const style = StyleSheet.create({
-
-});
