@@ -1,6 +1,6 @@
 import { React } from 'react';
 import renderer from 'react-test-renderer';
-import { SpeechToTextPage } from './speech-to-text';
+import { SpeechToTextPage } from '../../speech-to-text';
 
 describe('<SpeechToTextPage />', () => {
   let speechToTextPage;

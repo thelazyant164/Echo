@@ -1,6 +1,6 @@
 import { React } from 'react';
 import renderer from 'react-test-renderer';
-import { Homepage } from './homepage';
+import { Homepage } from '../../homepage';
 
 describe('<Homepage />', () => {
   let homepage;

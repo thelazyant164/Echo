@@ -1,6 +1,7 @@
 const logger = require('./logger');
 
 const requestLogger = (request, response, next) => {
+  logger.info('---');
   logger.info('Method:', request.method);
   logger.info('Path:  ', request.path);
   logger.info('Body:  ', request.body);
@@ -14,22 +15,20 @@ const unknownEndpoint = (request, response) => {
 
 const errorHandler = (error, request, response, next) => {
   logger.errorInfo(error.message);
-
+  // if (!request.files) {
+  //   return response.status(400).send({ error: 'no files uploaded' });
+  // }
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' });
   } if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message });
   } if (error.name === 'JsonWebTokenError') {
-    return response.status(401).json({
-      error: 'invalid token',
-    });
+    return response.status(401).json({ error: 'invalid token' });
   } if (error.name === 'TokenExpiredError') {
-    return response.status(401).json({
-      error: 'token expired',
-    });
+    return response.status(401).json({ error: 'token expired' });
   }
 
-  logger.error(error.message);
+  logger.errorInfo(error.message);
   next(error);
 };
 

@@ -31,6 +31,7 @@ $ npm install
 3. Setup .env in root directory for port configuration, database credentials & secret digital signature
 
 ```
+TEST_MONGODB_URI=...
 MONGODB_URI=...
 PORT=3001
 SECRET=...
@@ -86,6 +87,7 @@ npm run lint
 * [Mongoose](https://mongoosejs.com/docs/guide.html) - High-level integration library for MongoDB
 * [Bcrypt](https://github.com/kelektiv/node.bcrypt.js) - Password hashing
 * [JsonWebToken](https://github.com/auth0/node-jsonwebtoken) - JSON Web Token authorization
+* [Multer](https://github.com/expressjs/multer) - Multipart form data handling for file transfer
 
 ### Testing
 
@@ -96,12 +98,14 @@ npm run lint
 * [ESlint](https://eslint.org/docs/latest/) - Used to enforce consistent coding style & perform static code analysis
 * [Nodemon](https://github.com/remy/nodemon) - Live reload for backend development
 * [Cross-env](https://github.com/kentcdodds/cross-env) - Set NODE_ENV for Window users
-* [Dotenv](https://github.com/motdotla/dotenv#readme) - Setup environment variables (credentials etc...)
+* [Dotenv](https://github.com/motdotla/dotenv) - Setup environment variables (credentials etc...)
+* [MongoDB-memory-server](https://github.com/nodkz/mongodb-memory-server) - Mock in-memory MongoDB for testing
+* [Supertest](https://github.com/visionmedia/supertest) - Superagent to mock API calls for testing
 
 ## Authors
 
-* **Trung Kien Nguyen** - *Initial idea, developer, designer* - [kiennguyen2403](https://github.com/kiennguyen2403)
-* **Aly** -  *Developer, tester* - [thelazyant164](https://github.com/thelazyant164)
+* **Trung Kien Nguyen** - *Initial idea, front-end developer, UI/UX designer* - [kiennguyen2403](https://github.com/kiennguyen2403)
+* **Aly** -  *Back-end developer, Q&A* - [thelazyant164](https://github.com/thelazyant164)
 
 ## License
 
