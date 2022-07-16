@@ -13,6 +13,7 @@
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.7",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
@@ -38,10 +39,6 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.4.4",
     "mongoose-unique-validator": "^3.1.0",
-<<<<<<< HEAD
-=======
-    "multer": "^1.4.5-lts.1",
->>>>>>> 45bc9942ac509e6182e7217320a9571efb77c1e2
     "normalize-volume": "^1.0.8",
     "react": "17.0.1",
     "react-dom": "17.0.1",

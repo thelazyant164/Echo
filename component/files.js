@@ -1,12 +1,14 @@
-import { React, useState, useEffect } from 'react';
+import { React, useEffect } from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
 } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import { StorageAccessFramework } from 'expo-file-system';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Featurebutton } from './page-component/feature-button';
 import { Header } from './page-component/header';
 import { FolderInput } from './page-component/newfolder-input';
+import { useCachedReadWritePermission } from './hooks/index';
 
 const style = StyleSheet.create({
   feature_container: {
@@ -17,6 +19,7 @@ const style = StyleSheet.create({
   container: {
     backgroundColor: '#F8F5F5',
     borderRadius: 12,
+    justifyContent: 'center',
   },
   list: {
     flexDirection: 'row',
@@ -31,37 +34,33 @@ const style = StyleSheet.create({
     marginTop: 600,
     marginLeft: 350,
   },
+  folderbutton: {
+    justifyContent: 'center',
+    width: 70,
+    height: 70,
+    margin: 30,
+  },
 });
 
 export function Files({ navigation }) {
-  const [showModal, setShowModal] = useState(false);
-  const [files, setFiles] = useState([]);
-  const [activeDirectory, setActiveDirectory] = useState('');
-  let permissions;
-  const readAllFiles = async () => {
-    // Gets SAF URI from response
-    const uri = permissions.directoryUri;
-    // Gets all files inside of selected directory
-    const localfile = await StorageAccessFramework.readDirectoryAsync(uri);
-    setFiles(localfile);
-  };
-  const getFileContent = async (path) => {
-    if (path === FileSystem.documentDirectory) {
-      permissions = await
-      StorageAccessFramework.requestDirectoryPermissionsAsync(path);
-    }
-    if (permissions.granted) {
-      await readAllFiles();
-    }
-  };
+  const {
+    getPermissionFirstTime,
+    getFileContent,
+    activeDirectory,
+    setActiveDirectory,
+    files,
+    setFiles,
+    showModal,
+    setShowModal,
+    goToFolder,
+  } = useCachedReadWritePermission();
   useEffect(async () => {
-    await getFileContent(FileSystem.documentDirectory + activeDirectory);
+    await getPermissionFirstTime();
+    await getFileContent();
   }, []);
   useEffect(async () => {
     setFiles([]);
-    console.log(`Files:${files}`);
-    console.log(`URL:${FileSystem.documentDirectory}${activeDirectory}`);
-    await getFileContent(FileSystem.documentDirectory);
+    await getFileContent();
   }, [activeDirectory]);
   return (
     <View>
@@ -69,30 +68,26 @@ export function Files({ navigation }) {
       <View style={{ marginTop: 60 }}>
 
         <Text style={{ textAlign: 'center', fontSize: 20 }}>Files Storage</Text>
-
         <View style={style.feature_container}>
-          <Text>Files in current directory</Text>
+          { activeDirectory
+            ? <Text style={{ fontSize: 20 }}>{activeDirectory.replace('%20', ' ')}</Text>
+            : <Text style={{ fontSize: 20 }}>Library</Text>}
           <View style={style.container}>
             <FlatList
-              numColumns={1}
+              numColumns={3}
               data={files}
-              renderItem={({ item }) => <Text key={item}>{item}</Text>}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={style.folderbutton}
+                  onPress={() => { goToFolder(item.slice(94, item.length)); }}
+                >
+                  <AntDesign name="folder1" size={40} />
+                  <Text key={item}>{item.slice(94, item.length).replace('%20', ' ')}</Text>
+                </TouchableOpacity>
+              )}
             />
           </View>
         </View>
-
-        <View style={style.feature_container}>
-          <Text>Feature</Text>
-          <View style={style.container}>
-            <FlatList
-              numColumns={4}
-              data={files}
-              renderItem={({ item, key }) =>
-                <Featurebutton feature={item} navigation={navigation} />}
-            />
-          </View>
-        </View>
-
         <TouchableOpacity
           style={style.addbutton}
           onPress={() => setShowModal(true)}

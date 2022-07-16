@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
+    marginTop: 5,
+    marginBottom: 5,
     borderRadius: 20,
     padding: 10,
     elevation: 2,
@@ -108,6 +110,14 @@ export function FolderInput({ setShowModal, activeDirectory, setActiveDirectory 
               }}
             >
               <Text style={styles.textStyle}>Save</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {
+                setShowModal(false);
+              }}
+            >
+              <Text style={styles.textStyle}>Cancel</Text>
             </Pressable>
           </View>
         </View>
