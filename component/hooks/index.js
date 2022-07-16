@@ -35,6 +35,9 @@ export const useCachedReadWritePermission = () => {
   const goToFolder = (path) => {
     setActiveDirectory(path);
   };
+  const gotoRoot = () => {
+    setActiveDirectory('');
+  };
   const getPermissionFirstTime = async () => {
     const permission = await getCachedPermission();
     if (!permission) {

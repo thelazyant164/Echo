@@ -70,7 +70,19 @@ export function Files({ navigation }) {
         <Text style={{ textAlign: 'center', fontSize: 20 }}>Files Storage</Text>
         <View style={style.feature_container}>
           { activeDirectory
-            ? <Text style={{ fontSize: 20 }}>{activeDirectory.replace('%20', ' ')}</Text>
+            ? (
+              <View style={{
+                display: 'flex',
+                width: '100%',
+                flexDirection: 'row',
+              }}
+              >
+                <TouchableOpacity onPress={() => { setActiveDirectory(''); }}><Text style={{ fontSize: 20 }}>Echo/</Text></TouchableOpacity>
+                <Text style={{ fontSize: 20 }}>
+                  {activeDirectory.replace('%20', ' ')}
+                </Text>
+              </View>
+            )
             : <Text style={{ fontSize: 20 }}>Library</Text>}
           <View style={style.container}>
             <FlatList

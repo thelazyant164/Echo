@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity, Image, PermissionsAndroid,
 } from 'react-native';
@@ -32,7 +32,8 @@ export function RecordPage({ navigation }) {
     const uri = recording.getURI();
     console.log('Recording stopped and stored at', uri);
   }
-
+  useEffect(() => {
+  }, [recording]);
   return (
     <View style={{ alignItems: 'center' }}>
       <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 60 }}>Noise reduction record</Text>
@@ -44,7 +45,7 @@ export function RecordPage({ navigation }) {
         recording ? stopRecording() : startRecording();
       }}
       >
-        { recording ? <Feather name="play" size={50} style={{ marginTop: 250 }} /> : <Feather name="pause" size={50} style={{ marginTop: 200 }} />}
+        { recording ? <Feather name="pause" size={50} style={{ marginTop: 200 }} /> : <Feather name="play" size={50} style={{ marginTop: 200 }} />}
       </TouchableOpacity>
     </View>
   );

@@ -59,7 +59,6 @@ export default function FileUploadForm(props) {
       GDrive.setAccessToken(res.authentication.accessToken);
       const result = await GDrive.files.list({ q: "'root' in parents" });
       const finalresult = await result.json();
-      console.log(finalresult);
       const audioExtensions = ['.mp3', '.wav', '.pcm', 'aiff', '.aac', '.ogg', '.wma', 'flac', 'alac'];
       finalresult.files = finalresult.files.filter((file) =>
         _.includes(audioExtensions, file.name.slice(-4), 0));
@@ -103,7 +102,7 @@ export default function FileUploadForm(props) {
           </TouchableOpacity>
         </View>
       </View>
-      <ListallFiles filelists={files} />
+      <ListallFiles filelists={files} setFiles={setFiles} />
     </View>
   );
 }

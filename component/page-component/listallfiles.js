@@ -3,6 +3,7 @@ import {
   View, StyleSheet, Modal, Pressable, Text, FlatList,
 } from 'react-native';
 import axios from 'axios';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Filebutton from './file-button';
 
 const styles = StyleSheet.create({
@@ -13,10 +14,15 @@ const styles = StyleSheet.create({
   modal: {
 
   },
-  buttonview: {},
+  buttonview: {
+    display: 'flex',
+    width: '100%',
+    flexDirection: 'row',
+    margin: 30,
+  },
 });
 
-export default function ListallFiles({ filelists }) {
+export default function ListallFiles({ filelists, setFiles }) {
   const SendFileInformation = (file) => {
     axios.post('', { fileid: file.id });
   };
@@ -29,6 +35,12 @@ export default function ListallFiles({ filelists }) {
   return (
     <View>
       <Modal style={styles.modal}>
+        <Pressable onPress={() => { setFiles([]); }}>
+          <View style={styles.buttonview}>
+            <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+            <Text style={{ fontSize: 20 }}>Back</Text>
+          </View>
+        </Pressable>
         <FlatList
           numColumns={3}
           data={filelists.files}
@@ -38,6 +50,7 @@ export default function ListallFiles({ filelists }) {
                 )
               }
         />
+
       </Modal>
     </View>
   );
