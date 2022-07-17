@@ -46,7 +46,7 @@ export default function ListallFiles({ filelists, setFiles }) {
           data={filelists.files}
           renderItem={
                 ({ item, key }) => (
-                  <Filebutton file={item} />
+                  <Filebutton file={item} setFiles={setFiles} />
                 )
               }
         />

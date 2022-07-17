@@ -19,9 +19,9 @@ const styles = StyleSheet.create({
   },
 });
 export default function Filebutton(props) {
-  const { file } = props;
+  const { file, setFiles } = props;
   const SendFileInformation = () => {
-    console.log(file.id);
+    setFiles('');
     axios.post('', { fileid: file.id });
   };
   return (

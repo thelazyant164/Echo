@@ -8,7 +8,6 @@ import Timer from './page-component/timer';
 
 export function RecordPage({ navigation }) {
   const [recording, setRecording] = useState(false);
-  const [start, setStart] = useState(false);
 
   async function startRecording() {
     try {
@@ -17,10 +16,11 @@ export function RecordPage({ navigation }) {
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
-      const { newrecording } = await Audio.Recording.createAsync(
+      // eslint-disable-next-line no-shadow
+      const { recording } = await Audio.Recording.createAsync(
         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
       );
-      setRecording(newrecording);
+      setRecording(recording);
     } catch (err) {
       console.error('Failed to start recording', err);
     }
@@ -40,13 +40,13 @@ export function RecordPage({ navigation }) {
 
       <TouchableOpacity onPress={() => {
         setRecording(!recording);
-        setStart(!start);
         // eslint-disable-next-line no-unused-expressions
         recording ? stopRecording() : startRecording();
       }}
       >
         { recording ? <Feather name="pause" size={50} style={{ marginTop: 200 }} /> : <Feather name="play" size={50} style={{ marginTop: 200 }} />}
       </TouchableOpacity>
+      <Timer recording={recording} />
     </View>
   );
 }

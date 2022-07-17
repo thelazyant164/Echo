@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Timer(props) {
-  const { start } = props;
+  const { recording } = props;
   const [second, setSecond] = useState(0);
   const [minute, setMinute] = useState(0);
   const [hour, setHour] = useState(0);
@@ -37,10 +37,14 @@ export default function Timer(props) {
   const StartTimer = () => {
     setInterval(Increment, 1000);
   };
+  const StopTimer = () => {
 
-  if (start === true) {
-    StartTimer();
-  }
+  };
+  useEffect(() => {
+    if (recording === true) {
+      StartTimer();
+    }
+  }, [second, minute, hour]);
   return (
     <View style={styles.container}>
       <Text style={styles.content}>{`${hour.toString()}:${minute.toString()}:${second.toString()}`}</Text>
