@@ -2,22 +2,19 @@ import { React, useEffect } from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
 } from 'react-native';
-import * as FileSystem from 'expo-file-system';
-import { StorageAccessFramework } from 'expo-file-system';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Featurebutton } from './page-component/feature-button';
 import { Header } from './page-component/header';
 import { FolderInput } from './page-component/newfolder-input';
 import { useCachedReadWritePermission } from './hooks/index';
+import Folderbutton from './page-component/folder-button';
 
 const style = StyleSheet.create({
   feature_container: {
-    marginTop: 100,
+    marginTop: 70,
     marginLeft: 10,
     marginRight: 10,
   },
   container: {
-    backgroundColor: '#F8F5F5',
     borderRadius: 12,
     justifyContent: 'center',
   },
@@ -34,12 +31,7 @@ const style = StyleSheet.create({
     marginTop: 600,
     marginLeft: 350,
   },
-  folderbutton: {
-    justifyContent: 'center',
-    width: 70,
-    height: 70,
-    margin: 30,
-  },
+
 });
 
 export function Files({ navigation }) {
@@ -89,23 +81,28 @@ export function Files({ navigation }) {
               numColumns={3}
               data={files}
               renderItem={({ item }) => (
-                <TouchableOpacity
-                  style={style.folderbutton}
-                  onPress={() => { goToFolder(item.slice(94, item.length)); }}
-                >
-                  <AntDesign name="folder1" size={40} />
-                  <Text key={item}>{item.slice(94, item.length).replace('%20', ' ')}</Text>
-                </TouchableOpacity>
+                <Folderbutton activeDirectory={item} goToFolder={goToFolder} />
               )}
             />
           </View>
         </View>
-        <TouchableOpacity
-          style={style.addbutton}
-          onPress={() => setShowModal(true)}
-        >
-          <Text style={{ fontSize: 30, textAlign: 'center', marginTop: 2 }}>+</Text>
-        </TouchableOpacity>
+        {activeDirectory ? (
+          <TouchableOpacity
+            style={style.addbutton}
+          >
+            <AntDesign name="addfile" size={25} style={{ textAlign: 'center', justifyContent: 'center', marginTop: 10 }} />
+          </TouchableOpacity>
+
+        )
+          : (
+
+            <TouchableOpacity
+              style={style.addbutton}
+              onPress={() => setShowModal(true)}
+            >
+              <Text style={{ fontSize: 30, textAlign: 'center', marginTop: 2 }}>+</Text>
+            </TouchableOpacity>
+          )}
 
         {showModal && (
           <FolderInput

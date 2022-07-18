@@ -8,9 +8,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 const styles = StyleSheet.create({
   container: {
     margin: 30,
-    borderColor: 'gray',
-    borderRadius: 12,
-    borderWidth: 2,
     width: '20%',
     height: '60%',
   },

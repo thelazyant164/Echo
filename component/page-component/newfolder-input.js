@@ -67,19 +67,21 @@ export function FolderInput({ setShowModal, activeDirectory, setActiveDirectory 
   // Create new folder in current active directory
   const createNewFolder = async () => {
     // Requests permissions for external directory
-    const permissions = await StorageAccessFramework
-      .requestDirectoryPermissionsAsync(FileSystem.documentDirectory);
+    if (newDirectory !== '') {
+      const permissions = await StorageAccessFramework
+        .requestDirectoryPermissionsAsync(FileSystem.documentDirectory);
 
-    if (permissions.granted) {
+      if (permissions.granted) {
       // Gets SAF URI from response
-      const uri = permissions.directoryUri;
-      const message = await StorageAccessFramework.makeDirectoryAsync(
-        uri,
-        activeDirectory,
-      );
-      return message;
+        const uri = permissions.directoryUri;
+        const message = await StorageAccessFramework.makeDirectoryAsync(
+          uri,
+          activeDirectory,
+        );
+        return message;
+      }
+      return '';
     }
-    return '';
   };
 
   return (

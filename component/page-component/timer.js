@@ -1,3 +1,4 @@
+import { now } from 'lodash';
 import { React, useState, useEffect } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
@@ -9,45 +10,25 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
 });
-
+let interval;
 export default function Timer(props) {
-  const { recording } = props;
-  const [second, setSecond] = useState(0);
-  const [minute, setMinute] = useState(0);
-  const [hour, setHour] = useState(0);
-  const Increment = () => {
-    if (second < 60) {
-      setSecond(second + 1);
-    } else {
-      setSecond(0);
-      if (minute < 60) {
-        setMinute(minute + 1);
-      } else {
-        setMinute(0);
-        if (hour < 24) {
-          setHour(hour + 1);
-        } else {
-          setSecond(0);
-          setMinute(0);
-          setHour(0);
-        }
-      }
-    }
-  };
-  const StartTimer = () => {
-    setInterval(Increment, 1000);
-  };
-  const StopTimer = () => {
-
-  };
+  const { recording, isPause } = props;
+  const starttime = new Date().getTime();
+  const [counter, setCounter] = useState(new Date().getTime() - starttime);
   useEffect(() => {
-    if (recording === true) {
-      StartTimer();
+    if (recording) {
+      const newinterval = setInterval(() => {
+        if (!isPause) {
+          setCounter(new Date().getTime() - starttime);
+        }
+      }, 1000);
+      interval = newinterval;
     }
-  }, [second, minute, hour]);
+    return () => clearInterval(interval);
+  }, [recording]);
   return (
     <View style={styles.container}>
-      <Text style={styles.content}>{`${hour.toString()}:${minute.toString()}:${second.toString()}`}</Text>
+      <Text style={styles.content}>{`${Math.floor((counter % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))}:${Math.floor((counter % (1000 * 60 * 60)) / (1000 * 60))}:${Math.floor((counter % (1000 * 60)) / 1000)}`}</Text>
     </View>
   );
 }

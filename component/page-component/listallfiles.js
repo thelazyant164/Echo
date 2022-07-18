@@ -5,6 +5,7 @@ import {
 import axios from 'axios';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Filebutton from './file-button';
+import Folderbutton from './folder-button';
 
 const styles = StyleSheet.create({
   appear: {
@@ -18,20 +19,43 @@ const styles = StyleSheet.create({
     display: 'flex',
     width: '100%',
     flexDirection: 'row',
-    margin: 30,
+    margin: 10,
   },
 });
 
-export default function ListallFiles({ filelists, setFiles }) {
+export default function ListallFiles({ filelists, setFiles, goToFolder }) {
   const SendFileInformation = (file) => {
     axios.post('', { fileid: file.id });
   };
+
   if (filelists.length === 0) {
     return (
       <View />
     );
   }
-
+  if (filelists.length > 0) {
+    return (
+      <View>
+        <Modal style={styles.modal}>
+          <Pressable onPress={() => { setFiles([]); }}>
+            <View style={styles.buttonview}>
+              <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+              <Text style={{ fontSize: 20 }}>Back</Text>
+            </View>
+          </Pressable>
+          <FlatList
+            numColumns={3}
+            data={filelists}
+            renderItem={
+                ({ item }) => (
+                  <Folderbutton activeDirectory={item} goToFolder={goToFolder} />
+                )
+              }
+          />
+        </Modal>
+      </View>
+    );
+  }
   return (
     <View>
       <Modal style={styles.modal}>
@@ -45,10 +69,10 @@ export default function ListallFiles({ filelists, setFiles }) {
           numColumns={3}
           data={filelists.files}
           renderItem={
-                ({ item, key }) => (
-                  <Filebutton file={item} setFiles={setFiles} />
-                )
-              }
+            ({ item }) => (
+              <Filebutton file={item} setFiles={setFiles} />
+            )
+          }
         />
 
       </Modal>

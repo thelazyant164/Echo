@@ -10,6 +10,7 @@ import * as Google from 'expo-auth-session/providers/google';
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 import ListallFiles from './listallfiles';
+import { useCachedReadWritePermission } from '../hooks';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,9 +33,15 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function FileUploadForm(props) {
   const { service } = props;
-
+  const {
+    getPermissionFirstTime,
+    getFileContent,
+    files,
+    setFiles,
+    activeDirectory,
+    goToFolder,
+  } = useCachedReadWritePermission();
   const [accesstoken, setAccesstoken] = useState('something');
-  const [files, setFiles] = useState([]);
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: '407037809807-d11u5dn0pvfm4ar2bi88ev0gc1qd6deg.apps.googleusercontent.com',
     androidClientId: '407037809807-97hgildkbh4b5qgbcca1qrqugnsnb5ff.apps.googleusercontent.com',
@@ -47,11 +54,9 @@ export default function FileUploadForm(props) {
     }
   }, [accesstoken]);
 
-  const getFileDevice = () => {
-    const getFileContent = async (path) => {
-      const reader = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-      setFiles(reader);
-    };
+  const getFileDevice = async () => {
+    await getPermissionFirstTime();
+    await getFileContent();
   };
   const getFileDrive = async (res) => {
     GDrive.init();
@@ -102,7 +107,7 @@ export default function FileUploadForm(props) {
           </TouchableOpacity>
         </View>
       </View>
-      <ListallFiles filelists={files} setFiles={setFiles} />
+      <ListallFiles filelists={files} setFiles={setFiles} goToFolder={goToFolder} />
     </View>
   );
 }
