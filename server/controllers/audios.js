@@ -36,7 +36,7 @@ audiosRouter.put('/:id', upload.single('test'), async (request, response, next) 
   };
 
   await Audio.findByIdAndUpdate(request.params.id, audio, { new: true });
-  response.json(request.params.id);
+  response.status(200).end();
 });
 
 audiosRouter.delete('/:id', async (request, response, next) => {
@@ -69,8 +69,8 @@ audiosRouter.post('/', upload.single('test'), async (request, response, next) =>
   const savedAudio = await audio.save();
   user.audios = user.audios.concat(savedAudio._id);
   await user.save();
-
-  response.json(savedAudio._id);
+  const res = { id: savedAudio._id };
+  response.json(res);
 });
 
 module.exports = audiosRouter;
