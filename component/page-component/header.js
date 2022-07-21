@@ -32,7 +32,7 @@ export function Header({ navigation }) {
 
     <View style={style.container}>
       <Text style={style.title}>Echo</Text>
-      <TouchableOpacity style={style.accountbutton} onPress={() => { navigation.navigate('Login'); }}>
+      <TouchableOpacity style={style.accountbutton} onPress={() => { navigation.navigate('Profile'); }}>
         <MaterialCommunityIcon name="account-circle-outline" size={40} />
       </TouchableOpacity>
     </View>

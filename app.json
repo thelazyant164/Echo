@@ -4,10 +4,10 @@
     "slug": "Echo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Logov2.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/Logov2.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFFFFF"
     },

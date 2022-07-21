@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     width: '100%',
     height: '100%',
-    justifyContent: 'center',
     backgroundColor: '#FFFFFF',
 
   },
@@ -41,14 +40,19 @@ const styles = StyleSheet.create({
   },
 });
 export default function SignupPage({ navigation }) {
-  const backendapi = '';
-  const [userInfo, setUser] = useState({ username: '', password: '', confirmpassword: '' });
+  const backendapi = 'http://192.168.5.179:3001/management/users';
+  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmpassword, setConfirmPassword] = useState('');
   const SubmitData = async () => {
-    if (userInfo.confirmpassword === userInfo.password && userInfo.username !== '' && userInfo.password !== null) {
-      /*  axios.post(backendapi, {
-        username: userInfo.username,
-        password: userInfo.password,
-      }).then((response) => { console.log(response); }).catch((err) => { console.log(err); }); */
+    if (confirmpassword === password && username !== '' && password !== null) {
+      axios.post(backendapi, {
+        name,
+        username,
+        password,
+        premium: true,
+      }).then((response) => { console.log(response); }).catch((err) => { console.log(err); });
       navigation.navigate('Login');
     } else {
       Alert.alert('Your passworfd and confirmation are not match');
@@ -58,20 +62,26 @@ export default function SignupPage({ navigation }) {
 
     <View style={styles.inputcontainer}>
       <TextInput
-        onChangeText={setUser}
-        value={userInfo.username}
+        onChangeText={setName}
+        value={name}
+        placeholder=" Name"
+        style={styles.input}
+      />
+      <TextInput
+        onChangeText={setUsername}
+        value={username}
         placeholder=" Username"
         style={styles.input}
       />
       <TextInput
-        onChangeText={setUser}
-        value={userInfo.password}
+        onChangeText={setPassword}
+        value={password}
         placeholder=" Password"
         style={styles.input}
       />
       <TextInput
-        onChangeText={setUser}
-        value={userInfo.confirmpassword}
+        onChangeText={setConfirmPassword}
+        value={confirmpassword}
         placeholder="Re-enter your password"
         style={styles.input}
       />

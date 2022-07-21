@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity, TextInput,
+  StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import axios from 'axios';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -48,46 +48,55 @@ const styles = StyleSheet.create({
 });
 const Stack = createStackNavigator();
 export default function LoginPage({ navigation }) {
-  const backendapi = '';
-  const [userInfo, setUser] = useState({ username: '', password: '' });
+  const backendapi = 'http://100.90.250.177:3001/login';
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const SubmitData = async () => {
-    /*   axios.post(backendapi, {
-      username: userInfo.username,
-      password: userInfo.password,
+    axios.post(backendapi, {
+      username,
+      password,
     }).then((response) => {
-      console.log(response);
-    }).catch((err) => { console.log(err); }); */
-    navigation.navigate('Mainpage');
+      console.log(response.data);
+
+      navigation.navigate('Mainpage');
+    }).catch((err) => {
+      console.log(err.toJSON());
+      Alert.alert('Invalid username or password');
+    });
   };
 
   return (
-    <View>
-      <View style={styles.inputcontainer}>
-        <Text style={styles.title}>Welcome back </Text>
-        <TextInput
-          onChangeText={setUser}
-          value={userInfo.username}
-          placeholder=" Username"
-          style={styles.input}
-        />
-        <TextInput
-          onChangeText={setUser}
-          value={userInfo.username}
-          secureTextEntry
-          placeholder=" Password"
-          style={styles.input}
-        />
-        <View>
-          <TouchableOpacity onPress={SubmitData} style={styles.button}>
-            <Text style={styles.text}>Login</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('Signup'); }}>
-            <Text style={styles.text}>Sign up</Text>
-          </TouchableOpacity>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <View>
+        <View style={styles.inputcontainer}>
+          <Text style={styles.title}>Welcome back </Text>
+          <TextInput
+            onChangeText={setUsername}
+            value={username}
+            placeholder=" Username"
+            style={styles.input}
+          />
+          <TextInput
+            onChangeText={setPassword}
+            value={password}
+            secureTextEntry
+            placeholder=" Password"
+            style={styles.input}
+          />
+          <View>
+            <TouchableOpacity onPress={SubmitData} style={styles.button}>
+              <Text style={styles.text}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('Signup'); }}>
+              <Text style={styles.text}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
