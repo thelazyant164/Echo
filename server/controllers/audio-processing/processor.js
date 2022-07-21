@@ -15,8 +15,7 @@ const normalize = async (raw) => {
 };
 
 const denoise = async (raw) => {
-	
-}
+};
 
 const volume = async (raw) => processed;
 
