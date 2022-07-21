@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Header } from './component/page-component/header';
 // places to import components of the application
-import Navigation from './component/page-component/navigation';
+import AuthenticationNavigation from './component/page-component/authennavigation';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 export default function App() {
   return (
     <View style={styles.container}>
-      <Navigation />
+      <AuthenticationNavigation />
     </View>
   );
 }

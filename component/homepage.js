@@ -2,7 +2,6 @@ import { React, useState } from 'react';
 import {
   StyleSheet, Text, View, FlatList,
 } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Featurebutton } from './page-component/feature-button';
 import { Header } from './page-component/header';
 
@@ -22,13 +21,12 @@ const style = StyleSheet.create({
   },
 });
 
-const Stack = createNativeStackNavigator();
 export function Homepage({ navigation }) {
   const [data, setData] = useState(['Noise cancelling', 'Volume adjust']);
   const allfeature = ['Noise cancelling', 'Volume adjust', 'Speech to text', 'Noise reduction record'];
   return (
     <View>
-      <Header />
+      <Header navigation={navigation} />
       <View style={{ marginTop: 60 }}>
 
         <Text style={{ textAlign: 'center', fontSize: 20 }}>Home</Text>

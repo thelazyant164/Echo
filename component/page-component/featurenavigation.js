@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Homepage } from '../homepage';
 import { RecordPage } from '../record';
 import { VolumeAdjustPage } from '../volume-adjust';
@@ -9,7 +8,6 @@ import { SpeechToTextPage } from '../speech-to-text';
 
 const Stack = createStackNavigator();
 export default function FeatureNavigation() {
-  const allfeature = ['Noise cancelling', 'Volume adjust', 'Speech to text', 'Noise reduction record'];
   return (
     <Stack.Navigator>
       <Stack.Screen

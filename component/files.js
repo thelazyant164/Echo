@@ -89,6 +89,9 @@ export function Files({ navigation }) {
         {activeDirectory ? (
           <TouchableOpacity
             style={style.addbutton}
+            onPress={() => {
+              navigation.navigate('Home');
+            }}
           >
             <AntDesign name="addfile" size={25} style={{ textAlign: 'center', justifyContent: 'center', marginTop: 10 }} />
           </TouchableOpacity>
