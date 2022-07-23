@@ -1,4 +1,4 @@
-import { React, useEffect } from 'react';
+import { React, useEffect, useContext } from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
 } from 'react-native';
@@ -7,6 +7,7 @@ import { Header } from './page-component/header';
 import { FolderInput } from './page-component/newfolder-input';
 import { useCachedReadWritePermission } from './hooks/index';
 import Folderbutton from './page-component/folder-button';
+import { Accesstoken } from './state/AccessTokencontext';
 
 const style = StyleSheet.create({
   feature_container: {
@@ -46,6 +47,8 @@ export function Files({ navigation }) {
     setShowModal,
     goToFolder,
   } = useCachedReadWritePermission();
+  const accesstoken = useContext(Accesstoken);
+  const backendapi = 'http://100.90.250.177:3001/api/audios';
   useEffect(async () => {
     await getPermissionFirstTime();
     await getFileContent();

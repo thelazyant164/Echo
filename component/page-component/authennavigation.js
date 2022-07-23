@@ -7,7 +7,7 @@ import SignupPage from '../signup';
 import Profilepage from '../profile';
 
 const Stack = createStackNavigator();
-export default function AuthenticationNavigation() {
+export default function AuthenticationNavigation(props) {
   return (
     <NavigationContainer>
       <Stack.Navigator>

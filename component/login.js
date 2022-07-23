@@ -1,11 +1,15 @@
-import { React, useState } from 'react';
+import { React, useState, useContext } from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import axios from 'axios';
 import { createStackNavigator } from '@react-navigation/stack';
+import { SetAccesstoken } from './state/AccessTokencontext';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   input: {
     borderWidth: 1,
     marginTop: 10,
@@ -30,7 +34,7 @@ const styles = StyleSheet.create({
     marginLeft: '15%',
     marginTop: '10%',
     width: '70%',
-    height: '15%',
+    height: 50,
     borderRadius: 12,
     backgroundColor: 'rgb(37, 150, 190)',
   },
@@ -48,6 +52,7 @@ const styles = StyleSheet.create({
 });
 const Stack = createStackNavigator();
 export default function LoginPage({ navigation }) {
+  const setAccessToken = useContext(SetAccesstoken);
   const backendapi = 'http://100.90.250.177:3001/login';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -56,11 +61,9 @@ export default function LoginPage({ navigation }) {
       username,
       password,
     }).then((response) => {
-      console.log(response.data);
-
+      setAccessToken(response.data.token);
       navigation.navigate('Mainpage');
     }).catch((err) => {
-      console.log(err.toJSON());
       Alert.alert('Invalid username or password');
     });
   };
@@ -68,6 +71,8 @@ export default function LoginPage({ navigation }) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      enabled
+      style={styles.container}
     >
       <View>
         <View style={styles.inputcontainer}>

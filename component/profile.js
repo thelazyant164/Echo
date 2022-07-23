@@ -1,9 +1,12 @@
-import { React, useState, useEffect } from 'react';
+import {
+  React, useState, useEffect, useContext,
+} from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity, Model,
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
+import { Accesstoken } from './state/AccessTokencontext';
 
 const styles = StyleSheet.create({
   information: {
@@ -45,12 +48,19 @@ const styles = StyleSheet.create({
 export default function Profilepage({ navigation }) {
   const [name, setName] = useState('');
   const [id, setID] = useState('');
-
+  const [Premium, setPremium] = useState(false);
+  const accesstoken = useContext(Accesstoken);
+  const backendapi = 'http://100.90.250.177:3001/api/me';
   useEffect(() => {
-    axios.get('http://100.90.250.177:3001/api/me', { Authorization: 'Bearer' })
-      .then((response) => { setName(response.name); })
-      .catch((err) => { console.log(err); });
-  }, []);
+    console.log(accesstoken);
+    axios.get('http://100.90.250.177:3001/api/me', { headers: { Authorization: `Bearer ${accesstoken}` } })
+      .then((response) => {
+        setName(response.data.name);
+        setID(response.data.id);
+        setPremium(response.data.premium);
+      })
+      .catch((err) => { console.log(`Error:${err}`); });
+  }, [accesstoken]);
   return (
     <View style={styles.container}>
       <View>

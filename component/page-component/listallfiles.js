@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 
 export default function ListallFiles({ filelists, setFiles, goToFolder }) {
   const SendFileInformation = (file) => {
-    axios.post('', { fileid: file.id });
+    /* axios.post('', { fileid: file.id }); */
   };
 
   if (filelists.length === 0) {
@@ -33,7 +33,7 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
       <View />
     );
   }
-  if (filelists.length > 0) {
+  if (filelists.length > 0 && filelists[0].name === undefined) {
     return (
       <View>
         <Modal style={styles.modal}>
@@ -52,6 +52,30 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
                 )
               }
           />
+        </Modal>
+      </View>
+    );
+  }
+  if (filelists.length > 0 && filelists[0].name !== undefined) {
+    return (
+      <View>
+        <Modal style={styles.modal}>
+          <Pressable onPress={() => { setFiles([]); }}>
+            <View style={styles.buttonview}>
+              <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+              <Text style={{ fontSize: 20 }}>Back</Text>
+            </View>
+          </Pressable>
+          <FlatList
+            numColumns={3}
+            data={filelists}
+            renderItem={
+              ({ item }) => (
+                <Filebutton file={item} setFiles={setFiles} />
+              )
+            }
+          />
+
         </Modal>
       </View>
     );

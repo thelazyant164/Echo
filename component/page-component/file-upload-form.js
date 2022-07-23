@@ -1,4 +1,6 @@
-import { React, useState, useEffect } from 'react';
+import {
+  React, useState, useEffect, useContext,
+} from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
@@ -11,6 +13,7 @@ import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 import ListallFiles from './listallfiles';
 import { useCachedReadWritePermission } from '../hooks';
+import { Accesstoken } from '../state/AccessTokencontext';
 
 const styles = StyleSheet.create({
   container: {
@@ -33,6 +36,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 export default function FileUploadForm(props) {
   const { service } = props;
+  const DBaccesstoken = useContext(Accesstoken);
   const {
     getPermissionFirstTime,
     getFileContent,
@@ -42,18 +46,25 @@ export default function FileUploadForm(props) {
     goToFolder,
   } = useCachedReadWritePermission();
   const [accesstoken, setAccesstoken] = useState('something');
-  const [request, response, promptAsync] = Google.useAuthRequest({
+  const [request, Googleresponse, promptAsync] = Google.useAuthRequest({
     expoClientId: '407037809807-d11u5dn0pvfm4ar2bi88ev0gc1qd6deg.apps.googleusercontent.com',
     androidClientId: '407037809807-97hgildkbh4b5qgbcca1qrqugnsnb5ff.apps.googleusercontent.com',
     scopes: ['https://www.googleapis.com/auth/drive'],
   });
-
+  const backendapi = 'http://100.90.250.177:3001/api/audios';
   useEffect(() => {
-    if (response?.type === 'success') {
-      setAccesstoken(response.authentication.accessToken);
+    if (Googleresponse?.type === 'success') {
+      setAccesstoken(Googleresponse.authentication.accessToken);
     }
   }, [accesstoken]);
 
+  const getFileCloud = () => {
+    axios.get(backendapi, { headers: { Authorization: `Bearer ${DBaccesstoken}` } })
+      .then((response) => {
+        setFiles(response.data);
+        console.log(response.data);
+      }).catch((err) => { console.log(err); });
+  };
   const getFileDevice = async () => {
     await getPermissionFirstTime();
     await getFileContent();
@@ -102,7 +113,7 @@ export default function FileUploadForm(props) {
           >
             <Entypo name="google-drive" size={30} />
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginLeft: 20, marginRight: 20 }}>
+          <TouchableOpacity onPress={getFileCloud} style={{ marginLeft: 20, marginRight: 20 }}>
             <Entypo name="icloud" size={30} />
           </TouchableOpacity>
         </View>

@@ -3,6 +3,7 @@ import {
   StyleSheet, Text, View, TouchableOpacity, TextInput, Alert,
 } from 'react-native';
 import axios from 'axios';
+import PlanSignupPage from './plansignup';
 
 const styles = StyleSheet.create({
   input: {
@@ -10,14 +11,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     width: '70%',
-    height: '8%',
+    height: 50,
     borderRadius: 12,
     borderColor: 'gray',
     textAlign: 'center',
     marginLeft: '15%',
   },
   inputcontainer: {
-
+    justifyContent: 'center',
     borderRadius: 12,
     width: '100%',
     height: '100%',
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     marginLeft: '15%',
     marginTop: '10%',
     width: '70%',
-    height: '25%',
+    height: 60,
     borderRadius: 12,
     backgroundColor: 'rgb(37, 150, 190)',
   },
@@ -40,18 +41,20 @@ const styles = StyleSheet.create({
   },
 });
 export default function SignupPage({ navigation }) {
-  const backendapi = 'http://192.168.5.179:3001/management/users';
+  const backendapi = 'http://100.90.250.177/management/users';
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmpassword, setConfirmPassword] = useState('');
+  const [premium, setPremium] = useState(null);
+  const [showmodal, setModal] = useState(false);
   const SubmitData = async () => {
     if (confirmpassword === password && username !== '' && password !== null) {
       axios.post(backendapi, {
         name,
         username,
         password,
-        premium: true,
+        premium,
       }).then((response) => { console.log(response); }).catch((err) => { console.log(err); });
       navigation.navigate('Login');
     } else {
@@ -86,11 +89,20 @@ export default function SignupPage({ navigation }) {
         style={styles.input}
       />
       <View>
-        <TouchableOpacity onPress={SubmitData} style={styles.button}>
-          <Text style={styles.text}>Sign up</Text>
-        </TouchableOpacity>
+        {!premium
+          ? (
+            <TouchableOpacity onPress={() => { setModal(!showmodal); }} style={styles.button}>
+              <Text style={styles.text}>Continue</Text>
+            </TouchableOpacity>
+          )
+          : (
+            <TouchableOpacity onPress={SubmitData} style={styles.button}>
+              <Text style={styles.text}>Sign up</Text>
+            </TouchableOpacity>
+          )}
 
       </View>
+      <PlanSignupPage showmodal={showmodal} setModal={setModal} setPremium={setPremium} />
     </View>
   );
 }

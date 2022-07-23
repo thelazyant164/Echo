@@ -1,9 +1,13 @@
-import { React, useState, useEffect } from 'react';
+import {
+  React, useState, useEffect, useContext,
+} from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
 import axios from 'axios';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Audio } from 'expo-av';
+import { Accesstoken } from '../state/AccessTokencontext';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,6 +24,13 @@ export default function Filebutton(props) {
   const SendFileInformation = () => {
     setFiles('');
     axios.post('', { fileid: file.id });
+  };
+  const accesstoken = useContext(Accesstoken);
+  const GetFileFromCloud = () => {
+    axios.get(`http://192.168.7.179:3001/api/audios/${file.id}`, { headers: { Authorization: `Bearer${accesstoken}` } });
+  };
+  const PlayFile = async () => {
+
   };
   return (
     <View style={styles.container}>

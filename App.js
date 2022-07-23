@@ -1,8 +1,8 @@
-import React from 'react';
+import { React, createContext, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Header } from './component/page-component/header';
 // places to import components of the application
 import AuthenticationNavigation from './component/page-component/authennavigation';
+import AccesstokenState from './component/state/AccessTokencontext';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,8 +14,11 @@ const styles = StyleSheet.create({
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <AuthenticationNavigation />
-    </View>
+    <AccesstokenState>
+      <View style={styles.container}>
+        <AuthenticationNavigation />
+      </View>
+    </AccesstokenState>
+
   );
 }
