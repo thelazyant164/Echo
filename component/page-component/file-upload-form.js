@@ -14,6 +14,7 @@ import axios from 'axios';
 import ListallFiles from './listallfiles';
 import { useCachedReadWritePermission } from '../hooks';
 import { Accesstoken } from '../state/AccessTokencontext';
+import PlayAudioPage from '../audioplay';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,6 +47,8 @@ export default function FileUploadForm(props) {
     goToFolder,
   } = useCachedReadWritePermission();
   const [accesstoken, setAccesstoken] = useState('something');
+  const [audiofile, setAudiofile] = useState(null);
+  const [visible, setVisible] = useState(false);
   const [request, Googleresponse, promptAsync] = Google.useAuthRequest({
     expoClientId: '407037809807-d11u5dn0pvfm4ar2bi88ev0gc1qd6deg.apps.googleusercontent.com',
     androidClientId: '407037809807-97hgildkbh4b5qgbcca1qrqugnsnb5ff.apps.googleusercontent.com',
@@ -59,11 +62,13 @@ export default function FileUploadForm(props) {
   }, [accesstoken]);
 
   const getFileCloud = () => {
+    setVisible(true);
     axios.get(backendapi, { headers: { Authorization: `Bearer ${DBaccesstoken}` } })
       .then((response) => {
+        setVisible(false);
         setFiles(response.data);
         console.log(response.data);
-      }).catch((err) => { console.log(err); });
+      }).catch((err) => { console.log(err); setVisible(false); });
   };
   const getFileDevice = async () => {
     await getPermissionFirstTime();
@@ -79,13 +84,6 @@ export default function FileUploadForm(props) {
       finalresult.files = finalresult.files.filter((file) =>
         _.includes(audioExtensions, file.name.slice(-4), 0));
       setFiles(finalresult);
-      /*
-      axios.post(`/${service}`, finalresult, {
-        headers: {
-          'Content-Type': finalresult.type,
-        },
-      }).then((respon) => { console.log(respon); })
-        .catch((err) => { console.log(err); }); */
     }
   };
 
@@ -118,7 +116,9 @@ export default function FileUploadForm(props) {
           </TouchableOpacity>
         </View>
       </View>
-      <ListallFiles filelists={files} setFiles={setFiles} goToFolder={goToFolder} />
+      {audiofile
+        ? <PlayAudioPage audiofile={audiofile} />
+        : <ListallFiles filelists={files} setFiles={setFiles} goToFolder={goToFolder} />}
     </View>
   );
 }

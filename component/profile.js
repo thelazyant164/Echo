@@ -2,11 +2,12 @@ import {
   React, useState, useEffect, useContext,
 } from 'react';
 import {
-  StyleSheet, Text, View, FlatList, TouchableOpacity, Model,
+  StyleSheet, Text, View, TouchableOpacity, Model,
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import { Accesstoken } from './state/AccessTokencontext';
+import LoadingEffect from './page-component/loadingeffect';
 
 const styles = StyleSheet.create({
   information: {
@@ -49,6 +50,7 @@ export default function Profilepage({ navigation }) {
   const [name, setName] = useState('');
   const [id, setID] = useState('');
   const [Premium, setPremium] = useState(false);
+  const [visible, setVisible] = useState(true);
   const accesstoken = useContext(Accesstoken);
   const backendapi = 'http://100.90.250.177:3001/api/me';
   useEffect(() => {
@@ -58,8 +60,9 @@ export default function Profilepage({ navigation }) {
         setName(response.data.name);
         setID(response.data.id);
         setPremium(response.data.premium);
+        setVisible(false);
       })
-      .catch((err) => { console.log(`Error:${err}`); });
+      .catch((err) => { console.log(`Error:${err}`); setVisible(false); });
   }, [accesstoken]);
   return (
     <View style={styles.container}>
@@ -81,6 +84,7 @@ export default function Profilepage({ navigation }) {
           <Text style={styles.text}>Log out </Text>
         </TouchableOpacity>
       </View>
+      <LoadingEffect visible={visible} />
     </View>
 
   );

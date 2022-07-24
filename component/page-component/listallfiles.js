@@ -71,7 +71,7 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
             data={filelists}
             renderItem={
               ({ item }) => (
-                <Filebutton file={item} setFiles={setFiles} />
+                <Filebutton file={item} setFiles={setFiles} source="cloud" />
               )
             }
           />
@@ -94,7 +94,7 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
           data={filelists.files}
           renderItem={
             ({ item }) => (
-              <Filebutton file={item} setFiles={setFiles} />
+              <Filebutton file={item} setFiles={setFiles} source="drive" />
             )
           }
         />

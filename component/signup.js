@@ -47,7 +47,7 @@ export default function SignupPage({ navigation }) {
   const [password, setPassword] = useState('');
   const [confirmpassword, setConfirmPassword] = useState('');
   const [premium, setPremium] = useState(null);
-  const [showmodal, setModal] = useState(false);
+  const [showmodal, setModal] = useState(true);
   const SubmitData = async () => {
     if (confirmpassword === password && username !== '' && password !== null) {
       axios.post(backendapi, {
@@ -89,7 +89,7 @@ export default function SignupPage({ navigation }) {
         style={styles.input}
       />
       <View>
-        {!premium
+        {premium === null
           ? (
             <TouchableOpacity onPress={() => { setModal(!showmodal); }} style={styles.button}>
               <Text style={styles.text}>Continue</Text>

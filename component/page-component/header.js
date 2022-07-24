@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
@@ -28,8 +28,11 @@ const style = StyleSheet.create({
 });
 
 export function Header({ navigation }) {
-  return (
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
 
+  }, [visible]);
+  return (
     <View style={style.container}>
       <Text style={style.title}>Echo</Text>
       <TouchableOpacity style={style.accountbutton} onPress={() => { navigation.navigate('Profile'); }}>

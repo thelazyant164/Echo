@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 export default function PlayAudioPage(props) {
+  const { audiofile, typeoffile } = props;
   const PlayAudio = async (link) => {
     try {
       const { sound } = await Audio.Sound.createAsync();
@@ -46,7 +47,7 @@ export default function PlayAudioPage(props) {
       <Text />
       <WaveformSeekBar
         style={styles.box}
-        // data={data}
+        data={audiofile}
         backgroundColor="#fff"
         progressColor="gray"
         onChange={(e) => console.log(e.nativeEvent)}

@@ -4,7 +4,9 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { createStackNavigator } from '@react-navigation/stack';
+import { set } from 'lodash';
 import { SetAccesstoken } from './state/AccessTokencontext';
+import LoadingEffect from './page-component/loadingeffect';
 
 const styles = StyleSheet.create({
   container: {
@@ -56,14 +58,19 @@ export default function LoginPage({ navigation }) {
   const backendapi = 'http://100.90.250.177:3001/login';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [visible, setVisible] = useState(false);
+  console.log('Login');
   const SubmitData = async () => {
+    setVisible(true);
     axios.post(backendapi, {
       username,
       password,
     }).then((response) => {
+      setVisible(false);
       setAccessToken(response.data.token);
       navigation.navigate('Mainpage');
     }).catch((err) => {
+      setVisible(false);
       Alert.alert('Invalid username or password');
     });
   };
@@ -99,8 +106,8 @@ export default function LoginPage({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-
       </View>
+      <LoadingEffect visible={visible} />
     </KeyboardAvoidingView>
   );
 }

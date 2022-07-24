@@ -2,7 +2,7 @@ import {
   React, useState, useEffect, useContext,
 } from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity,
+  StyleSheet, Text, View, TouchableOpacity, Alert,
 } from 'react-native';
 import axios from 'axios';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -20,21 +20,31 @@ const styles = StyleSheet.create({
   },
 });
 export default function Filebutton(props) {
-  const { file, setFiles } = props;
-  const SendFileInformation = () => {
-    setFiles('');
-    axios.post('', { fileid: file.id });
-  };
+  const { file, setFiles, source } = props;
   const accesstoken = useContext(Accesstoken);
   const GetFileFromCloud = () => {
-    axios.get(`http://192.168.7.179:3001/api/audios/${file.id}`, { headers: { Authorization: `Bearer${accesstoken}` } });
+    axios.get(`http://100.90.250.177:3001/api/audios/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+      .then((response) => { setFiles(''); console.log(response.data); })
+      .catch((err) => { console.log(err); });
+    setFiles('');
+  };
+  const GetFileFromDevice = () => {};
+  const GetFileFromDrive = () => {};
+  const GetFile = () => {
+    if (source === 'drive') {
+      GetFileFromDrive();
+    } else if (source === 'cloud') {
+      GetFileFromCloud();
+    } else {
+      GetFileFromDevice();
+    }
   };
   const PlayFile = async () => {
 
   };
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={SendFileInformation} style={styles.content}>
+      <TouchableOpacity onPress={GetFileFromCloud} style={styles.content}>
 
         <FontAwesome name="file-audio-o" size={40} />
 
