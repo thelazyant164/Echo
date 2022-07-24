@@ -66,7 +66,7 @@ export function FolderInput({ setShowModal, activeDirectory, setActiveDirectory 
   const [newDirectory, setNewDirectory] = useState('New folder');
   // Create new folder in current active directory
   const createNewFolder = async () => {
-    // Requests permissions for external directory
+    /* Requests permissions for external directory
     if (newDirectory !== '') {
       const permissions = await StorageAccessFramework
         .requestDirectoryPermissionsAsync(FileSystem.documentDirectory);
@@ -81,7 +81,11 @@ export function FolderInput({ setShowModal, activeDirectory, setActiveDirectory 
         return message;
       }
       return '';
-    }
+    } */
+    await FileSystem.makeDirectoryAsync(
+      `${FileSystem.documentDirectory}/${newDirectory}`,
+      { intermediates: true },
+    );
   };
 
   return (

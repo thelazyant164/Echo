@@ -9,6 +9,11 @@ export const useCachedReadWritePermission = () => {
   const [files, setFiles] = useState([]);
   const [activeDirectory, setActiveDirectory] = useState('');
 
+  const readAllFilesTestVersion = async () => {
+    const result = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory
+      + activeDirectory);
+    setFiles(result);
+  };
   const readAllFiles = async () => {
     let uri;
     if (activeDirectory !== '') {
@@ -27,10 +32,13 @@ export const useCachedReadWritePermission = () => {
     setFiles(localfile);
   };
   const getFileContent = async () => {
+    /*
     const permission = await getCachedPermission();
     if (permission.granted) {
       await readAllFiles();
     }
+    */
+    await readAllFilesTestVersion();
   };
   const goToFolder = (path) => {
     setActiveDirectory(path);

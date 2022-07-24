@@ -59,7 +59,6 @@ export default function LoginPage({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
-  console.log('Login');
   const SubmitData = async () => {
     setVisible(true);
     axios.post(backendapi, {

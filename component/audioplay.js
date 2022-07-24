@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import { Audio } from 'expo-av';
 import WaveformSeekBar from 'react-native-waveform-seekbar';
+import audioBufferToWav from 'audiobuffer-to-wav';
 
 const styles = StyleSheet.create({
   container: {
