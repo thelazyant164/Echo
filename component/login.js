@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { set } from 'lodash';
 import { SetAccesstoken } from './state/AccessTokencontext';
 import LoadingEffect from './page-component/loadingeffect';
+import axiosInstance from './service/axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -55,13 +56,13 @@ const styles = StyleSheet.create({
 const Stack = createStackNavigator();
 export default function LoginPage({ navigation }) {
   const setAccessToken = useContext(SetAccesstoken);
-  const backendapi = 'http://100.90.250.177:3001/login';
+  const backendapi = 'login';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
   const SubmitData = async () => {
     setVisible(true);
-    axios.post(backendapi, {
+    axiosInstance.post(backendapi, {
       username,
       password,
     }).then((response) => {

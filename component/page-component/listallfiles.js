@@ -2,10 +2,10 @@ import { React, useState, useEffect } from 'react';
 import {
   View, StyleSheet, Modal, Pressable, Text, FlatList,
 } from 'react-native';
-import axios from 'axios';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Filebutton from './file-button';
 import Folderbutton from './folder-button';
+import axiosInstance from '../service/axios';
 
 const styles = StyleSheet.create({
   appear: {
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 
 export default function ListallFiles({ filelists, setFiles, goToFolder }) {
   const SendFileInformation = (file) => {
-    /* axios.post('', { fileid: file.id }); */
+    /* axiosInstance.post('', { fileid: file.id }); */
   };
 
   if (filelists.length === 0) {

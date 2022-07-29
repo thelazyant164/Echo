@@ -4,12 +4,12 @@ import {
 import {
   StyleSheet, Text, View, TouchableOpacity, Alert,
 } from 'react-native';
-import axios from 'axios';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Audio } from 'expo-av';
 import audioBufferToWav from 'audiobuffer-to-wav';
 import * as FileSystem from 'expo-file-system';
 import { Accesstoken } from '../state/AccessTokencontext';
+import axiosInstance from '../service/axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,8 +25,13 @@ export default function Filebutton(props) {
   const { file, setFiles, source } = props;
   const accesstoken = useContext(Accesstoken);
   const GetFileFromCloud = () => {
-    axios.get(`http://100.90.250.177:3001/api/audios/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
-      .then((response) => { setFiles(''); console.log(response.data.content.buffer); })
+    axiosInstance.get(`api/audios/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+      .then((response) => {
+        // setFiles('');
+        const buffer = response.data.content.buffer;
+        console.log(buffer);
+        audioBufferToWav(buffer);
+      })
       .catch((err) => { console.log(err); });
     setFiles('');
   };

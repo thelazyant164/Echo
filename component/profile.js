@@ -5,9 +5,9 @@ import {
   StyleSheet, Text, View, TouchableOpacity, Model,
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import axios from 'axios';
 import { Accesstoken } from './state/AccessTokencontext';
 import LoadingEffect from './page-component/loadingeffect';
+import axiosInstance from './service/axios';
 
 const styles = StyleSheet.create({
   information: {
@@ -52,10 +52,10 @@ export default function Profilepage({ navigation }) {
   const [Premium, setPremium] = useState(false);
   const [visible, setVisible] = useState(true);
   const accesstoken = useContext(Accesstoken);
-  const backendapi = 'http://100.90.250.177:3001/api/me';
+  const backendapi = 'api/me';
   useEffect(() => {
     console.log(accesstoken);
-    axios.get('http://100.90.250.177:3001/api/me', { headers: { Authorization: `Bearer ${accesstoken}` } })
+    axiosInstance.get('backendapi', { headers: { Authorization: `Bearer ${accesstoken}` } })
       .then((response) => {
         setName(response.data.name);
         setID(response.data.id);

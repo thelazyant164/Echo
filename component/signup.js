@@ -2,8 +2,8 @@ import { React, useState } from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity, TextInput, Alert,
 } from 'react-native';
-import axios from 'axios';
 import PlanSignupPage from './plansignup';
+import axiosInstance from './service/axios';
 
 const styles = StyleSheet.create({
   input: {
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
 });
 export default function SignupPage({ navigation }) {
-  const backendapi = 'http://100.90.250.177/management/users';
+  const backendapi = 'management/users';
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -50,7 +50,7 @@ export default function SignupPage({ navigation }) {
   const [showmodal, setModal] = useState(true);
   const SubmitData = async () => {
     if (confirmpassword === password && username !== '' && password !== null) {
-      axios.post(backendapi, {
+      axiosInstance.post(backendapi, {
         name,
         username,
         password,
