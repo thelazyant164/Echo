@@ -2,19 +2,18 @@ import {
   React, useState, useEffect, useContext,
 } from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity,
+  StyleSheet, Text, View, TouchableOpacity, Alert,
 } from 'react-native';
 import _ from 'lodash';
 import Entypo from 'react-native-vector-icons/Entypo';
 import GDrive from 'expo-google-drive-api-wrapper';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import * as FileSystem from 'expo-file-system';
+import axios from 'axios';
 import ListallFiles from './listallfiles';
 import { useCachedReadWritePermission } from '../hooks';
 import { Accesstoken } from '../state/AccessTokencontext';
 import PlayAudioPage from '../audioplay';
-import axiosInstance from '../service/axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -54,7 +53,7 @@ export default function FileUploadForm(props) {
     androidClientId: '407037809807-97hgildkbh4b5qgbcca1qrqugnsnb5ff.apps.googleusercontent.com',
     scopes: ['https://www.googleapis.com/auth/drive'],
   });
-  const backendapi = 'api/audios';
+  const backendapi = 'http://100.90.250.177:3001/api/audios';
   useEffect(() => {
     if (Googleresponse?.type === 'success') {
       setAccesstoken(Googleresponse.authentication.accessToken);
@@ -63,11 +62,10 @@ export default function FileUploadForm(props) {
 
   const getFileCloud = () => {
     setVisible(true);
-    axiosInstance.get(backendapi, { headers: { Authorization: `Bearer ${DBaccesstoken}` } })
+    axios.get(backendapi, { headers: { Authorization: `Bearer ${DBaccesstoken}` } })
       .then((response) => {
         setVisible(false);
         setFiles(response.data);
-        console.log(response.data);
       }).catch((err) => { console.log(err); setVisible(false); });
   };
   const getFileDevice = async () => {

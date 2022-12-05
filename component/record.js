@@ -55,8 +55,6 @@ export function RecordPage({ navigation }) {
   }, [recording]);
   return (
     <View style={{ alignItems: 'center' }}>
-      <Text style={{ fontSize: 20, textAlign: 'center', marginTop: 60 }}>Noise reduction record</Text>
-
       <TouchableOpacity onPress={() => {
         // eslint-disable-next-line no-unused-expressions
 

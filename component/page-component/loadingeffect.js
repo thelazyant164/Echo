@@ -9,10 +9,9 @@ const styles = StyleSheet.create({
   },
 });
 export default function LoadingEffect(props) {
-  const { visible } = props;
   return (
     <AnimatedLoader
-      visible={visible}
+      visible
       overlayColor="rgba(255,255,255,0.75)"
       // eslint-disable-next-line global-require
       source={require('../../assets/97203-loader.json')}

@@ -84,7 +84,7 @@ export default function Profilepage({ navigation }) {
           <Text style={styles.text}>Log out </Text>
         </TouchableOpacity>
       </View>
-      <LoadingEffect visible={visible} />
+      {visible ? <LoadingEffect /> : <View />}
     </View>
 
   );

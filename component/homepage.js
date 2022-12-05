@@ -46,7 +46,7 @@ export function Homepage({ navigation }) {
         </View>
 
         <View style={style.feature_container}>
-          <Text>Feature</Text>
+          <Text>Features</Text>
           <View style={style.container}>
             <FlatList
               numColumns={4}

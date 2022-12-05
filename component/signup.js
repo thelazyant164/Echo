@@ -106,9 +106,3 @@ export default function SignupPage({ navigation }) {
     </View>
   );
 }
-
-const style = StyleSheet.create({
-  button: {},
-  inputplace: {},
-  inputfield: {},
-});
