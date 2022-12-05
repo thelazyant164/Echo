@@ -1,4 +1,5 @@
 const NormalizeVolume = require('normalize-volume');
+const { splitAudio } = require('audio-splitter');
 const logger = require('../../utils/logger');
 
 const normalize = async (raw) => {
@@ -17,11 +18,20 @@ const normalize = async (raw) => {
 const denoise = async (raw) => {
 };
 
-const volume = async (raw) => processed;
+const volume = async (raw) => {
 
-const silence = async (raw) => processed;
+};
 
-const transcribe = async (raw) => processed;
+const silence = async (raw) => {
+  splitAudio({
+    mergedTrack: 'path/to/file.mp3',
+    outputDir: 'path/to/outdir/',
+  });
+};
+
+const transcribe = async (raw) => {
+
+};
 
 module.exports = {
   normalize, denoise, volume, silence, transcribe,

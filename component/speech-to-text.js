@@ -9,8 +9,7 @@ export function SpeechToTextPage({ navigation }) {
 
   };
   return (
-    <View style={{ marginTop: 60 }}>
-      <Text style={{ textAlign: 'center', fontSize: 20 }}>Speech to text</Text>
+    <View style={{ marginTop: '20%' }}>
       <FileUploadForm />
     </View>
   );

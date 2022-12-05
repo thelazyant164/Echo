@@ -1,9 +1,8 @@
-import { React } from 'react';
+import { React, useState } from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import * as FileSystem from 'expo-file-system';
 
 const style = StyleSheet.create({
   container: {
@@ -22,7 +21,9 @@ const style = StyleSheet.create({
   },
 });
 export default function Folderbutton(props) {
-  const { activeDirectory, goToFolder } = props;
+  const {
+    activeDirectory, goToFolder, setVisible, setFolder,
+  } = props;
   return (
     <View style={style.container}>
       <TouchableOpacity
@@ -35,10 +36,11 @@ export default function Folderbutton(props) {
           // goToFolder(activeDirectory.slice(94, activeDirectory.length));
           goToFolder(activeDirectory);
         }}
+        onLongPress={() => { setVisible(true); setFolder(activeDirectory); }}
+
       >
         <AntDesign name="folder1" size={40} />
         <Text>{activeDirectory}</Text>
-        <Text>{activeDirectory.slice(94, activeDirectory.length).replace('%20', ' ')}</Text>
       </TouchableOpacity>
     </View>
   );

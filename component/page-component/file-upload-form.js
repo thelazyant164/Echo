@@ -2,14 +2,13 @@ import {
   React, useState, useEffect, useContext,
 } from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity,
+  StyleSheet, Text, View, TouchableOpacity, Alert,
 } from 'react-native';
 import _ from 'lodash';
 import Entypo from 'react-native-vector-icons/Entypo';
 import GDrive from 'expo-google-drive-api-wrapper';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
-import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
 import ListallFiles from './listallfiles';
 import { useCachedReadWritePermission } from '../hooks';
@@ -67,7 +66,6 @@ export default function FileUploadForm(props) {
       .then((response) => {
         setVisible(false);
         setFiles(response.data);
-        console.log(response.data);
       }).catch((err) => { console.log(err); setVisible(false); });
   };
   const getFileDevice = async () => {

@@ -4,7 +4,6 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { createStackNavigator } from '@react-navigation/stack';
-import { set } from 'lodash';
 import { SetAccesstoken } from './state/AccessTokencontext';
 import LoadingEffect from './page-component/loadingeffect';
 
@@ -106,13 +105,7 @@ export default function LoginPage({ navigation }) {
           </View>
         </View>
       </View>
-      <LoadingEffect visible={visible} />
+      { visible ? <LoadingEffect /> : <View />}
     </KeyboardAvoidingView>
   );
 }
-
-const style = StyleSheet.create({
-  button: {},
-  inputplace: {},
-  inputfield: {},
-});

@@ -6,6 +6,7 @@ import axios from 'axios';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Filebutton from './file-button';
 import Folderbutton from './folder-button';
+import FolderOptions from './folderoptions';
 
 const styles = StyleSheet.create({
   appear: {
@@ -13,6 +14,8 @@ const styles = StyleSheet.create({
   },
   disappear: {},
   modal: {
+    width: '100%',
+    height: '100%',
 
   },
   buttonview: {
@@ -24,6 +27,10 @@ const styles = StyleSheet.create({
 });
 
 export default function ListallFiles({ filelists, setFiles, goToFolder }) {
+  const [isVisible, setVisible] = useState(false);
+  const [folder, setFolder] = useState('');
+
+  useEffect(() => { console.log(filelists); }, [isVisible, filelists]);
   const SendFileInformation = (file) => {
     /* axios.post('', { fileid: file.id }); */
   };
@@ -35,53 +42,6 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
   }
   if (filelists.length > 0 && filelists[0].name === undefined) {
     return (
-      <View>
-        <Modal style={styles.modal}>
-          <Pressable onPress={() => { setFiles([]); }}>
-            <View style={styles.buttonview}>
-              <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
-              <Text style={{ fontSize: 20 }}>Back</Text>
-            </View>
-          </Pressable>
-          <FlatList
-            numColumns={3}
-            data={filelists}
-            renderItem={
-                ({ item }) => (
-                  <Folderbutton activeDirectory={item} goToFolder={goToFolder} />
-                )
-              }
-          />
-        </Modal>
-      </View>
-    );
-  }
-  if (filelists.length > 0 && filelists[0].name !== undefined) {
-    return (
-      <View>
-        <Modal style={styles.modal}>
-          <Pressable onPress={() => { setFiles([]); }}>
-            <View style={styles.buttonview}>
-              <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
-              <Text style={{ fontSize: 20 }}>Back</Text>
-            </View>
-          </Pressable>
-          <FlatList
-            numColumns={3}
-            data={filelists}
-            renderItem={
-              ({ item }) => (
-                <Filebutton file={item} setFiles={setFiles} source="cloud" />
-              )
-            }
-          />
-
-        </Modal>
-      </View>
-    );
-  }
-  return (
-    <View>
       <Modal style={styles.modal}>
         <Pressable onPress={() => { setFiles([]); }}>
           <View style={styles.buttonview}>
@@ -91,15 +51,71 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
         </Pressable>
         <FlatList
           numColumns={3}
-          data={filelists.files}
+          data={filelists}
           renderItem={
+                ({ item }) => (
+                  <Folderbutton
+                    activeDirectory={item}
+                    goToFolder={goToFolder}
+                    setVisible={setVisible}
+                    setFolder={setFolder}
+                  />
+                )
+              }
+        />
+        {isVisible ? (
+          <FolderOptions
+            folder={folder}
+            setVisible={setVisible}
+            setFiles={setFiles}
+          />
+        ) : <View />}
+      </Modal>
+    );
+  }
+  if (filelists.length > 0 && filelists[0].name !== undefined) {
+    return (
+      <Modal style={styles.modal}>
+        <Pressable onPress={() => { setFiles([]); }}>
+          <View style={styles.buttonview}>
+            <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+            <Text style={{ fontSize: 20 }}>Back</Text>
+          </View>
+        </Pressable>
+        <FlatList
+          numColumns={3}
+          data={filelists}
+          renderItem={
+              ({ item }) => (
+                <Filebutton file={item} setFiles={setFiles} source="cloud" mission="normalize" />
+              )
+            }
+        />
+
+      </Modal>
+
+    );
+  }
+  return (
+
+    <Modal style={styles.modal}>
+      <Pressable onPress={() => { setFiles([]); }}>
+        <View style={styles.buttonview}>
+          <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+          <Text style={{ fontSize: 20 }}>Back</Text>
+        </View>
+      </Pressable>
+      <FlatList
+        numColumns={3}
+        data={filelists.files}
+        renderItem={
             ({ item }) => (
               <Filebutton file={item} setFiles={setFiles} source="drive" />
             )
           }
-        />
+      />
 
-      </Modal>
-    </View>
+    </Modal>
+
   );
 }

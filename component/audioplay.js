@@ -1,10 +1,10 @@
 import { React, useState, useEffect } from 'react';
 import {
-  Text, View, StyleSheet, Button, Modal,
+  Text, View, StyleSheet, Button, Modal, TouchableOpacity,
 } from 'react-native';
 import { Audio } from 'expo-av';
 import WaveformSeekBar from 'react-native-waveform-seekbar';
-import audioBufferToWav from 'audiobuffer-to-wav';
+import Feather from 'react-native-vector-icons/Feather';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
   },
 });
 export default function PlayAudioPage(props) {
-  const { audiofile, typeoffile } = props;
+  const { audiofile } = props;
+  const { isPlaying, setPlaying } = useState(false);
   const PlayAudio = async (link) => {
     try {
       const { sound } = await Audio.Sound.createAsync();
@@ -53,6 +54,19 @@ export default function PlayAudioPage(props) {
         progressColor="gray"
         onChange={(e) => console.log(e.nativeEvent)}
       />
+      {
+        isPlaying
+          ? (
+            <TouchableOpacity onPress={() => { setPlaying(false); }}>
+              <Feather name="play" size={50} style={{ marginTop: 200 }} />
+            </TouchableOpacity>
+          )
+          : (
+            <TouchableOpacity onPress={() => { setPlaying(true); }}>
+              <Feather name="pause" size={50} style={{ marginTop: 200 }} />
+            </TouchableOpacity>
+          )
+      }
     </Modal>
   );
 }

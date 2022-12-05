@@ -1,4 +1,6 @@
-import { React, useEffect, useContext } from 'react';
+import {
+  React, useEffect, useContext, useState,
+} from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
 } from 'react-native';
@@ -8,6 +10,7 @@ import { FolderInput } from './page-component/newfolder-input';
 import { useCachedReadWritePermission } from './hooks/index';
 import Folderbutton from './page-component/folder-button';
 import { Accesstoken } from './state/AccessTokencontext';
+import FolderOptions from './page-component/folderoptions';
 
 const style = StyleSheet.create({
   feature_container: {
@@ -29,7 +32,7 @@ const style = StyleSheet.create({
     height: 50,
     borderRadius: 30,
     position: 'absolute',
-    marginTop: 600,
+    marginTop: 500,
     marginLeft: 350,
   },
 
@@ -47,6 +50,8 @@ export function Files({ navigation }) {
     setShowModal,
     goToFolder,
   } = useCachedReadWritePermission();
+  const [isVisible, setVisible] = useState(false);
+  const [folder, setFolder] = useState('');
   const accesstoken = useContext(Accesstoken);
   const backendapi = 'http://100.90.250.177:3001/api/audios';
   useEffect(async () => {
@@ -84,7 +89,12 @@ export function Files({ navigation }) {
               numColumns={3}
               data={files}
               renderItem={({ item }) => (
-                <Folderbutton activeDirectory={item} goToFolder={goToFolder} />
+                <Folderbutton
+                  activeDirectory={item}
+                  goToFolder={goToFolder}
+                  setVisible={setVisible}
+                  setFolder={setFolder}
+                />
               )}
             />
           </View>
@@ -119,6 +129,13 @@ export function Files({ navigation }) {
         )}
 
       </View>
+      {isVisible ? (
+        <FolderOptions
+          folder={folder}
+          setVisible={setVisible}
+          setFiles={setFiles}
+        />
+      ) : <View />}
     </View>
   );
 }
