@@ -5,11 +5,10 @@ import os
 
 
 def Transcribe(file):
-    # file is location of audio in file system
+    # file is name of audio (no extension) in file system
     r = sr.Recognizer()
-    f = open("server/temp/results/" +
-             file[0:-4] + "-transcribed.txt", "a").close()
-    with sr.AudioFile("server/temp/files/" + file) as source:
+    f = open(f"server/temp/results/{file}-transcribed.txt", "a").close()
+    with sr.AudioFile(f"server/temp/files/{file}") as source:
         # listen for the data (load audio to memory)
         audio_data = r.record(source)
         # recognize (convert from speech to text)
@@ -17,11 +16,10 @@ def Transcribe(file):
             text = r.recognize_google(audio_data)
         except:
             text = "No eligible speech detected."
-        f = open("server/temp/results/" + file[0:-4] + "-transcribed.txt", "w")
+        f = open(f"server/temp/results/{file}-transcribed.txt", "w")
         f.write(text)
     f.close()
-    print("server\\temp\\results\\" +
-          file[0:-4] + "-transcribed.txt")
+    print(f"server\\temp\\results\\{file}-transcribed.txt")
 
 
 Transcribe(sys.argv[1])

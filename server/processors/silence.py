@@ -4,12 +4,10 @@ import soundfile
 import sys
 
 
-def Silence(file_path):  # file is location of audio in file system
-    file_name = file_path.split('/')[-1]
-    audio_format = "wav"
-
+def Silence(file):
+    # file is name of audio (no extension) in file system
     # Reading and splitting the audio file into chunks
-    sound = AudioSegment.from_file(file_path, format=audio_format)
+    sound = AudioSegment.from_file(f"server/temp/files/{file}.wav", "wav")
     audio_chunks = split_on_silence(
         sound, min_silence_len=100, silence_thresh=-45, keep_silence=50)
     # Putting the file back together
@@ -17,8 +15,8 @@ def Silence(file_path):  # file is location of audio in file system
     for chunk in audio_chunks:
         combined += chunk
     combined.export(
-        f'server/temp/results/{file_name}-silenceRemoved', format=audio_format)
-    print(f'server\\temp\\results\\{file_name}-silenceRemoved.wav')
+        f'server/temp/results/{file}-silenceRemoved', format="wav")
+    print(f'server\\temp\\results\\{file}-silenceRemoved.wav')
 
 
 Silence(sys.argv[1])

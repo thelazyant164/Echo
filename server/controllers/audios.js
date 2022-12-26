@@ -4,6 +4,7 @@ const audiosRouter = require('express').Router();
 const User = require('../models/user');
 const Audio = require('../models/audio');
 const { getLoggedInUser, authorizeRequest } = require('../utils/authHelper');
+const { getBufferFileFromId } = require('../utils/bufferHelper');
 
 const upload = multer();
 
@@ -16,12 +17,7 @@ audiosRouter.get('/', async (request, response) => {
 
 audiosRouter.get('/:id', async (request, response, next) => {
   await authorizeRequest(request, response);
-  const audio = await Audio.findById(request.params.id);
-  if (audio) {
-    response.json(audio);
-  } else {
-    response.status(404).end();
-  }
+  await getBufferFileFromId(request, response);
 });
 
 audiosRouter.put('/:id', upload.single('test'), async (request, response, next) => {
