@@ -1,16 +1,14 @@
-import { React, useState, useEffect } from 'react';
+import React from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
 } from 'react-native';
 import FileUploadForm from './page-component/file-upload-form';
 
-export function SpeechToTextPage({ navigation }) {
-  const Speedtotext = (audiofile) => {
-
-  };
+export function NoisecancellingPage({ navigation }) {
   return (
     <View style={{ marginTop: '20%' }}>
-      <FileUploadForm service="speechtotext" navigation={navigation} />
+
+      <FileUploadForm service="noisecancelling" navigation={navigation} />
     </View>
   );
 }

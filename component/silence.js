@@ -4,11 +4,10 @@ import {
 } from 'react-native';
 import FileUploadForm from './page-component/file-upload-form';
 
-export function NoisecancellingPage({ navigation }) {
+export function SilencePage({ navigation }) {
   return (
     <View style={{ marginTop: '20%' }}>
-
-      <FileUploadForm />
+      <FileUploadForm service="silence" navigation={navigation} />
     </View>
   );
 }

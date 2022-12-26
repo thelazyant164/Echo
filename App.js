@@ -1,7 +1,7 @@
 import { React, createContext, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 // places to import components of the application
-import AuthenticationNavigation from './component/page-component/authennavigation';
+import AuthenticationNavigation from './component/page-component/authen-navigation';
 import AccesstokenState from './component/state/AccessTokencontext';
 
 const styles = StyleSheet.create({

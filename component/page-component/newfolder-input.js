@@ -13,6 +13,10 @@ const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
+    position: 'absolute',
+    width: '80%',
+    height: '50%',
+    zIndex: 1000,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
@@ -28,19 +32,19 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   button: {
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 20,
+    marginBottom: 20,
     borderRadius: 20,
     padding: 10,
     elevation: 2,
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
-    width: 100,
+    width: 200,
   },
   buttonClose: {
     backgroundColor: '#2196F3',
-    width: 100,
+    width: 200,
   },
   textStyle: {
     color: 'white',
@@ -53,7 +57,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderColor: 'gray',
-    width: 150,
+    width: 250,
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,

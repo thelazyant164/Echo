@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 });
 //
 export default function Timer(props) {
-  const { recording, isPause, reset } = props;
+  const { state } = props;
   const [counter, setCounter] = useState(0);
   /* useEffect(() => {
     if (recording && isPause) {
@@ -27,11 +27,10 @@ export default function Timer(props) {
     return () => clearInterval(interval);
   }, [isPause]); */
   useEffect(() => {
-    setCounter(0);
-  }, [reset]);
-  useInterval(() => {
-    setCounter(counter + 1);
-  }, isPause ? null : 1000);
+    if (state === 'stop') { setCounter(0); } else if (state === 'play') {
+      setCounter(counter + 1);
+    }
+  }, [state]);
 
   return (
     <View style={styles.container}>

@@ -1,10 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Homepage } from '../homepage';
+import { Homepage } from '../home-page';
 import { RecordPage } from '../record';
 import { VolumeAdjustPage } from '../volume-adjust';
-import { NoisecancellingPage } from '../noisecancelling';
+import { NoisecancellingPage } from '../noise-cancelling';
 import { SpeechToTextPage } from '../speech-to-text';
+import { NormalizationPage } from '../normalization';
+import { SilencePage } from '../silence';
 
 const Stack = createStackNavigator();
 export default function FeatureNavigation() {
@@ -34,6 +36,16 @@ export default function FeatureNavigation() {
         key="Noise reduction record"
         name="Noise reduction record"
         component={RecordPage}
+      />
+      <Stack.Screen
+        key="Normalization"
+        name="Normalization"
+        component={NormalizationPage}
+      />
+      <Stack.Screen
+        key="Silence"
+        name="Silence"
+        component={SilencePage}
       />
     </Stack.Navigator>
   );

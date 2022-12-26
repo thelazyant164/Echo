@@ -7,7 +7,8 @@ import {
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import { Accesstoken } from './state/AccessTokencontext';
-import LoadingEffect from './page-component/loadingeffect';
+import LoadingEffect from './page-component/loading-effect';
+import { Configuration } from '../configuration/configuration';
 
 const styles = StyleSheet.create({
   information: {
@@ -52,17 +53,16 @@ export default function Profilepage({ navigation }) {
   const [Premium, setPremium] = useState(false);
   const [visible, setVisible] = useState(true);
   const accesstoken = useContext(Accesstoken);
-  const backendapi = 'http://100.90.250.177:3001/api/me';
+  const backendapi = `${Configuration.backendAPI}/api/me`;
   useEffect(() => {
-    console.log(accesstoken);
-    axios.get('http://100.90.250.177:3001/api/me', { headers: { Authorization: `Bearer ${accesstoken}` } })
+    axios.get(backendapi, { headers: { Authorization: `Bearer ${accesstoken}` } })
       .then((response) => {
         setName(response.data.name);
         setID(response.data.id);
         setPremium(response.data.premium);
         setVisible(false);
       })
-      .catch((err) => { console.log(`Error:${err}`); setVisible(false); });
+      .catch((err) => { console.warn(`Error:${err}`); setVisible(false); });
   }, [accesstoken]);
   return (
     <View style={styles.container}>
@@ -82,6 +82,9 @@ export default function Profilepage({ navigation }) {
         </Text>
         <TouchableOpacity onPress={() => { navigation.navigate('Login'); }} style={styles.button}>
           <Text style={styles.text}>Log out </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={!Premium ? () => { navigation.navigate('PlanSignupPage'); } : null} disable={Premium} style={styles.button}>
+          <Text style={styles.text}>Upgraded </Text>
         </TouchableOpacity>
       </View>
       {visible ? <LoadingEffect /> : <View />}

@@ -29,18 +29,15 @@ export default function Folderbutton(props) {
       <TouchableOpacity
         style={style.folderbutton}
         onPress={async () => {
-          /* await FileSystem.makeDirectoryAsync(`${FileSystem.documentDirectory}/JasonMraz`,
-          { intermediates: true });
-          console.log(await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}/Songs`));
-          console.log(await FileSystem.readDirectoryAsync(FileSystem.documentDirectory)); */
-          // goToFolder(activeDirectory.slice(94, activeDirectory.length));
           goToFolder(activeDirectory);
         }}
-        onLongPress={() => { setVisible(true); setFolder(activeDirectory); }}
-
+        onLongPress={() => {
+          setVisible.current.open();
+          setFolder(activeDirectory);
+        }}
       >
         <AntDesign name="folder1" size={40} />
-        <Text>{activeDirectory}</Text>
+        <Text>{activeDirectory.slice(0, 8)}</Text>
       </TouchableOpacity>
     </View>
   );

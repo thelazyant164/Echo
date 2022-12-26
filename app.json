@@ -7,7 +7,7 @@
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#FFFFFF"
     },
@@ -15,7 +15,7 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*" 
+      "**/*"
     ],
     "ios": {
       "supportsTablet": true
@@ -23,12 +23,18 @@
     "android": {
       "package": "com.Echo",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/favicon.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "scheme": "com.Echo",
+    "extra": {
+      "eas": {
+        "projectId": "61a8a2aa-dad9-444e-9b65-66364985396d"
+      }
     }
   }
 }

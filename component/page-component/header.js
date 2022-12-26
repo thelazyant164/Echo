@@ -9,8 +9,9 @@ const style = StyleSheet.create({
     fontSize: 24,
     marginTop: 40,
     marginLeft: 20,
+    display: 'flex',
     justifyContent: 'center',
-
+    alignItems: 'center',
   },
   container: {
     backgroundColor: '#D9D9D9',
@@ -29,6 +30,7 @@ const style = StyleSheet.create({
 
 export function Header({ navigation }) {
   const [visible, setVisible] = useState(false);
+
   useEffect(() => {
 
   }, [visible]);

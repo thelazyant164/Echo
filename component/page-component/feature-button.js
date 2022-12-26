@@ -3,6 +3,8 @@ import {
   StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import * as FileSystem from 'expo-file-system';
 
 const style = StyleSheet.create({
   button: {
@@ -72,7 +74,33 @@ export function Featurebutton(props) {
         </View>
       </TouchableOpacity>
     );
+  } if (feature.toLowerCase() === 'normalization') {
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+        <View style={style.content}>
+          <MaterialCommunityIcons
+            name="waveform"
+            size={20}
+          />
+          <Text>{feature}</Text>
+        </View>
+      </TouchableOpacity>
+    );
   }
+  if (feature.toLowerCase() === 'silence') {
+    return (
+      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+        <View style={style.content}>
+          <MaterialIcons
+            name="leak-remove"
+            size={20}
+          />
+          <Text>{feature}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <View />
   );

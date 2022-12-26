@@ -32,12 +32,6 @@ export const useCachedReadWritePermission = () => {
     setFiles(localfile);
   };
   const getFileContent = async () => {
-    /*
-    const permission = await getCachedPermission();
-    if (permission.granted) {
-      await readAllFiles();
-    }
-    */
     await readAllFilesTestVersion();
   };
   const goToFolder = (path) => {

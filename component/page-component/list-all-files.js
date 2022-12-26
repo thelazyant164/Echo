@@ -1,4 +1,6 @@
-import { React, useState, useEffect } from 'react';
+import {
+  React, useState, useEffect, useRef,
+} from 'react';
 import {
   View, StyleSheet, Modal, Pressable, Text, FlatList,
 } from 'react-native';
@@ -6,7 +8,7 @@ import axios from 'axios';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Filebutton from './file-button';
 import Folderbutton from './folder-button';
-import FolderOptions from './folderoptions';
+import FolderOptions from './folder-options';
 
 const styles = StyleSheet.create({
   appear: {
@@ -26,16 +28,23 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function ListallFiles({ filelists, setFiles, goToFolder }) {
-  const [isVisible, setVisible] = useState(false);
+export default function ListallFiles({
+  filelists,
+  setFiles,
+  goToFolder,
+  service,
+  setActiveDirectory,
+  showFileLists,
+  setshowFileLists,
+  activeDirectory,
+  source,
+}) {
   const [folder, setFolder] = useState('');
+  const refRBSheet = useRef();
 
-  useEffect(() => { console.log(filelists); }, [isVisible, filelists]);
-  const SendFileInformation = (file) => {
-    /* axios.post('', { fileid: file.id }); */
-  };
+  useEffect(() => { }, [filelists]);
 
-  if (filelists.length === 0) {
+  if ((!showFileLists)) {
     return (
       <View />
     );
@@ -43,7 +52,14 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
   if (filelists.length > 0 && filelists[0].name === undefined) {
     return (
       <Modal style={styles.modal}>
-        <Pressable onPress={() => { setFiles([]); }}>
+        <Pressable onPress={() => {
+          if (!activeDirectory) {
+            setshowFileLists(false);
+          }
+          setFiles([]);
+          setActiveDirectory('');
+        }}
+        >
           <View style={styles.buttonview}>
             <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
             <Text style={{ fontSize: 20 }}>Back</Text>
@@ -57,26 +73,33 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
                   <Folderbutton
                     activeDirectory={item}
                     goToFolder={goToFolder}
-                    setVisible={setVisible}
+                    setVisible={refRBSheet}
                     setFolder={setFolder}
                   />
                 )
               }
         />
-        {isVisible ? (
-          <FolderOptions
-            folder={folder}
-            setVisible={setVisible}
-            setFiles={setFiles}
-          />
-        ) : <View />}
+
+        <FolderOptions
+          folder={folder}
+          setFiles={setFiles}
+          refRBSheet={refRBSheet}
+        />
+
       </Modal>
     );
   }
   if (filelists.length > 0 && filelists[0].name !== undefined) {
     return (
       <Modal style={styles.modal}>
-        <Pressable onPress={() => { setFiles([]); }}>
+        <Pressable onPress={() => {
+          if (!activeDirectory) {
+            setshowFileLists(false);
+          }
+          setFiles([]);
+          setActiveDirectory('');
+        }}
+        >
           <View style={styles.buttonview}>
             <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
             <Text style={{ fontSize: 20 }}>Back</Text>
@@ -87,7 +110,7 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
           data={filelists}
           renderItem={
               ({ item }) => (
-                <Filebutton file={item} setFiles={setFiles} source="cloud" mission="normalize" />
+                <Filebutton file={item} setFiles={setFiles} source={source} mission={service} />
               )
             }
         />
@@ -99,7 +122,14 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
   return (
 
     <Modal style={styles.modal}>
-      <Pressable onPress={() => { setFiles([]); }}>
+      <Pressable onPress={() => {
+        if (!activeDirectory) {
+          setshowFileLists(false);
+        }
+        setFiles([]);
+        setActiveDirectory('');
+      }}
+      >
         <View style={styles.buttonview}>
           <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
           <Text style={{ fontSize: 20 }}>Back</Text>
@@ -110,11 +140,10 @@ export default function ListallFiles({ filelists, setFiles, goToFolder }) {
         data={filelists.files}
         renderItem={
             ({ item }) => (
-              <Filebutton file={item} setFiles={setFiles} source="drive" />
+              <Filebutton file={item} setFiles={setFiles} source={source} mission={service} />
             )
           }
       />
-
     </Modal>
 
   );

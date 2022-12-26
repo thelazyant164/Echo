@@ -23,7 +23,7 @@ const style = StyleSheet.create({
 
 export function Homepage({ navigation }) {
   const [data, setData] = useState(['Noise cancelling', 'Volume adjust']);
-  const allfeature = ['Noise cancelling', 'Volume adjust', 'Speech to text', 'Noise reduction record'];
+  const allfeature = ['Noise cancelling', 'Volume adjust', 'Speech to text', 'Normalization', 'Noise reduction record', 'Silence'];
   return (
     <View>
       <Header navigation={navigation} />

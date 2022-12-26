@@ -24,8 +24,7 @@ const styles = StyleSheet.create({
 });
 export function RecordPage({ navigation }) {
   const [recording, setRecording] = useState(false);
-  const [isPause, setPause] = useState(true);
-  const [reset, setReset] = useState(false);
+  const [state, setState] = useState('stop');
   async function startRecording() {
     try {
       await Audio.requestPermissionsAsync();
@@ -38,56 +37,58 @@ export function RecordPage({ navigation }) {
         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
       );
       setRecording(recording);
+      setState('play');
     } catch (err) {
       console.error('Failed to start recording', err);
     }
   }
   async function pauseRecording() {
     await recording.pauseAsync();
+    setState('pause');
   }
   async function stopRecording() {
     await recording.stopAndUnloadAsync();
     const uri = recording.getURI();
+    setState('stop');
     console.log('Recording stopped and stored at', uri);
   }
-  useEffect(() => {
 
-  }, [recording]);
   return (
     <View style={{ alignItems: 'center' }}>
       <TouchableOpacity onPress={() => {
         // eslint-disable-next-line no-unused-expressions
-
-        if (!recording) {
-          startRecording();
-        }
-
-        setPause(!isPause);
-        if (isPause && recording) {
-          pauseRecording();
+        switch (state) {
+          case 'stop':
+            startRecording();
+            break;
+          case 'pause':
+            startRecording();
+            break;
+          case 'play':
+            pauseRecording();
+            break;
+          default:
         }
       }}
       >
-        { !isPause ? <Feather name="pause" size={50} style={{ marginTop: 200 }} /> : <Feather name="play" size={50} style={{ marginTop: 200 }} />}
+        { state !== 'play' ? <Feather name="play" size={50} style={{ marginTop: 200 }} /> : <Feather name="pause" size={50} style={{ marginTop: 200 }} />}
       </TouchableOpacity>
-      <Timer recording={recording} isPause={isPause} reset={reset} />
-      {recording ? (
-        <TouchableOpacity
-          onPress={async () => {
-            setReset(true);
-            setPause(true);
-            stopRecording();
-          }}
-          style={styles.buttonactive}
+      <Timer recording={recording} setState={setState} state={state} />
+      <TouchableOpacity
+        onPress={async () => {
+          stopRecording();
+        }}
+        disabled={!recording}
+        style={recording ? styles.buttonactive : styles.buttondisable}
+      >
+        <Text style={{
+          textAlign: 'center', justifyContent: 'center', fontSize: 20, top: '20%',
+        }}
         >
-          <Text style={{ textAlign: 'center', marginTop: '10%', fontSize: 20 }}>Save</Text>
-        </TouchableOpacity>
-      )
-        : (
-          <View style={styles.buttondisable}>
-            <Text style={{ textAlign: 'center', marginTop: '10%', fontSize: 20 }}>Save</Text>
-          </View>
-        ) }
+          Save
+        </Text>
+      </TouchableOpacity>
+
     </View>
   );
 }

@@ -1,10 +1,11 @@
 import { React, useState, useEffect } from 'react';
 import {
-  Text, View, StyleSheet, Button, Modal, TouchableOpacity,
+  Text, View, StyleSheet, Modal, TouchableOpacity,
 } from 'react-native';
 import { Audio } from 'expo-av';
 import WaveformSeekBar from 'react-native-waveform-seekbar';
 import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,9 +30,9 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
-export default function PlayAudioPage(props) {
-  const { audiofile } = props;
-  const { isPlaying, setPlaying } = useState(false);
+
+export default function PlayAudioPage({ audiofile, setAudiofile }) {
+  const [isPlaying, setPlaying] = useState(false);
   const PlayAudio = async (link) => {
     try {
       const { sound } = await Audio.Sound.createAsync();
@@ -44,29 +45,40 @@ export default function PlayAudioPage(props) {
   const PauseAudio = async () => {
 
   };
+  if (audiofile == null) {
+    return <View />;
+  }
+
   return (
-    <Modal>
-      <Text />
-      <WaveformSeekBar
+    <Modal style={styles.container}>
+      {/* <WaveformSeekBar
         style={styles.box}
-        data={audiofile}
+        data={[1, 2]}
         backgroundColor="#fff"
         progressColor="gray"
         onChange={(e) => console.log(e.nativeEvent)}
-      />
+      /> */}
       {
-        isPlaying
-          ? (
-            <TouchableOpacity onPress={() => { setPlaying(false); }}>
-              <Feather name="play" size={50} style={{ marginTop: 200 }} />
-            </TouchableOpacity>
-          )
-          : (
-            <TouchableOpacity onPress={() => { setPlaying(true); }}>
-              <Feather name="pause" size={50} style={{ marginTop: 200 }} />
-            </TouchableOpacity>
-          )
-      }
+      isPlaying
+        ? (
+          <TouchableOpacity onPress={() => { setPlaying(false); PlayAudio(); }}>
+            <Feather name="play" size={50} style={{ marginTop: 200 }} />
+          </TouchableOpacity>
+        )
+        : (
+          <TouchableOpacity onPress={() => { setPlaying(true); PauseAudio(); }}>
+            <Feather name="pause" size={50} style={{ marginTop: 200 }} />
+          </TouchableOpacity>
+        )
+    }
+
+      <TouchableOpacity onPress={() => {
+        setAudiofile(null);
+      }}
+      >
+        <Text>Back</Text>
+      </TouchableOpacity>
     </Modal>
+  // <Text>{JSON.stringify(audiofile)}</Text>
   );
 }

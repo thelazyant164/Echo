@@ -1,5 +1,6 @@
 const fs = require('fs');
 const audioProcessingRouter = require('express').Router();
+const { spawn } = require('child_process');
 const Audio = require('../models/audio');
 const { authorizeRequest } = require('../utils/authHelper');
 const {
@@ -17,32 +18,57 @@ audioProcessingRouter.get('/:req/:id', async (request, response, next) => {
   }
 
   // write file to Heroku FS
-  let raw = `${audio.name}.mp3`;
-  fs.writeFile(raw, audio.content, 'ascii', (err) => logger.info(err));
+  let raw = `${audio.name.replace(/ /g, '')}.wav`;
+  fs.writeFile(`./server/controllers/audio-processing/child-process-hub/files/${raw}`, audio.content.buffer.toString(), 'ascii', (err) => logger.info(err));
   raw = raw.slice(0, -4);
   // Store path name & forward to processing functions
   let processed = '';
   switch (req) {
     case 'normalize':
-      processed = await normalize(raw);
+      logger.info('Normalize request received. Waiting for server to process...');
+      try {
+        processed = await normalize(raw);
+      } catch (e) {
+        logger.errorInfo(e);
+      }
       break;
     case 'denoise':
-      processed = await denoise(raw);
+      logger.info('Denoise request received. Waiting for server to process...');
+      try {
+        processed = await denoise(raw);
+      } catch (e) {
+        logger.errorInfo(e);
+      }
       break;
     case 'volume':
-      processed = await volume(raw);
+      logger.info('Volume adjust request received. Waiting for server to process...');
+      try {
+        processed = await volume(raw);
+      } catch (e) {
+        logger.errorInfo(e);
+      }
       break;
     case 'silence':
-      processed = await silence(raw);
+      logger.info('Silence request received. Waiting for server to process...');
+      try {
+        processed = await silence(raw);
+      } catch (e) {
+        logger.errorInfo(e);
+      }
       break;
     case 'transcribe':
-      processed = await transcribe(raw);
+      logger.info('Transcribe request received. Waiting for server to process...');
+      try {
+        processed = await transcribe(raw);
+      } catch (e) {
+        logger.errorInfo(e);
+      }
       break;
     default:
     // if no request, download original file from ID in DB
       response.redirect(301, `../../audios/${id}`);
   }
-  response.download(processed);
+  response.download(processed.trim());
 });
 
 module.exports = audioProcessingRouter;

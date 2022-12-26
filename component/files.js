@@ -1,5 +1,5 @@
 import {
-  React, useEffect, useContext, useState,
+  React, useEffect, useContext, useState, useRef,
 } from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
@@ -10,13 +10,24 @@ import { FolderInput } from './page-component/newfolder-input';
 import { useCachedReadWritePermission } from './hooks/index';
 import Folderbutton from './page-component/folder-button';
 import { Accesstoken } from './state/AccessTokencontext';
-import FolderOptions from './page-component/folderoptions';
+import FolderOptions from './page-component/folder-options';
+import { Configuration } from '../configuration/configuration';
 
 const style = StyleSheet.create({
   feature_container: {
     marginTop: 70,
     marginLeft: 10,
     marginRight: 10,
+  },
+  outer_container: {
+    backgroundColor: 'rgba(0,0,0,0)',
+    width: '100%',
+    height: '100%',
+  },
+  outer_container_faded: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    width: '100%',
+    height: '100%',
   },
   container: {
     borderRadius: 12,
@@ -32,7 +43,7 @@ const style = StyleSheet.create({
     height: 50,
     borderRadius: 30,
     position: 'absolute',
-    marginTop: 500,
+    marginTop: 550,
     marginLeft: 350,
   },
 
@@ -50,25 +61,32 @@ export function Files({ navigation }) {
     setShowModal,
     goToFolder,
   } = useCachedReadWritePermission();
-  const [isVisible, setVisible] = useState(false);
   const [folder, setFolder] = useState('');
-  const accesstoken = useContext(Accesstoken);
-  const backendapi = 'http://100.90.250.177:3001/api/audios';
-  useEffect(async () => {
+
+  async function FirstTimeFetching() {
     await getPermissionFirstTime();
     await getFileContent();
-  }, []);
-  useEffect(async () => {
+  }
+  async function FetchFolderContent() {
     setFiles([]);
     await getFileContent();
-  }, [activeDirectory]);
-  return (
-    <View>
-      <Header />
-      <View style={{ marginTop: 60 }}>
+  }
 
+  const refRBSheet = useRef();
+  useEffect(() => {
+    FirstTimeFetching();
+  }, []);
+
+  useEffect(() => {
+    FetchFolderContent();
+  }, [activeDirectory]);
+
+  return (
+    <View style={showModal ? style.outer_container_faded : style.outer_container}>
+      <Header navigation={navigation} />
+      <View style={{ marginTop: 60 }}>
         <Text style={{ textAlign: 'center', fontSize: 20 }}>Files Storage</Text>
-        <View style={style.feature_container}>
+        <View style={showModal ? style.feature_container : style.feature_container}>
           { activeDirectory
             ? (
               <View style={{
@@ -77,13 +95,13 @@ export function Files({ navigation }) {
                 flexDirection: 'row',
               }}
               >
-                <TouchableOpacity onPress={() => { setActiveDirectory(''); }}><Text style={{ fontSize: 20 }}>Echo/</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => { setActiveDirectory(''); }}><Text style={{ fontSize: 20 }}>Root Folder/</Text></TouchableOpacity>
                 <Text style={{ fontSize: 20 }}>
                   {activeDirectory.replace('%20', ' ')}
                 </Text>
               </View>
             )
-            : <Text style={{ fontSize: 20 }}>Library</Text>}
+            : <Text style={{ fontSize: 20 }}>Root Folder</Text>}
           <View style={style.container}>
             <FlatList
               numColumns={3}
@@ -92,7 +110,7 @@ export function Files({ navigation }) {
                 <Folderbutton
                   activeDirectory={item}
                   goToFolder={goToFolder}
-                  setVisible={setVisible}
+                  setVisible={refRBSheet}
                   setFolder={setFolder}
                 />
               )}
@@ -108,10 +126,8 @@ export function Files({ navigation }) {
           >
             <AntDesign name="addfile" size={25} style={{ textAlign: 'center', justifyContent: 'center', marginTop: 10 }} />
           </TouchableOpacity>
-
         )
           : (
-
             <TouchableOpacity
               style={style.addbutton}
               onPress={() => setShowModal(true)}
@@ -127,15 +143,12 @@ export function Files({ navigation }) {
             setActiveDirectory={setActiveDirectory}
           />
         )}
-
       </View>
-      {isVisible ? (
-        <FolderOptions
-          folder={folder}
-          setVisible={setVisible}
-          setFiles={setFiles}
-        />
-      ) : <View />}
+      <FolderOptions
+        folder={folder}
+        refRBSheet={refRBSheet}
+        setFiles={setFiles}
+      />
     </View>
   );
 }
