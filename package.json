@@ -74,7 +74,6 @@
     "react-native-snap-carousel": "^4.0.0-beta.6",
     "react-native-stopwatch-timer": "^0.0.21",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-waveform-seekbar": "^0.1.2",
     "react-native-web": "~0.18.7",
     "react-redux": "^8.0.5",
     "redux": "^4.2.0",

@@ -1,10 +1,15 @@
-import { React, useState, useEffect } from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity, Image, PermissionsAndroid,
+  React, useState, useEffect, useContext,
+} from 'react';
+import {
+  StyleSheet, Text, View, TouchableOpacity, Image, PermissionsAndroid, Alert,
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
+import axios from 'axios';
 import Timer from './page-component/timer';
+import { Configuration } from '../configuration/configuration';
+import { Accesstoken } from './state/AccessTokencontext';
 
 const styles = StyleSheet.create({
   buttondisable: {
@@ -23,6 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 export function RecordPage({ navigation }) {
+  const accesstoken = useContext(Accesstoken);
   const [recording, setRecording] = useState(false);
   const [state, setState] = useState('stop');
   async function startRecording() {
@@ -49,8 +55,14 @@ export function RecordPage({ navigation }) {
   async function stopRecording() {
     await recording.stopAndUnloadAsync();
     const uri = recording.getURI();
+    axios.get('http://192.168.1.7:3001/api/audio/denoise', { headers: { Authorization: `Bearer ${accesstoken}` } })
+      .then((response) => {
+
+      })
+      .catch((err) => {
+        Alert.alert('Error while processing. Please try again.');
+      });
     setState('stop');
-    console.log('Recording stopped and stored at', uri);
   }
 
   return (

@@ -3,7 +3,6 @@ import {
   Text, View, StyleSheet, Modal, TouchableOpacity,
 } from 'react-native';
 import { Audio } from 'expo-av';
-import WaveformSeekBar from 'react-native-waveform-seekbar';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
