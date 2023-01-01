@@ -15,7 +15,7 @@ def Silence(file):
     for chunk in audio_chunks:
         combined += chunk
     combined.export(
-        f'server/temp/results/{file}-silenceRemoved', format="wav")
+        f'server/temp/results/{file}-silenceRemoved.wav', format="wav")
     print(f'server\\temp\\results\\{file}-silenceRemoved.wav')
 
 

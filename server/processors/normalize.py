@@ -5,7 +5,7 @@ import os
 
 def Normalize(file):
     # file is name of audio (no extension) in file system
-    rawsound = AudioSegment.from_file(f"server/temp/files/{file}", "wav")
+    rawsound = AudioSegment.from_file(f"server/temp/files/{file}.wav", "wav")
     normalizedsound = effects.normalize(rawsound)
     normalizedsound.export(
         f"server/temp/results/{file}-normalized.wav", format="wav")

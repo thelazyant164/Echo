@@ -8,6 +8,17 @@ const clearBuffer = async (filePath) => {
   await unlinkPromise(filePath);
 };
 
+const writeTextFile = async (name, text) => {
+  const writeFilePromise = promisify(fs.writeFile);
+  const filePath = `./server/temp/results/${name}-transcribed.txt`;
+  const err = await writeFilePromise(filePath, text, 'ascii');
+  if (err) {
+    logger.errorInfo('Error while writing transcribed text.');
+  } else {
+    return filePath;
+  }
+};
+
 // returns the name of the file written to FS, responses with status code 404 if error
 const bufferFileFromId = async (request, response) => {
   const audio = await Audio.findById(request.params.id);
@@ -17,7 +28,7 @@ const bufferFileFromId = async (request, response) => {
   const writeFilePromise = promisify(fs.writeFile);
   const filePath = `./server/temp/files/${audio.name}.wav`;
   // write file to FS
-  const err = await writeFilePromise(filePath, audio.content.buffer.toString(), 'ascii');
+  const err = await writeFilePromise(filePath, audio.content, 'ascii');
   if (err) {
     response.status(404).end();
   }
@@ -29,7 +40,9 @@ const bufferFileFromId = async (request, response) => {
 const getBufferFileFromId = async (request, response) => {
   const audioName = await bufferFileFromId(request, response);
   await response.download(`./server/temp/files/${audioName}.wav`);
-  await clearBuffer(`./server/temp/files/${audioName}.wav`);
+  // await clearBuffer(`./server/temp/files/${audioName}.wav`);
 };
 
-module.exports = { bufferFileFromId, getBufferFileFromId, clearBuffer };
+module.exports = {
+  bufferFileFromId, getBufferFileFromId, writeTextFile, clearBuffer,
+};

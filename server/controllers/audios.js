@@ -57,7 +57,7 @@ audiosRouter.post('/', upload.single('test'), async (request, response, next) =>
 
   const audio = new Audio({
     name,
-    content: file,
+    content: file.buffer,
     user: user._id,
     date: new Date(),
   });
