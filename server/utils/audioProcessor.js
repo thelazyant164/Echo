@@ -1,5 +1,4 @@
 const { spawn } = require('child_process');
-const { writeTextFile } = require('./bufferHelper');
 const logger = require('./logger');
 
 const getChildProcessResult = (process) => new Promise((resolve) => {
@@ -49,10 +48,7 @@ const getChildProcessResult = (process) => new Promise((resolve) => {
 const processAudio = async (command, fileName) => {
   logger.info(`${command} request received. Waiting for server to process...`);
   const process = spawn('python', [`server\\processors\\${command}.py`, fileName]);
-  let result = await getChildProcessResult(process);
-  if (command === 'transcribe') {
-    result = await writeTextFile(fileName, result);
-  }
+  const result = await getChildProcessResult(process);
   return result;
 };
 

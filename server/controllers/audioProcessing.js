@@ -1,6 +1,6 @@
 const audioProcessingRouter = require('express').Router();
 const { authorizeRequest } = require('../utils/authHelper');
-const { bufferFileFromId, clearBuffer } = require('../utils/bufferHelper');
+const { bufferFileFromId, clearTempBuffer } = require('../utils/bufferHelper');
 const { processAudio } = require('../utils/audioProcessor');
 
 audioProcessingRouter.get('/:req/:id', async (request, response, next) => {
@@ -12,8 +12,10 @@ audioProcessingRouter.get('/:req/:id', async (request, response, next) => {
   }
   const audioName = await bufferFileFromId(request, response);
   const processedFilePath = await processAudio(req, audioName);
-  await response.download(processedFilePath.trim());
-  // await clearBuffer(processedFilePath.trim());
+  await response.download(processedFilePath.trim(), () => {
+    clearTempBuffer(`./server/temp/files/${audioName}.wav`);
+    clearTempBuffer(processedFilePath.trim());
+  });
 });
 
 module.exports = audioProcessingRouter;
