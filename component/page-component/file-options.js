@@ -5,6 +5,7 @@ import {
 import * as FileSystem from 'expo-file-system';
 import Feather from 'react-native-vector-icons/Feather';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import { uploadFiles } from 'react-native-fs';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,18 +36,18 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-export default function FolderOptions(props) {
+export default function FileOptions(props) {
   const { folder, setFiles, refRBSheet } = props;
 
-  const DeleteFolder = async () => {
-    const folderDir = FileSystem.documentDirectory + folder;
-    await FileSystem.deleteAsync(folderDir);
-    const newFiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-    setFiles(newFiles);
-    refRBSheet.current.close();
+  const DeleteFile = async () => {
+
   };
 
-  const RenameFolder = () => {
+  const UploadFile = async () => {
+
+  };
+
+  const RenameFile = () => {
     refRBSheet.current.close();
   };
   return (
@@ -57,12 +58,16 @@ export default function FolderOptions(props) {
       closeOnPressMask
     >
       <View style={styles.container}>
-        <TouchableOpacity onPress={RenameFolder} style={styles.button}>
+        <TouchableOpacity onPress={RenameFile} style={styles.button}>
           <Feather name="edit" size={30} style={styles.icon} />
           <Text style={styles.text}> Rename</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={DeleteFolder} style={styles.button}>
+        <TouchableOpacity onPress={DeleteFile} style={styles.button}>
           <Feather name="trash-2" size={30} style={styles.icon} />
+          <Text style={styles.text}> Delete</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={UploadFile} style={styles.button}>
+          <Feather name="upload" size={30} style={styles.icon} />
           <Text style={styles.text}> Delete</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { refRBSheet.current.close(); }} style={styles.button}>

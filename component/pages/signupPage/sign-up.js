@@ -5,7 +5,9 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import Purchases, { PurchasesOffering } from 'react-native-purchases';
-import { Configuration } from '../configuration/configuration';
+import e from 'cors';
+import { useSelector, useDispatch } from 'react-redux';
+import { Configuration } from '../../../configuration/configuration';
 
 const APIKeys = {
   apple: 'your_revenuecat_apple_api_key',
@@ -65,6 +67,7 @@ export default function SignupPage({ route, navigation }) {
   const [password, setPassword] = useState('');
   const [confirmpassword, setConfirmPassword] = useState('');
   const [currentOffering, setCurrentOffering] = useState(null);
+  const dispatch = useDispatch();
 
   const Payment = async () => {
     const offerings = await Purchases.getOfferings();
