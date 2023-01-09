@@ -1,11 +1,11 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import Navigation from '../navigation';
-import LoginPage from '../../login';
-import SignupPage from '../../sign-up';
-import Profilepage from '../../profile';
-import PlanSignupPage from '../../plan-signup';
+import Navigation from '../navigation/navigation';
+import LoginPage from '../../pages/loginPage/login';
+import SignupPage from '../../pages/signupPage/sign-up';
+import Profilepage from '../../pages/profilePage/profile';
+import PlanSignupPage from '../../pages/planSignUpPage/plan-signup';
 
 const Stack = createStackNavigator();
 export default function AuthenticationNavigation(props) {

@@ -1,12 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Homepage } from '../../home-page';
-import { RecordPage } from '../../record';
-import { VolumeAdjustPage } from '../../volume-adjust';
-import { NoisecancellingPage } from '../../noise-cancelling';
-import { SpeechToTextPage } from '../../speech-to-text';
-import { NormalizationPage } from '../../normalization';
-import { SilencePage } from '../../silence';
+import { Homepage } from '../../pages/homePage/home-page';
+import { RecordPage } from '../../pages/recordPage/record';
+import { VolumeAdjustPage } from '../../pages/volumeAdjust/volume-adjust';
+import { NoisecancellingPage } from '../../pages/noiseCancellingPage/noise-cancelling';
+import { SpeechToTextPage } from '../../pages/speechToTextPage/speech-to-text';
+import { NormalizationPage } from '../../pages/normalizationPage/normalization';
+import { SilencePage } from '../../pages/silencePage/silence';
 
 const Stack = createStackNavigator();
 export default function FeatureNavigation() {

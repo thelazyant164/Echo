@@ -10,9 +10,10 @@ import * as FileSystem from 'expo-file-system';
 import GDrive from 'expo-google-drive-api-wrapper';
 import { useSelector, useDispatch } from 'react-redux';
 import { Accesstoken } from '../../state/AccessTokencontext';
-import PlayAudioPage from '../../audio-play';
-import LoadingEffect from '../loading-effect';
+import PlayAudioPage from '../../pages/audioPlayPage/audio-play';
+import LoadingEffect from '../loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
+import { updateAudioFile } from '../file-upload-form/file-upload-form-slider';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,15 +30,15 @@ export default function Filebutton(props) {
     file, source, mission,
   } = props;
   const accesstoken = useContext(Accesstoken);
-  const [isVisible, setVisible] = useState(false);
+  // const [isVisible, setVisible] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [audiofile, setAudiofile] = useState(null);
+  const dispatch = useDispatch();
 
   const ShowFileOption = () => {};
   const GetFileFromCloud = () => {
     axios.get(Configuration.backendAPI`/api/audios/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
       .then((response) => {
-        setAudiofile(response.data.content.buffer);
+        dispatch(updateAudioFile(response.data.content.buffer));
       })
       .catch((err) => { console.log(err); });
   };
@@ -69,10 +70,10 @@ export default function Filebutton(props) {
   const FileProcessing = async (service) => {
     setLoading(true);
     if (source === 'cloud') {
-      axios.get(`http://192.168.1.7:3001/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+      axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
         .then((response) => {
-          setAudiofile(response);
-          setVisible(true);
+          dispatch(updateAudioFile(response));
+          // setVisible(true);
           setLoading(false);
         })
         .catch((err) => {
@@ -80,10 +81,10 @@ export default function Filebutton(props) {
           setLoading(false);
         });
     } else if (source === 'drive') {
-      axios.get(`http://192.168.1.7:3001/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+      axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
         .then((response) => {
-          setAudiofile(response);
-          setVisible(true);
+          dispatch(updateAudioFile(response));
+          // setVisible(true);
           setLoading(false);
         })
         .catch((err) => {
@@ -91,10 +92,10 @@ export default function Filebutton(props) {
           setLoading(false);
         });
     } else {
-      axios.get(`http://192.168.1.7:3001/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+      axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
         .then((response) => {
-          setAudiofile(response);
-          setVisible(true);
+          dispatch(updateAudioFile(response));
+          // setVisible(true);
           setLoading(false);
         })
         .catch((err) => {
@@ -108,7 +109,7 @@ export default function Filebutton(props) {
     GetFile();
     switch (mission) {
       case 'play':
-        setVisible(true);
+        // setVisible(true);
         break;
       case 'noisecancelling':
         FileProcessing('denoise');
@@ -139,7 +140,7 @@ export default function Filebutton(props) {
           <Text>{`${file.name.slice(0, 6)}...`}</Text>
         </View>
       </TouchableOpacity>
-      {isVisible ? <PlayAudioPage audiofile={audiofile} /> : <View />}
+      {/* {isVisible ? <PlayAudioPage audiofile={audiofile} /> : <View />} */}
       {isLoading ? <LoadingEffect /> : <View />}
     </View>
   );

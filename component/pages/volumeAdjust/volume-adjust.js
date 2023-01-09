@@ -2,7 +2,7 @@ import { React } from 'react';
 import {
   StyleSheet, Text, View,
 } from 'react-native';
-import FileUploadForm from '../../page-component/file-upload-form';
+import FileUploadForm from '../../page-component/file-upload-form/file-upload-form';
 
 export function VolumeAdjustPage({ navigation }) {
   return (

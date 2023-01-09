@@ -2,8 +2,8 @@ import { React, useState } from 'react';
 import {
   StyleSheet, Text, View, FlatList,
 } from 'react-native';
-import { Featurebutton } from '../../page-component/feature-button';
-import { Header } from '../../page-component/header';
+import { Featurebutton } from '../../page-component/feature-button/feature-button';
+import { Header } from '../../page-component/header/header';
 
 const style = StyleSheet.create({
   feature_container: {

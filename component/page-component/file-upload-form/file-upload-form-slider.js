@@ -7,6 +7,9 @@ export const fileUploadFormSlice = createSlice({
       activeDirectory: '',
       files: [],
       isVisible: false,
+      isFilesListVisible: false,
+      folder: '',
+      audioFile: null,
     },
   },
   reducers: {
@@ -14,20 +17,39 @@ export const fileUploadFormSlice = createSlice({
       state.value.activeDirectory = action.payload;
     },
     updateFiles: (state, action) => {
-      state.value.files.push(action.payload);
+      state.value.files = action.payload;
     },
-    showModal: (state) => {
+    updateFolder: (state, action) => {
+      state.value.folder = action.payload;
+    },
+    updateAudioFile: (state, action) => {
+      state.value.audioFile = action.payload;
+    },
+    showLoading: (state) => {
       state.value.isVisible = true;
     },
-    hideModal: (state) => {
+    hideLoading: (state) => {
       state.value.isVisible = false;
+    },
+    showFilesList: (state) => {
+      state.value.isFilesListVisible = true;
+    },
+    hideFilesList: (state) => {
+      state.value.isFilesListVisible = false;
     },
   },
 });
 
 export const filestate = (state) => state.form.value;
 export const {
-  updateActiveDirectory, updateFiles, showModal, hideModal,
+  updateActiveDirectory,
+  updateFiles,
+  updateFolder,
+  updateAudioFile,
+  showFilesList,
+  hideFilesList,
+  showLoading,
+  hideLoading,
 } = fileUploadFormSlice.actions;
 
 export default fileUploadFormSlice.reducer;

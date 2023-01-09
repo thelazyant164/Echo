@@ -8,7 +8,7 @@ import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import Timer from '../../page-component/timer';
+import Timer from '../../page-component/timer/timer';
 import { Configuration } from '../../../configuration/configuration';
 import { Accesstoken } from '../../state/AccessTokencontext';
 

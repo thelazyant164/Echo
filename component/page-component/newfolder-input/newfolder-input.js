@@ -3,8 +3,8 @@ import {
   StyleSheet, Text, TextInput, View, Modal, Pressable, Alert,
 } from 'react-native';
 import * as FileSystem from 'expo-file-system';
-import { StorageAccessFramework } from 'expo-file-system';
 import { useSelector, useDispatch } from 'react-redux';
+import { hideModal } from '../../pages/filesStoragePage/files-slider';
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -67,26 +67,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export function FolderInput({ setShowModal, activeDirectory, setActiveDirectory }) {
+export function FolderInput({ setShowModal }) {
   const [newDirectory, setNewDirectory] = useState('New folder');
   // Create new folder in current active directory
-  const createNewFolder = async () => {
-    /* Requests permissions for external directory
-    if (newDirectory !== '') {
-      const permissions = await StorageAccessFramework
-        .requestDirectoryPermissionsAsync(FileSystem.documentDirectory);
+  const dispatch = useDispatch();
 
-      if (permissions.granted) {
-      // Gets SAF URI from response
-        const uri = permissions.directoryUri;
-        const message = await StorageAccessFramework.makeDirectoryAsync(
-          uri,
-          activeDirectory,
-        );
-        return message;
-      }
-      return '';
-    } */
+  const createNewFolder = async () => {
     await FileSystem.makeDirectoryAsync(
       `${FileSystem.documentDirectory}/${newDirectory}`,
       { intermediates: true },
@@ -115,9 +101,9 @@ export function FolderInput({ setShowModal, activeDirectory, setActiveDirectory 
               style={[styles.button, styles.buttonClose]}
               onPress={() => {
                 createNewFolder()
-                  .then(setActiveDirectory(newDirectory))
-                  .then(setShowModal(false))
-                  .catch(({ message }) => { console.log(message); });
+                  // .then(setActiveDirectory(newDirectory))
+                  .then(dispatch(hideModal()))
+                  .catch(({ message }) => { Alert.alert(message); });
               }}
             >
               <Text style={styles.textStyle}>Save</Text>
@@ -125,7 +111,7 @@ export function FolderInput({ setShowModal, activeDirectory, setActiveDirectory 
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => {
-                setShowModal(false);
+                dispatch(hideModal());
               }}
             >
               <Text style={styles.textStyle}>Cancel</Text>

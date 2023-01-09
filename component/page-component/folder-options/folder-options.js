@@ -5,6 +5,8 @@ import {
 import * as FileSystem from 'expo-file-system';
 import Feather from 'react-native-vector-icons/Feather';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateFiles } from '../../pages/filesStoragePage/files-slider';
 
 const styles = StyleSheet.create({
   container: {
@@ -36,13 +38,15 @@ const styles = StyleSheet.create({
   },
 });
 export default function FolderOptions(props) {
-  const { folder, setFiles, refRBSheet } = props;
+  const { refRBSheet } = props;
+  const dispatch = useDispatch();
 
+  const filesstate = useSelector((state) => state.files.value);
   const DeleteFolder = async () => {
-    const folderDir = FileSystem.documentDirectory + folder;
+    const folderDir = FileSystem.documentDirectory + filesstate.folder;
     await FileSystem.deleteAsync(folderDir);
     const newFiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-    setFiles(newFiles);
+    dispatch(updateFiles(newFiles));
     refRBSheet.current.close();
   };
 

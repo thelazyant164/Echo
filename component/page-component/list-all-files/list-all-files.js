@@ -7,9 +7,12 @@ import {
 import axios from 'axios';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
-import Filebutton from '../file-button';
-import Folderbutton from '../folder-button';
-import FolderOptions from '../folder-options';
+import Filebutton from '../file-button/file-button';
+import Folderbutton from '../folder-button/folder-button';
+import FolderOptions from '../folder-options/folder-options';
+import {
+  updateActiveDirectory, updateFiles, showLoading, hideLoading, showFilesList, hideFilesList,
+} from '../file-upload-form/file-upload-form-slider';
 
 const styles = StyleSheet.create({
   appear: {
@@ -30,35 +33,30 @@ const styles = StyleSheet.create({
 });
 
 export default function ListallFiles({
-  filelists,
-  setFiles,
-  goToFolder,
   service,
-  setActiveDirectory,
-  showFileLists,
-  setshowFileLists,
-  activeDirectory,
   source,
 }) {
-  const [folder, setFolder] = useState('');
   const refRBSheet = useRef();
+  const dispatch = useDispatch();
 
-  useEffect(() => { }, [filelists]);
+  const formstate = useSelector((state) => state.form.value);
 
-  if ((!showFileLists)) {
+  useEffect(() => { }, [formstate.files]);
+
+  if ((!formstate.isFilesListVisible)) {
     return (
       <View />
     );
   }
-  if (filelists.length > 0 && filelists[0].name === undefined) {
+  if (formstate.files.length > 0 && formstate.files[0].name === undefined) {
     return (
       <Modal style={styles.modal}>
         <Pressable onPress={() => {
-          if (!activeDirectory) {
-            setshowFileLists(false);
+          if (!formstate.activeDirectory) {
+            dispatch(hideFilesList());
           }
-          setFiles([]);
-          setActiveDirectory('');
+          dispatch(updateFiles([]));
+          dispatch(updateActiveDirectory(''));
         }}
         >
           <View style={styles.buttonview}>
@@ -68,37 +66,35 @@ export default function ListallFiles({
         </Pressable>
         <FlatList
           numColumns={3}
-          data={filelists}
+          data={formstate.files}
           renderItem={
                 ({ item }) => (
                   <Folderbutton
+                    location="form"
                     activeDirectory={item}
-                    goToFolder={goToFolder}
                     setVisible={refRBSheet}
-                    setFolder={setFolder}
                   />
                 )
               }
         />
 
         <FolderOptions
-          folder={folder}
-          setFiles={setFiles}
+          folder={formstate.folder}
           refRBSheet={refRBSheet}
         />
 
       </Modal>
     );
   }
-  if (filelists.length > 0 && filelists[0].name !== undefined) {
+  if (formstate.files.length > 0 && formstate.files[0].name !== undefined) {
     return (
       <Modal style={styles.modal}>
         <Pressable onPress={() => {
-          if (!activeDirectory) {
-            setshowFileLists(false);
+          if (!formstate.activeDirectory) {
+            dispatch(hideFilesList());
           }
-          setFiles([]);
-          setActiveDirectory('');
+          dispatch(updateFiles([]));
+          dispatch(updateActiveDirectory(''));
         }}
         >
           <View style={styles.buttonview}>
@@ -108,10 +104,10 @@ export default function ListallFiles({
         </Pressable>
         <FlatList
           numColumns={3}
-          data={filelists}
+          data={formstate.files}
           renderItem={
               ({ item }) => (
-                <Filebutton file={item} setFiles={setFiles} source={source} mission={service} />
+                <Filebutton file={item} source={source} mission={service} />
               )
             }
         />
@@ -124,11 +120,11 @@ export default function ListallFiles({
 
     <Modal style={styles.modal}>
       <Pressable onPress={() => {
-        if (!activeDirectory) {
-          setshowFileLists(false);
+        if (!formstate.activeDirectory) {
+          dispatch(showFilesList());
         }
-        setFiles([]);
-        setActiveDirectory('');
+        dispatch(updateFiles([]));
+        dispatch(updateActiveDirectory(''));
       }}
       >
         <View style={styles.buttonview}>
@@ -138,10 +134,10 @@ export default function ListallFiles({
       </Pressable>
       <FlatList
         numColumns={3}
-        data={filelists.files}
+        data={formstate.files}
         renderItem={
             ({ item }) => (
-              <Filebutton file={item} setFiles={setFiles} source={source} mission={service} />
+              <Filebutton file={item} source={source} mission={service} />
             )
           }
       />

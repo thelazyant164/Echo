@@ -4,7 +4,7 @@ import {
 import {
   View, Text, StyleSheet,
 } from 'react-native';
-import CarouselCards from '../../page-component/carouse';
+import CarouselCards from '../../page-component/carouse/carouse';
 
 const styles = StyleSheet.create({
   container: {

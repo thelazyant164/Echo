@@ -2,7 +2,7 @@ import { React, useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, FlatList, TouchableOpacity,
 } from 'react-native';
-import FileUploadForm from '../../page-component/file-upload-form';
+import FileUploadForm from '../../page-component/file-upload-form/file-upload-form';
 
 export function SpeechToTextPage({ navigation }) {
   return (

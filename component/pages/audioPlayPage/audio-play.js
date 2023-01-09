@@ -5,6 +5,7 @@ import {
 import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
 import { useSelector, useDispatch } from 'react-redux';
+import { updateAudioFile } from '../../page-component/file-upload-form/file-upload-form-slider';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,8 +31,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function PlayAudioPage({ audiofile, setAudiofile }) {
+export default function PlayAudioPage() {
   const [isPlaying, setPlaying] = useState(false);
+  const dispatch = useDispatch();
+
+  const formstate = useSelector((state) => state.form.value);
 
   const PlayAudio = async (link) => {
     try {
@@ -45,7 +49,7 @@ export default function PlayAudioPage({ audiofile, setAudiofile }) {
   const PauseAudio = async () => {
 
   };
-  if (audiofile == null) {
+  if (formstate.audioFile == null) {
     return <View />;
   }
 
@@ -73,7 +77,7 @@ export default function PlayAudioPage({ audiofile, setAudiofile }) {
     }
 
       <TouchableOpacity onPress={() => {
-        setAudiofile(null);
+        dispatch(updateAudioFile(null));
       }}
       >
         <Text>Back</Text>

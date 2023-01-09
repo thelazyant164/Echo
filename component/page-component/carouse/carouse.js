@@ -4,7 +4,7 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { useSelector, useDispatch } from 'react-redux';
 import CarouselCardItem, {
   SLIDER_WIDTH, ITEM_WIDTH, ITEM_HEIGHT, SLIDER_HEIGHT,
-} from '../carouse-card';
+} from '../carouse-card/carouse-card';
 
 const styles = StyleSheet.create({
   container: {

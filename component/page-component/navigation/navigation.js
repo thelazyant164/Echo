@@ -2,8 +2,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import FeatureNavigation from '../feature-navigation';
-import { Files } from '../../files';
+import FeatureNavigation from '../feature-navigation/feature-navigation';
+import { Files } from '../../pages/filesStoragePage/files';
 
 const Tab = createBottomTabNavigator();
 export default function Navigation() {

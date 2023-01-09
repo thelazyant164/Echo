@@ -9,8 +9,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 // import * as AppAuth from 'expo-app-auth';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Google from 'expo-auth-session/providers/google';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SetAccesstoken } from '../../state/AccessTokencontext';
-import LoadingEffect from '../../page-component/loading-effect';
+import LoadingEffect from '../../page-component/loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
 
 const styles = StyleSheet.create({

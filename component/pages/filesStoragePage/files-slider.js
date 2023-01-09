@@ -15,9 +15,7 @@ export const fileSlice = createSlice({
       state.value.activeDirectory = action.payload;
     },
     updateFiles: (state, action) => {
-      action.payload.forEAch((item) => {
-        state.value.files.push(item);
-      });
+      state.value.files = action.payload;
     },
     updateFolders: (state, action) => {
       state.value.folder = action.payload;
@@ -33,7 +31,7 @@ export const fileSlice = createSlice({
 
 export const filestate = (state) => state.files.value;
 export const {
-  updateActiveDirectory, updateFiles, showModal, hideModal,
+  updateActiveDirectory, updateFiles, updateFolders, showModal, hideModal,
 } = fileSlice.actions;
 
 export default fileSlice.reducer;

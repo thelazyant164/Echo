@@ -7,7 +7,7 @@ import {
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import { Accesstoken } from '../../state/AccessTokencontext';
-import LoadingEffect from '../../page-component/loading-effect';
+import LoadingEffect from '../../page-component/loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
 
 const styles = StyleSheet.create({

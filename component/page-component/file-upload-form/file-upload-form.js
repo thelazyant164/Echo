@@ -11,12 +11,15 @@ import * as Google from 'expo-auth-session/providers/google';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import _ from 'lodash';
-import ListallFiles from '../list-all-files';
-import { useCachedReadWritePermission } from '../../hooks';
+import ListallFiles from '../list-all-files/list-all-files';
+import { useDocumentReadWritePermission } from '../../utils/documentaryHelper';
 import { Accesstoken } from '../../state/AccessTokencontext';
-import LoadingEffect from '../loading-effect';
+import LoadingEffect from '../loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
-import PlayAudioPage from '../../audio-play';
+import PlayAudioPage from '../../pages/audioPlayPage/audio-play';
+import {
+  updateActiveDirectory, updateFiles, showLoading, hideLoading, showFilesList,
+} from './file-upload-form-slider';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,16 +46,8 @@ export default function FileUploadForm(props) {
   const {
     getPermissionFirstTime,
     getFileContent,
-    files,
-    setFiles,
-    activeDirectory,
-    setActiveDirectory,
-    goToFolder,
-  } = useCachedReadWritePermission();
+  } = useDocumentReadWritePermission();
   const [accesstoken, setAccesstoken] = useState('something');
-  const [audiofile, setAudiofile] = useState(null);
-  const [visible, setVisible] = useState(false);
-  const [showFileLists, setshowFileLists] = useState(false);
   const [source, setSource] = useState('');
   const [request, Googleresponse, promptAsync] = Google.useAuthRequest({
     expoClientId: Configuration.appKey.expoClientId,
@@ -60,42 +55,48 @@ export default function FileUploadForm(props) {
     scopes: ['https://www.googleapis.com/auth/drive'],
   });
   const backendapi = `${Configuration.backendAPI}/api/audios`;
+
+  const dispatch = useDispatch();
+
+  const formstate = useSelector((state) => state.form.value);
   async function FetchFolderContent() {
-    setFiles([]);
-    await getFileContent();
+    const result = await getFileContent(formstate.activeDirectory);
+    dispatch(updateFiles(result));
   }
 
   const getFileCloud = () => {
     setSource('cloud');
-    setVisible(true);
+    dispatch(showLoading());
     axios.get(backendapi, { headers: { Authorization: `Bearer ${DBaccesstoken}` } })
       .then((response) => {
-        setshowFileLists(true);
-        setVisible(false);
-        setFiles(response.data);
-      }).catch((err) => { console.log(err); setVisible(false); });
+        dispatch(showFilesList());
+        dispatch(hideLoading());
+        dispatch(updateFiles(response.data));
+      }).catch((err) => { console.error(err); dispatch(hideLoading()); });
   };
   const getFileDevice = async () => {
     setSource('device');
+    dispatch(showLoading());
     await getPermissionFirstTime();
-    await getFileContent();
-    setshowFileLists(true);
+    const result = await getFileContent(formstate.activeDirectory);
+    dispatch(updateFiles(result));
+    dispatch(hideLoading());
+    dispatch(showFilesList());
   };
   const getFileDrive = async (res) => {
     setSource('drive');
     GDrive.init();
     if (GDrive.isInitialized) {
       GDrive.setAccessToken(res.authentication.accessToken);
-      setVisible(true);
+      dispatch(showLoading());
       const result = await GDrive.files.list({ q: "'root' in parents" });
       const finalresult = await result.json();
-      setVisible(false);
+      dispatch(hideLoading());
       const audioExtensions = ['.mp3', '.wav', '.pcm', 'aiff', '.aac', '.ogg', '.wma', 'flac', 'alac'];
       finalresult.files = finalresult.files.filter((file) =>
         _.includes(audioExtensions, file.name.slice(-4), 0));
-      setFiles(finalresult.files);
-      console.log(`files: ${JSON.stringify(finalresult.files)}`);
-      setshowFileLists(true);
+      dispatch(updateFiles(finalresult.files));
+      dispatch(showFilesList());
     }
   };
   useEffect(() => {
@@ -106,11 +107,11 @@ export default function FileUploadForm(props) {
 
   useEffect(() => {
     FetchFolderContent();
-  }, [activeDirectory]);
+  }, [formstate.activeDirectory]);
 
   return (
     <View>
-      { visible ? <LoadingEffect /> : <View />}
+      { formstate.isVisible ? <LoadingEffect /> : <View />}
       <View style={styles.container}>
         <Text style={styles.title}>Choosing your file from</Text>
         <View style={{
@@ -139,17 +140,9 @@ export default function FileUploadForm(props) {
           </TouchableOpacity>
         </View>
       </View>
-      <PlayAudioPage audiofile={audiofile} setAudiofile={setAudiofile} />
-
+      <PlayAudioPage />
       <ListallFiles
-        filelists={files}
-        setFiles={setFiles}
-        goToFolder={goToFolder}
         service={service}
-        activeDirectory={activeDirectory}
-        setActiveDirectory={setActiveDirectory}
-        showFileLists={showFileLists}
-        setshowFileLists={setshowFileLists}
         source={source}
       />
     </View>

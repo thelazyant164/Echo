@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import Purchases, { PurchasesOffering } from 'react-native-purchases';
-import e from 'cors';
 import { useSelector, useDispatch } from 'react-redux';
 import { Configuration } from '../../../configuration/configuration';
 
