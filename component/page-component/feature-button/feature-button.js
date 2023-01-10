@@ -5,6 +5,7 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as FileSystem from 'expo-file-system';
+import { saveCached, getCached } from '../../utils/cacheHelper';
 
 const style = StyleSheet.create({
   button: {
@@ -28,7 +29,16 @@ export function Featurebutton(props) {
   const { feature, navigation } = props;
   if (feature.toLowerCase() === 'noise cancelling') {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+      <TouchableOpacity
+        onPress={async () => {
+          const result = await getCached();
+          result.unshift(feature.toLowerCase());
+          result.pop(result[result.length() - 1]);
+          saveCached(result);
+          navigation.navigate(feature);
+        }}
+        style={style.button}
+      >
         <View style={style.content}>
           <MaterialCommunityIcons
             name="headphones"
@@ -40,7 +50,13 @@ export function Featurebutton(props) {
     );
   } if (feature.toLowerCase() === 'volume adjust') {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate(feature);
+          saveCached(feature.toLowerCase());
+        }}
+        style={style.button}
+      >
         <View style={style.content}>
           <MaterialCommunityIcons
             name="volume-plus"
@@ -52,7 +68,13 @@ export function Featurebutton(props) {
     );
   } if (feature.toLowerCase() === 'speech to text') {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate(feature);
+          saveCached(feature.toLowerCase());
+        }}
+        style={style.button}
+      >
         <View style={style.content}>
           <MaterialCommunityIcons
             name="file-document-outline"
@@ -64,7 +86,13 @@ export function Featurebutton(props) {
     );
   } if (feature.toLowerCase() === 'noise reduction record') {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate(feature);
+          saveCached(feature.toLowerCase());
+        }}
+        style={style.button}
+      >
         <View style={style.content}>
           <MaterialCommunityIcons
             name="microphone-outline"
@@ -76,7 +104,13 @@ export function Featurebutton(props) {
     );
   } if (feature.toLowerCase() === 'normalization') {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate(feature);
+          saveCached(feature.toLowerCase());
+        }}
+        style={style.button}
+      >
         <View style={style.content}>
           <MaterialCommunityIcons
             name="waveform"
@@ -89,7 +123,13 @@ export function Featurebutton(props) {
   }
   if (feature.toLowerCase() === 'silence') {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate(feature)} style={style.button}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate(feature);
+          saveCached(feature.toLowerCase());
+        }}
+        style={style.button}
+      >
         <View style={style.content}>
           <MaterialIcons
             name="leak-remove"

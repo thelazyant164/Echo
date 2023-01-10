@@ -1,9 +1,10 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, FlatList,
 } from 'react-native';
 import { Featurebutton } from '../../page-component/feature-button/feature-button';
 import { Header } from '../../page-component/header/header';
+import { getCached, saveCached } from '../../utils/cacheHelper';
 
 const style = StyleSheet.create({
   feature_container: {
@@ -25,6 +26,18 @@ export function Homepage({ navigation }) {
   const [data, setData] = useState(['Noise cancelling', 'Volume adjust']);
   const allfeature = ['Noise cancelling', 'Volume adjust', 'Speech to text', 'Normalization', 'Noise reduction record', 'Silence'];
 
+  const getRecentFeature = async () => {
+    const result = await getCached();
+    setData(result);
+  };
+
+  const saveRecentFeature = async (features) => {
+    saveCached(features);
+  };
+  useEffect(() => {
+    saveRecentFeature(data);
+    getRecentFeature();
+  }, []);
   return (
     <View>
       <Header navigation={navigation} />

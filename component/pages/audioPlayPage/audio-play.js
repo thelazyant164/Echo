@@ -5,18 +5,18 @@ import {
 import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
 import { useSelector, useDispatch } from 'react-redux';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { updateAudioFile } from '../../page-component/file-upload-form/file-upload-form-slider';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
+    backgroundColor: '#000ff',
     justifyContent: 'center',
-    backgroundColor: '#000',
-    padding: 30,
+    top: '40%',
   },
   text: {
-    color: '#fff',
+    marginTop: 30,
     fontSize: 20,
   },
   btn: {
@@ -32,57 +32,80 @@ const styles = StyleSheet.create({
 });
 
 export default function PlayAudioPage() {
-  const [isPlaying, setPlaying] = useState(false);
+  const [isPlaying, setPlaying] = useState(true);
+  const [audio, setAudio] = useState(null);
   const dispatch = useDispatch();
-
   const formstate = useSelector((state) => state.form.value);
 
   const PlayAudio = async (link) => {
     try {
-      const { sound } = await Audio.Sound.createAsync();
+      const sound = new Audio.Sound();
+      await sound.loadAsync({ uri: formstate.audioFile.uri });
       await sound.playAsync();
-      await sound.unloadAsync();
+
+      setAudio(sound);
+      // await sound.unloadAsync();
     } catch (err) {
       console.error(err);
     }
   };
   const PauseAudio = async () => {
-
+    await audio.pauseAsync();
   };
-  if (formstate.audioFile == null) {
+  if (formstate.audioFile === null) {
     return <View />;
   }
 
   return (
-    <Modal style={styles.container}>
-      {/* <WaveformSeekBar
-        style={styles.box}
-        data={[1, 2]}
-        backgroundColor="#fff"
-        progressColor="gray"
-        onChange={(e) => console.log(e.nativeEvent)}
-      /> */}
-      {
+    <Modal>
+      <TouchableOpacity
+        style={{
+          display: 'flex',
+          width: '100%',
+          flexDirection: 'row',
+          margin: 10,
+        }}
+        onPress={() => {
+          dispatch(updateAudioFile(null));
+        }}
+      >
+        <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+        <Text style={{ fontSize: 20 }}>Back</Text>
+      </TouchableOpacity>
+      <View style={styles.container}>
+        {
       isPlaying
         ? (
           <TouchableOpacity onPress={() => { setPlaying(false); PlayAudio(); }}>
-            <Feather name="play" size={50} style={{ marginTop: 200 }} />
+            <Feather name="play" size={50} />
           </TouchableOpacity>
         )
         : (
           <TouchableOpacity onPress={() => { setPlaying(true); PauseAudio(); }}>
-            <Feather name="pause" size={50} style={{ marginTop: 200 }} />
+            <Feather name="pause" size={50} />
           </TouchableOpacity>
         )
     }
-
-      <TouchableOpacity onPress={() => {
-        dispatch(updateAudioFile(null));
-      }}
-      >
-        <Text>Back</Text>
-      </TouchableOpacity>
+        <View style={{
+          display: 'flex',
+          width: '100%',
+          flexDirection: 'row',
+          margin: 10,
+          top: '80%',
+          justifyContent: 'space-around',
+        }}
+        >
+          <TouchableOpacity onPress={() => { dispatch(updateAudioFile([])); }}>
+            <Feather name="download" size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { }}>
+            <Feather name="share" size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => { dispatch(updateAudioFile([])); }}>
+            <AntDesign name="delete" size={30} />
+          </TouchableOpacity>
+        </View>
+      </View>
     </Modal>
-  // <Text>{JSON.stringify(audiofile)}</Text>
   );
 }

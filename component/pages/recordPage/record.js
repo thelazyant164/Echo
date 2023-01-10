@@ -57,7 +57,7 @@ export function RecordPage({ navigation }) {
   async function stopRecording() {
     await recording.stopAndUnloadAsync();
     const uri = recording.getURI();
-    axios.get('http://192.168.1.7:3001/api/audio/denoise', { headers: { Authorization: `Bearer ${accesstoken}` } })
+    axios.get(`${Configuration.backendAPI}/api/audio/denoise`, { headers: { Authorization: `Bearer ${accesstoken}` } })
       .then((response) => {
 
       })

@@ -66,7 +66,6 @@ export default function SignupPage({ route, navigation }) {
   const [password, setPassword] = useState('');
   const [confirmpassword, setConfirmPassword] = useState('');
   const [currentOffering, setCurrentOffering] = useState(null);
-  const dispatch = useDispatch();
 
   const Payment = async () => {
     const offerings = await Purchases.getOfferings();
@@ -138,10 +137,6 @@ export default function SignupPage({ route, navigation }) {
           <Text style={styles.text}>Finish</Text>
         </TouchableOpacity>
       </View>
-      {/* <PlanSignupPage
-        showmodal={showmodal}
-        style={styles.modal}
-      /> */}
     </View>
   );
 }

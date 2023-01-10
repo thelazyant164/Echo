@@ -9,6 +9,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as FileSystem from 'expo-file-system';
 import GDrive from 'expo-google-drive-api-wrapper';
 import { useSelector, useDispatch } from 'react-redux';
+import { Asset } from 'expo-asset';
 import { Accesstoken } from '../../state/AccessTokencontext';
 import PlayAudioPage from '../../pages/audioPlayPage/audio-play';
 import LoadingEffect from '../loading-effect/loading-effect';
@@ -70,7 +71,12 @@ export default function Filebutton(props) {
   const FileProcessing = async (service) => {
     setLoading(true);
     if (source === 'cloud') {
-      axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+      // axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, {
+      //   headers: { Authorization: `Bearer ${accesstoken}` }, responseType: 'blob',
+      // })
+      FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${`${FileSystem.documentDirectory}/Download`}`, {
+        headers: { Authorization: `Bearer ${accesstoken}` },
+      })
         .then((response) => {
           dispatch(updateAudioFile(response));
           // setVisible(true);
@@ -81,7 +87,24 @@ export default function Filebutton(props) {
           setLoading(false);
         });
     } else if (source === 'drive') {
-      axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+      // const asset = new Asset();
+      // eslint-disable-next-line max-len
+      // asset.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${FileSystem.documentDirectory}`, {
+      //   headers: { Authorization: `Bearer ${accesstoken}` },
+      // }).then((response) => {
+      //   dispatch(updateAudioFile(response));
+      //   // setVisible(true);
+      //   setLoading(false);
+      // })
+      //   .catch((err) => {
+      //     Alert.alert('Error while processing. Please try again.');
+      //     setLoading(false);
+      //   });
+      // eslint-disable-next-line max-len
+      // axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` }, responseType: 'blob' })
+      FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${FileSystem.documentDirectory}`, {
+        headers: { Authorization: `Bearer ${accesstoken}` },
+      })
         .then((response) => {
           dispatch(updateAudioFile(response));
           // setVisible(true);
@@ -92,7 +115,11 @@ export default function Filebutton(props) {
           setLoading(false);
         });
     } else {
-      axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+      // eslint-disable-next-line max-len
+      // axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` }, responseType: 'blob' })
+      FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${FileSystem.documentDirectory}`, {
+        headers: { Authorization: `Bearer ${accesstoken}` },
+      })
         .then((response) => {
           dispatch(updateAudioFile(response));
           // setVisible(true);
@@ -106,7 +133,7 @@ export default function Filebutton(props) {
   };
 
   const Operate = () => {
-    GetFile();
+    // GetFile();
     switch (mission) {
       case 'play':
         // setVisible(true);

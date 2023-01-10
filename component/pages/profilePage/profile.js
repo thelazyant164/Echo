@@ -2,10 +2,11 @@ import {
   React, useState, useEffect, useContext,
 } from 'react';
 import {
-  StyleSheet, Text, View, TouchableOpacity, Model,
+  StyleSheet, Text, View, TouchableOpacity, Platform, Alert,
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
+import Purchases, { PurchasesOffering } from 'react-native-purchases';
 import { Accesstoken } from '../../state/AccessTokencontext';
 import LoadingEffect from '../../page-component/loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
@@ -54,6 +55,23 @@ export default function Profilepage({ navigation }) {
   const [visible, setVisible] = useState(true);
   const accesstoken = useContext(Accesstoken);
   const backendapi = `${Configuration.backendAPI}/api/me`;
+  const APIKeys = {
+    apple: 'your_revenuecat_apple_api_key',
+    google: 'your_revenuecat_google_api_key',
+  };
+  const Payment = async () => {
+    try {
+      const offerings = await Purchases.getOfferings();
+      Purchases.setDebugLogsEnabled(true);
+      if (Platform.OS === 'android') {
+        Purchases.configure({ apiKey: APIKeys.google });
+      } else {
+        Purchases.configure({ apiKey: APIKeys.apple });
+      }
+    } catch (err) {
+      Alert.alert(err);
+    }
+  };
   useEffect(() => {
     axios.get(backendapi, { headers: { Authorization: `Bearer ${accesstoken}` } })
       .then((response) => {
@@ -83,7 +101,11 @@ export default function Profilepage({ navigation }) {
         <TouchableOpacity onPress={() => { navigation.navigate('Login'); }} style={styles.button}>
           <Text style={styles.text}>Log out </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={!Premium ? () => { navigation.navigate('PlanSignupPage'); } : null} disable={Premium} style={styles.button}>
+        <TouchableOpacity
+          onPress={!Premium ? () => { Payment(); } : null}
+          disable={Premium}
+          style={styles.button}
+        >
           <Text style={styles.text}>Upgraded </Text>
         </TouchableOpacity>
       </View>

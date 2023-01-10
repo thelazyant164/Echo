@@ -20,6 +20,7 @@ import PlayAudioPage from '../../pages/audioPlayPage/audio-play';
 import {
   updateActiveDirectory, updateFiles, showLoading, hideLoading, showFilesList,
 } from './file-upload-form-slider';
+import ShowTextFilePage from '../../pages/showTextFile/show-text-file';
 
 const styles = StyleSheet.create({
   container: {
@@ -140,7 +141,7 @@ export default function FileUploadForm(props) {
           </TouchableOpacity>
         </View>
       </View>
-      <PlayAudioPage />
+      {service !== 'speechtotext' ? <PlayAudioPage /> : <ShowTextFilePage />}
       <ListallFiles
         service={service}
         source={source}
