@@ -8,8 +8,10 @@
     "lint": "eslint ./server/"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.245.0",
     "audio-splitter": "^1.1.1",
     "audiobuffer-to-wav": "^1.0.0",
+    "aws-sdk": "^2.1291.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
