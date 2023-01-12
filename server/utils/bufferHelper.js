@@ -1,6 +1,9 @@
 const fs = require('fs');
 const { promisify } = require('util');
 const Audio = require('../models/audio');
+const {
+  S3RetrieveItem,
+} = require('./S3Storage');
 
 const clearTempBuffer = async (filePath) => {
   const unlinkPromise = promisify(fs.unlink);
@@ -13,10 +16,11 @@ const bufferFileFromId = async (request, response) => {
   if (!audio) {
     response.status(404).end();
   }
+  const result = await S3RetrieveItem(request.user.username, audio.id);
   const writeFilePromise = promisify(fs.writeFile);
   const filePath = `./server/temp/files/${audio.name}.wav`;
   // write file to FS
-  const err = await writeFilePromise(filePath, audio.content, 'ascii');
+  const err = await writeFilePromise(filePath, result.Body, 'ascii');
   if (err) {
     response.status(404).end();
   }

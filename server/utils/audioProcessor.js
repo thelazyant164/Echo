@@ -19,29 +19,29 @@ const getChildProcessResult = (process) => new Promise((resolve) => {
     logger.errorInfo(`\n\t\tERROR: spawn failed! (${code})`);
   });
   process.on('message', (code) => {
-    // logger.info(code);
+    logger.info(code);
   });
 
   process.on('exit', (code, signal) => {
-    // logger.info('The data retrieved from the Python script is, ', result);
-    // logger.info(`code: ${code}`);
-    // logger.info(`signal: ${signal}`);
-    // logger.info(signal);
+    logger.info('The data retrieved from the Python script is, ', result);
+    logger.info(`code: ${code}`);
+    logger.info(`signal: ${signal}`);
+    logger.info(signal);
     resolve(result);
   });
 
   process.on('close', (code, signal) => {
-    // logger.info('The data retrieved from the Python script is, ', result);
-    // logger.info('The error retrieve from the Python script is, ', error);
-    // logger.info(`code: ${code}`);
-    // logger.info(`signal: ${signal}`);
+    logger.info('The data retrieved from the Python script is, ', result);
+    logger.info('The error retrieve from the Python script is, ', error);
+    logger.info(`code: ${code}`);
+    logger.info(`signal: ${signal}`);
     resolve(result);
   });
 
   process.on('warning', (warning) => {
-    // logger.info(warning.name); // Print the warning name
-    // logger.info(warning.message); // Print the warning message
-    // logger.info(warning.stack); // Print the stack trace
+    logger.info(warning.name);
+    logger.info(warning.message);
+    logger.info(warning.stack);
   });
 });
 

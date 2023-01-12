@@ -30,6 +30,7 @@ const authorizeRequest = async (request, response) => {
   if (!authorized) {
     response.status(401).send({ error: 'unauthorized permission' });
   }
+  return user;
 };
 
 module.exports = {

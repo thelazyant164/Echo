@@ -12,7 +12,7 @@ audioProcessingRouter.get('/:req/:id', async (request, response, next) => {
   }
   const audioName = await bufferFileFromId(request, response);
   const processedFilePath = await processAudio(req, audioName);
-  await response.download(processedFilePath.trim(), () => {
+  response.download(processedFilePath.trim(), () => {
     clearTempBuffer(`./server/temp/files/${audioName}.wav`);
     clearTempBuffer(processedFilePath.trim());
   });

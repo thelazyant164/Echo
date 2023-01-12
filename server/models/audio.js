@@ -8,7 +8,7 @@ const audioSchema = new mongoose.Schema({
   },
   date: Date,
   content: {
-    type: Buffer,
+    type: String,
     required: true,
   },
   user: {
