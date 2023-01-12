@@ -4,7 +4,7 @@ const { bufferFileFromId, clearTempBuffer } = require('../utils/bufferHelper');
 const { processAudio } = require('../utils/audioProcessor');
 
 audioProcessingRouter.get('/:req/:id', async (request, response, next) => {
-  await authorizeRequest(request, response);
+  const user = await authorizeRequest(request, response, user.username);
   const { req, id } = request.params;
   const acceptedReq = ['normalize', 'denoise', 'volume', 'silence', 'transcribe'];
   if (!acceptedReq.includes(req)) {
@@ -12,7 +12,7 @@ audioProcessingRouter.get('/:req/:id', async (request, response, next) => {
   }
   const audioName = await bufferFileFromId(request, response);
   const processedFilePath = await processAudio(req, audioName);
-  await response.download(processedFilePath.trim(), () => {
+  response.download(processedFilePath.trim(), () => {
     clearTempBuffer(`./server/temp/files/${audioName}.wav`);
     clearTempBuffer(processedFilePath.trim());
   });

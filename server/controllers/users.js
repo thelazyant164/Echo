@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const usersRouter = require('express').Router();
 const User = require('../models/user');
 const Audio = require('../models/audio');
-
+const { S3CreateBucket} = require('../utils/s3Storage');
 usersRouter.get('/', async (request, response) => {
   const users = await User.find({}).populate('audios', { name: 1, date: 1 });
   response.json(users);

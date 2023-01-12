@@ -5,7 +5,7 @@ const User = require('../models/user');
 const Audio = require('../models/audio');
 const { getLoggedInUser, authorizeRequest } = require('../utils/authHelper');
 const { getBufferFileFromId } = require('../utils/bufferHelper');
-const { S3CreateBucket,S3Delete,S3Update,S3Insert} = require('../utils/s3Storage')
+const { S3Delete, S3Insert, S3RetrieveAll, S3RetrieveItem} = require('../utils/s3Storage');
 
 const upload = multer();
 
@@ -17,8 +17,8 @@ audiosRouter.get('/', async (request, response) => {
 });
 
 audiosRouter.get('/:id', async (request, response, next) => {
-  await authorizeRequest(request, response);
-  await getBufferFileFromId(request, response);
+  const user = await authorizeRequest(request, response);
+  await getBufferFileFromId(request, response, user.username);
 });
 
 audiosRouter.put('/:id', upload.single('test'), async (request, response, next) => {
@@ -47,7 +47,7 @@ audiosRouter.delete('/:id', async (request, response, next) => {
   _.remove(user.audios, (audioID) => audioID === audio.id);
   // await user.save(user);
   user.save(user);
-  // await S3Delete(request.params.id)
+  await S3Delete(user.username,request.params.id)
   // Delete audio
   await Audio.findByIdAndRemove(audio.id);
   response.status(204).end();
@@ -64,10 +64,9 @@ audiosRouter.post('/', upload.single('test'), async (request, response, next) =>
     user: user._id,
     date: new Date(),
   });
-
-  // await S3Insert(name,file.buffer)
   const savedAudio = await audio.save();
   user.audios = user.audios.concat(savedAudio._id);
+  await S3Insert(savedAudio._id,file.buffer)
   await user.save();
   const res = { id: savedAudio._id };
   response.json(res);

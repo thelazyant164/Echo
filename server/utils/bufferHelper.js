@@ -1,22 +1,23 @@
 const fs = require('fs');
 const { promisify } = require('util');
 const Audio = require('../models/audio');
-
+const { S3CreateBucket, S3Delete, S3Insert, S3RetrieveAll, S3RetrieveItem} = require('./s3Storage');
 const clearTempBuffer = async (filePath) => {
   const unlinkPromise = promisify(fs.unlink);
   await unlinkPromise(filePath);
 };
 
 // returns the name of the file written to FS, responses with status code 404 if error
-const bufferFileFromId = async (request, response) => {
+const bufferFileFromId = async (request, response,username) => {
   const audio = await Audio.findById(request.params.id);
   if (!audio) {
     response.status(404).end();
   }
+  const result = await S3RetrieveItem(username, audio.id);
   const writeFilePromise = promisify(fs.writeFile);
   const filePath = `./server/temp/files/${audio.name}.wav`;
   // write file to FS
-  const err = await writeFilePromise(filePath, audio.content, 'ascii');
+  const err = await writeFilePromise(filePath, result.Body.buffer, 'ascii');
   if (err) {
     response.status(404).end();
   }
@@ -25,8 +26,8 @@ const bufferFileFromId = async (request, response) => {
 
 // downloads the file written to FS as attachment
 // auto clears buffer when done, responses with status code 404 if error
-const getBufferFileFromId = async (request, response) => {
-  const audioName = await bufferFileFromId(request, response);
+const getBufferFileFromId = async (request, response,username) => {
+  const audioName = await bufferFileFromId(request, response,username);
   await response.download(`./server/temp/files/${audioName}.wav`, () => {
     clearTempBuffer(`./server/temp/files/${audioName}.wav`);
   });
