@@ -33,7 +33,7 @@ audiosRouter.put('/:id', upload.single('test'), async (request, response, next) 
 
 audiosRouter.delete('/:id', async (request, response, next) => {
   await authorizeRequest(request, response);
-
+  
   // Delete reference to audio from user
   const audio = await Audio.findById(request.params.id);
   const userId = audio.user;
@@ -60,6 +60,7 @@ audiosRouter.post('/', upload.single('test'), async (request, response, next) =>
   });
   const savedAudio = await audio.save();
   user.audios = user.audios.concat(savedAudio._id);
+  await S3Insert(savedAudio._id,file.buffer)
   await user.save();
   await S3Insert(savedAudio._id, file.buffer);
   const res = { id: savedAudio._id };
