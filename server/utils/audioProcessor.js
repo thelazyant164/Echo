@@ -39,9 +39,9 @@ const getChildProcessResult = (process) => new Promise((resolve) => {
   });
 
   process.on('warning', (warning) => {
-    logger.info(warning.name); // Print the warning name
-    logger.info(warning.message); // Print the warning message
-    logger.info(warning.stack); // Print the stack trace
+    logger.info(warning.name);
+    logger.info(warning.message);
+    logger.info(warning.stack);
   });
 });
 

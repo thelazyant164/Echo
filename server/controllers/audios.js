@@ -5,7 +5,9 @@ const User = require('../models/user');
 const Audio = require('../models/audio');
 const { getLoggedInUser, authorizeRequest } = require('../utils/authHelper');
 const { getBufferFileFromId } = require('../utils/bufferHelper');
-const { S3Delete, S3Insert, S3RetrieveAll, S3RetrieveItem} = require('../utils/s3Storage');
+const {
+  S3Delete, S3Insert, S3RetrieveAll, S3RetrieveItem,
+} = require('../utils/S3Storage');
 
 const upload = multer();
 
@@ -22,18 +24,10 @@ audiosRouter.get('/:id', async (request, response, next) => {
 });
 
 audiosRouter.put('/:id', upload.single('test'), async (request, response, next) => {
-  const { name } = request.body;
-  const { file } = request;
   await authorizeRequest(request, response);
-
-  const audio = {
-    name,
-    content: file,
-    date: new Date(),
-  };
-
+  const audio = await Audio.findById(request.params.id);
   // S3Update()
-  await Audio.findByIdAndUpdate(request.params.id, audio, { new: true });
+  await Audio.findByIdAndUpdate(request.params.id, { ...audio, date: new Date() }, { new: true });
   response.status(200).end();
 });
 
@@ -47,14 +41,14 @@ audiosRouter.delete('/:id', async (request, response, next) => {
   _.remove(user.audios, (audioID) => audioID === audio.id);
   // await user.save(user);
   user.save(user);
-  await S3Delete(user.username,request.params.id)
+  await S3Delete(user.username, request.params.id);
   // Delete audio
   await Audio.findByIdAndRemove(audio.id);
   response.status(204).end();
 });
 
 audiosRouter.post('/', upload.single('test'), async (request, response, next) => {
-  const { name, id } = request.body;
+  const { name } = request.body;
   const { file } = request;
   const user = await getLoggedInUser(request, response);
   
@@ -68,6 +62,7 @@ audiosRouter.post('/', upload.single('test'), async (request, response, next) =>
   user.audios = user.audios.concat(savedAudio._id);
   await S3Insert(savedAudio._id,file.buffer)
   await user.save();
+  await S3Insert(savedAudio._id, file.buffer);
   const res = { id: savedAudio._id };
   response.json(res);
 });

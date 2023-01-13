@@ -13,6 +13,7 @@ const authenticate = async (request, response, next) => {
   if (!user) {
     return response.status(401).json({ error: 'invalid user' });
   }
+  request = { ...request, user };
   next();
 };
 
