@@ -2,10 +2,11 @@ import {
   React, useEffect, useContext, useState, useRef,
 } from 'react';
 import {
-  StyleSheet, Text, View, FlatList, TouchableOpacity,
+  StyleSheet, Text, View, FlatList, TouchableOpacity, Alert,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
+import * as FileSystem from 'expo-file-system';
 import { Header } from '../../page-component/header/header';
 import { FolderInput } from '../../page-component/newfolder-input/newfolder-input';
 import { useDocumentReadWritePermission } from '../../utils/documentaryHelper';
@@ -66,13 +67,18 @@ export function Files({ navigation }) {
   const filesstate = useSelector((state) => state.files.value);
 
   async function FirstTimeFetching() {
-    await getPermissionFirstTime();
+    await getPermissionFirstTime(filesstate.activeDirectory);
     const files = await getFileContent(filesstate.activeDirectory);
     dispatch(updateFiles(files));
   }
   async function FetchFolderContent() {
-    const files = await getFileContent(filesstate.activeDirectory);
-    dispatch(updateFiles(files));
+    try {
+      const files = await getFileContent(filesstate.activeDirectory);
+      dispatch(updateFiles(files));
+    } catch (err) {
+      dispatch(updateFiles([]));
+      Alert.alert('Cannot read file from this directory');
+    }
   }
 
   const refRBSheet = useRef();

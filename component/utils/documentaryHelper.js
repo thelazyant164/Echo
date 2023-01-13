@@ -22,9 +22,12 @@ export const useDocumentReadWritePermission = () => {
   //     uri = permission.directoryUri;
   //   }
   //   // Gets all files inside of selected directory
-  //   const localfile = await StorageAccessFramework.readDirectoryAsync(uri);
+  // eslint-disable-next-line max-len
+  //   const localfile = await StorageAccessFramework.readDirectoryAsync(FileSystem.documentDirectory
+  //     + activeDirectory);
   //   return localfile;
   // };
+
   const getFileContent = (activeDirectory) => readAllFiles(activeDirectory);
   // const goToFolder = (path) => {
   //   setActiveDirectory(path);
@@ -36,6 +39,7 @@ export const useDocumentReadWritePermission = () => {
     const permission = await getCachedPermission();
     if (!permission) {
       // Manually get permision on first app launch
+      console.log(FileSystem.documentDirectory + activeDirectory);
       const newPermission = await StorageAccessFramework
         .requestDirectoryPermissionsAsync(FileSystem.documentDirectory + activeDirectory);
       await cachePermission(newPermission);

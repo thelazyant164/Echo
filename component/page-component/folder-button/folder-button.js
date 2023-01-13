@@ -30,7 +30,9 @@ export default function Folderbutton({ activeDirectory, setVisible, location }) 
       <TouchableOpacity
         style={style.folderbutton}
         onPress={async () => {
-          if (location === 'files') { dispatch(updateActiveDirectory(activeDirectory)); } else {
+          if (location === 'files') {
+            dispatch(updateActiveDirectory(activeDirectory));
+          } else {
             dispatch(FormUpdateActiveDirectory(activeDirectory));
           }
         }}

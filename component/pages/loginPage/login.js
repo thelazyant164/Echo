@@ -79,6 +79,7 @@ export default function LoginPage({ navigation }) {
   }, [response]);
 
   const SubmitData = async () => {
+    // await AsyncStorage.clear();
     setVisible(true);
     axios.post(backendapi, {
       username,
@@ -119,7 +120,7 @@ export default function LoginPage({ navigation }) {
             <TouchableOpacity onPress={SubmitData} style={styles.button}>
               <Text style={styles.text}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('PlanSignup'); }}>
+            <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('Pricing'); }}>
               <Text style={styles.text}>Sign up</Text>
             </TouchableOpacity>
             <Text style={{ textAlign: 'center', marginTop: '10%' }}>OR</Text>

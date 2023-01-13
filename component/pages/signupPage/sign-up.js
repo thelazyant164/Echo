@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
 });
 export default function SignupPage({ route, navigation }) {
-  const backendapi = `${Configuration.backendAPI}/management/users`;
+  const backendapi = `${Configuration.backendAPI}/management/users/`;
   const { premium } = route.params;
 
   const [name, setName] = useState('');
