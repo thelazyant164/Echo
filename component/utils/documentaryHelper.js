@@ -1,11 +1,17 @@
 import * as FileSystem from 'expo-file-system';
 import { StorageAccessFramework } from 'expo-file-system';
 import { cachePermission, getCachedPermission } from './cacheHelper';
+import { listAllFilesAsync, getAlbum } from './albumHelper';
 
 export const useDocumentReadWritePermission = () => {
   const readAllFiles = async (activeDirectory) => {
-    const result = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory
+    if (!activeDirectory) {
+      const result = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory
       + activeDirectory);
+      return result;
+    }
+    const album = await getAlbum(activeDirectory);
+    const result = await listAllFilesAsync(album);
     return result;
   };
   // const readAllFiles = async (activeDirectory) => {
@@ -39,7 +45,6 @@ export const useDocumentReadWritePermission = () => {
     const permission = await getCachedPermission();
     if (!permission) {
       // Manually get permision on first app launch
-      console.log(FileSystem.documentDirectory + activeDirectory);
       const newPermission = await StorageAccessFramework
         .requestDirectoryPermissionsAsync(FileSystem.documentDirectory + activeDirectory);
       await cachePermission(newPermission);

@@ -7,14 +7,15 @@ import {
 import axios from 'axios';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as FileSystem from 'expo-file-system';
-import GDrive from 'expo-google-drive-api-wrapper';
 import { useSelector, useDispatch } from 'react-redux';
 import { Asset } from 'expo-asset';
+import * as MediaLibrary from 'expo-media-library';
+import * as ImagePicker from 'expo-image-picker';
 import { Accesstoken } from '../../state/AccessTokencontext';
-import PlayAudioPage from '../../pages/audioPlayPage/audio-play';
 import LoadingEffect from '../loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
 import { updateAudioFile } from '../file-upload-form/file-upload-form-slider';
+import { createAlbumAsync, createAssetsAsync, addAssettoAlbum } from '../../utils/albumHelper';
 
 const styles = StyleSheet.create({
   container: {
@@ -59,15 +60,15 @@ export default function Filebutton(props) {
     // setAudiofile(file.id);
   };
 
-  const GetFile = async () => {
-    if (source === 'drive') {
-      GetFileFromDrive();
-    } else if (source === 'cloud') {
-      GetFileFromCloud();
-    } else {
-      await GetFileFromDevice();
-    }
-  };
+  // const GetFile = async () => {
+  //   if (source === 'drive') {
+  //     GetFileFromDrive();
+  //   } else if (source === 'cloud') {
+  //     GetFileFromCloud();
+  //   } else {
+  //     await GetFileFromDevice();
+  //   }
+  // };
   const FileProcessing = async (service) => {
     setLoading(true);
     if (source === 'cloud') {
@@ -77,8 +78,28 @@ export default function Filebutton(props) {
       FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${`${FileSystem.documentDirectory}/Download`}`, {
         headers: { Authorization: `Bearer ${accesstoken}` },
       })
-        .then((response) => {
-          dispatch(updateAudioFile(response));
+        .then(async (response) => {
+          // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          // if (status !== 'granted') {
+          //   alert('...');
+          // }
+          // try {
+          //   const asset = await MediaLibrary.createAssetAsync(response.uri);
+          //   const album = await MediaLibrary.getAlbumAsync('Download');
+          //   if (album == null) {
+          //     await MediaLibrary.createAlbumAsync('Download', asset, false);
+          //   } else {
+          //     await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
+          //   }
+          // } catch (e) {
+          //   Alert.alert(e);
+          // }
+          const asset = await createAssetsAsync(response.uri);
+          const album = await createAlbumAsync('Download');
+          if (album !== undefined && asset !== undefined) {
+            await addAssettoAlbum(asset, album);
+            dispatch(updateAudioFile(response));
+          }
           // setVisible(true);
           setLoading(false);
         })
