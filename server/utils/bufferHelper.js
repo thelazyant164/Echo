@@ -11,31 +11,43 @@ const clearTempBuffer = async (filePath) => {
 };
 
 // returns the name of the file written to FS, responses with status code 404 if error
-const bufferFileFromId = async (request, response) => {
+const tryBufferFileFromId = async (request, response, out) => {
   const audio = await Audio.findById(request.params.id);
   if (!audio) {
-    response.status(404).end();
+    response.status(404).send({ error: 'file info not found in database' });
+    return false;
   }
-  const result = await S3RetrieveItem(request.user.username, audio.id);
+  let result;
+  try {
+    result = await S3RetrieveItem(request.user.userID, audio.id);
+  } catch (err) {
+    response.status(404).send({ error: 'file data not found in database' });
+    return false;
+  }
   const writeFilePromise = promisify(fs.writeFile);
   const filePath = `./server/temp/files/${audio.name}.wav`;
   // write file to FS
   const err = await writeFilePromise(filePath, result.Body, 'ascii');
   if (err) {
-    response.status(404).end();
+    response.status(500).send({ error: 'cannot write file to temporary buffer for download' });
+    return false;
   }
-  return audio.name;
+  out.audioName = audio.name;
+  return true;
 };
 
 // downloads the file written to FS as attachment
 // auto clears buffer when done, responses with status code 404 if error
 const getBufferFileFromId = async (request, response) => {
-  const audioName = await bufferFileFromId(request, response);
-  await response.download(`./server/temp/files/${audioName}.wav`, () => {
-    clearTempBuffer(`./server/temp/files/${audioName}.wav`);
-  });
+  const out = {};
+  if (await tryBufferFileFromId(request, response, out)) {
+    const { audioName } = out;
+    await response.download(`./server/temp/files/${audioName}.wav`, () => {
+      clearTempBuffer(`./server/temp/files/${audioName}.wav`);
+    });
+  }
 };
 
 module.exports = {
-  bufferFileFromId, getBufferFileFromId, clearTempBuffer,
+  tryBufferFileFromId, getBufferFileFromId, clearTempBuffer,
 };

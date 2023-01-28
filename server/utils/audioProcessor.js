@@ -22,21 +22,21 @@ const getChildProcessResult = (process) => new Promise((resolve) => {
     logger.info(code);
   });
 
-  process.on('exit', (code, signal) => {
-    logger.info('The data retrieved from the Python script is, ', result);
-    logger.info(`code: ${code}`);
-    logger.info(`signal: ${signal}`);
-    logger.info(signal);
-    resolve(result);
-  });
+  // process.on('exit', (code, signal) => {
+  //   logger.info('The data retrieved from the Python script is, ', result);
+  //   logger.info(`code: ${code}`);
+  //   logger.info(`signal: ${signal}`);
+  //   logger.info(signal);
+  //   resolve(result);
+  // });
 
-  process.on('close', (code, signal) => {
-    logger.info('The data retrieved from the Python script is, ', result);
-    logger.info('The error retrieve from the Python script is, ', error);
-    logger.info(`code: ${code}`);
-    logger.info(`signal: ${signal}`);
-    resolve(result);
-  });
+  // process.on('close', (code, signal) => {
+  //   logger.info('The data retrieved from the Python script is, ', result);
+  //   logger.info('The error retrieve from the Python script is, ', error);
+  //   logger.info(`code: ${code}`);
+  //   logger.info(`signal: ${signal}`);
+  //   resolve(result);
+  // });
 
   process.on('warning', (warning) => {
     logger.info(warning.name);

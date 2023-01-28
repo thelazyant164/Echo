@@ -19,53 +19,62 @@ const s3 = new AWS.S3({
 //   });
 // };
 
-const S3Insert = (username, id, fileContent) => {
+const S3Insert = (userID, id, fileContent) => {
   s3.upload({
     Bucket: config.BUCKETNAME,
-    Key: `${username}/${id}`,
+    Key: `${userID}/${id}`,
     Body: fileContent,
   }, (err, data) => {
     if (err) {
       logger.errorInfo(err, err.stack);
+      throw err;
     } else {
       logger.info(`File uploaded successfully at ${data.Location}`);
     }
   });
 };
 
-const S3Delete = (username, id) => {
+const S3Delete = (userID, id) => {
   s3.deleteObject({
     Bucket: config.BUCKETNAME,
-    Key: `${username}/${id}`,
+    Key: `${userID}/${id}`,
   }, (err, data) => {
     if (err) {
       logger.errorInfo(err, err.stack);
+      throw err;
     } else {
       logger.info(`File deleted successfully from ${data.Location}`);
     }
   });
 };
 
-const S3RetrieveItem = (username, id) => new Promise((resolve, reject) => {
+const S3Update = (userID, id, data) => {
+  S3Delete(userID, id);
+  S3Insert(userID, id, data);
+};
+
+const S3RetrieveItem = (userID, id) => new Promise((resolve, reject) => {
   s3.getObject({
     Bucket: config.BUCKETNAME,
-    Key: `${username}/${id}`,
-  }, (error, data) => {
-    if (error) {
-      reject(error);
+    Key: `${userID}/${id}`,
+  }, (err, data) => {
+    if (err) {
+      logger.errorInfo(err, err.stack);
+      throw err;
     } else {
       resolve(data);
     }
   });
 });
 
-const S3RetrieveAll = (username, id) => {
+const S3RetrieveAll = (userID, id) => {
   s3.listObjects({
     Bucket: config.BUCKETNAME,
-    Key: `${username}/${id}`,
+    Key: `${userID}/${id}`,
   }, (err, data) => {
     if (err) {
       logger.errorInfo(err, err.stack);
+      throw err;
     } else {
       logger.info(`File successfully retrieved from ${data.Location}`);
     }
@@ -73,5 +82,5 @@ const S3RetrieveAll = (username, id) => {
 };
 
 module.exports = {
-  S3Delete, S3Insert, S3RetrieveItem, S3RetrieveAll,
+  S3Delete, S3Insert, S3RetrieveItem, S3RetrieveAll, S3Update,
 };
