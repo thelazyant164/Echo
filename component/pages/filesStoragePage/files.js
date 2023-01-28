@@ -12,6 +12,7 @@ import { FolderInput } from '../../page-component/newfolder-input/newfolder-inpu
 import { useDocumentReadWritePermission } from '../../utils/documentaryHelper';
 import Folderbutton from '../../page-component/folder-button/folder-button';
 import { Accesstoken } from '../../state/AccessTokencontext';
+import Filebutton from '../../page-component/file-button/file-button';
 import FolderOptions from '../../page-component/folder-options/folder-options';
 import { Configuration } from '../../../configuration/configuration';
 import {
@@ -74,7 +75,11 @@ export function Files({ navigation }) {
   async function FetchFolderContent() {
     try {
       const files = await getFileContent(filesstate.activeDirectory);
-      dispatch(updateFiles(files));
+      if (files.assets !== undefined) {
+        dispatch(updateFiles(files.assets));
+      } else {
+        dispatch(updateFiles(files));
+      }
     } catch (err) {
       dispatch(updateFiles([]));
       Alert.alert('Cannot read file from this directory');
@@ -116,19 +121,34 @@ export function Files({ navigation }) {
                 </Text>
               </View>
             )
+
             : <Text style={{ fontSize: 20 }}>Root Folder</Text>}
           <View style={style.container}>
-            <FlatList
-              numColumns={3}
-              data={filesstate.files}
-              renderItem={({ item }) => (
-                <Folderbutton
-                  location="files"
-                  activeDirectory={item}
-                  setVisible={refRBSheet}
+
+            {filesstate.activeDirectory
+              ? (
+                <FlatList
+                  numColumns={3}
+                  data={filesstate.files}
+                  renderItem={(item) => (
+                    <Filebutton
+                      file={item}
+                    />
+                  )}
+                />
+              ) : (
+                <FlatList
+                  numColumns={3}
+                  data={filesstate.files}
+                  renderItem={({ item }) => (
+                    <Folderbutton
+                      location="files"
+                      activeDirectory={item}
+                      setVisible={refRBSheet}
+                    />
+                  )}
                 />
               )}
-            />
           </View>
         </View>
         {filesstate.activeDirectory ? (

@@ -31,6 +31,8 @@ export default function Filebutton(props) {
   const {
     file, source, mission,
   } = props;
+
+  console.log(file);
   const accesstoken = useContext(Accesstoken);
   // const [isVisible, setVisible] = useState(false);
   const [isLoading, setLoading] = useState(false);
@@ -185,6 +187,7 @@ export default function Filebutton(props) {
         <FontAwesome name="file-audio-o" size={40} />
 
         <View>
+          {/* { if (file.item.filename !== undefined) {<Text>{file.item.filename}</Text> } <Text>{`${file.name.slice(0, 6)}...`}</Text>} */}
           <Text>{`${file.name.slice(0, 6)}...`}</Text>
         </View>
       </TouchableOpacity>
