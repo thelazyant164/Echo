@@ -48,6 +48,24 @@ const getBufferFileFromId = async (request, response) => {
   }
 };
 
+const tryBufferFileFromRequest = async (request, response, out) => {
+  const { audioFile } = request;
+  if (!audioFile) {
+    response.status(404).send({ error: 'file info not found in database' });
+    return false;
+  }
+  const writeFilePromise = promisify(fs.writeFile);
+  const filePath = `./server/temp/files/${audioFile.name}.wav`;
+  // write file to FS
+  const err = await writeFilePromise(filePath, audioFile.buffer, 'ascii');
+  if (err) {
+    response.status(500).send({ error: 'cannot write file to temporary buffer for download' });
+    return false;
+  }
+  out.audioName = audioFile.name;
+  return true;
+};
+
 module.exports = {
-  tryBufferFileFromId, getBufferFileFromId, clearTempBuffer,
+  tryBufferFileFromRequest, tryBufferFileFromId, getBufferFileFromId, clearTempBuffer,
 };

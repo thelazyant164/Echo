@@ -9,6 +9,7 @@ const loginRouter = require('./controllers/login');
 const usersRouter = require('./controllers/users');
 const userLoggedInRouter = require('./controllers/usersLoggedIn');
 const audiosRouter = require('./controllers/audios');
+const quickProcessingRouter = require('./controllers/quickProcessing');
 const audioProcessingRouter = require('./controllers/audioProcessing');
 
 const authenticate = require('./utils/authenticate');
@@ -32,6 +33,7 @@ app.use(middleware.requestLogger);
 app.use('/login', loginRouter);
 app.use('/api/me', authenticate, userLoggedInRouter);
 app.use('/api/audios', authenticate, audiosRouter);
+app.use('/api/audio/quick', authenticate, quickProcessingRouter);
 app.use('/api/audio', authenticate, audioProcessingRouter);
 app.use('/management/users', usersRouter);
 
