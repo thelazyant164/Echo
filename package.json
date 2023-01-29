@@ -20,6 +20,7 @@
     "express-async-errors": "^3.1.1",
     "ffmpeg": "^0.0.4",
     "ffmpeg-extract-audio": "^1.0.2",
+    "google-auth-library": "^8.7.0",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
     "mongoose": "^6.4.4",

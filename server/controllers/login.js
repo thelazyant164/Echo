@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
 const bcrypt = require('bcrypt');
 const loginRouter = require('express').Router();
+const client = new OAuth2Client(process.env.CLIENT_ID);
 const User = require('../models/user');
 
 loginRouter.post('/', async (request, response) => {
@@ -31,6 +33,20 @@ loginRouter.post('/', async (request, response) => {
   response
     .status(200)
     .send({ token });
+});
+
+loginRouter.post('/google', async (request, response) => {
+  const { token }  = req.body;
+  const ticket = await client.verifyIdToken({
+    idToken: token,
+    audience: process.env.CLIENT_ID
+});
+const { name, email, picture } = ticket.getPayload();
+
+response
+.status(200)
+.send({ name,email,picture });
+
 });
 
 module.exports = loginRouter;
