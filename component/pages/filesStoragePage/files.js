@@ -13,7 +13,9 @@ import { useDocumentReadWritePermission } from '../../utils/documentaryHelper';
 import Folderbutton from '../../page-component/folder-button/folder-button';
 import { Accesstoken } from '../../state/AccessTokencontext';
 import Filebutton from '../../page-component/file-button/file-button';
+import FileOptions from '../../page-component/file-options/file-options';
 import FolderOptions from '../../page-component/folder-options/folder-options';
+import PlayAudioPage from '../audioPlayPage/audio-play';
 import { Configuration } from '../../../configuration/configuration';
 import {
   showModal,
@@ -38,6 +40,7 @@ const style = StyleSheet.create({
     height: '100%',
   },
   container: {
+    marginBottom: 80,
     borderRadius: 12,
     justifyContent: 'center',
   },
@@ -124,7 +127,6 @@ export function Files({ navigation }) {
 
             : <Text style={{ fontSize: 20 }}>Root Folder</Text>}
           <View style={style.container}>
-
             {filesstate.activeDirectory
               ? (
                 <FlatList
@@ -133,6 +135,7 @@ export function Files({ navigation }) {
                   renderItem={(item) => (
                     <Filebutton
                       file={item}
+                      location="file"
                     />
                   )}
                 />
@@ -141,11 +144,14 @@ export function Files({ navigation }) {
                   numColumns={3}
                   data={filesstate.files}
                   renderItem={({ item }) => (
-                    <Folderbutton
-                      location="files"
-                      activeDirectory={item}
-                      setVisible={refRBSheet}
-                    />
+                    typeof item !== 'object'
+                      ? (
+                        <Folderbutton
+                          location="files"
+                          activeDirectory={item}
+                          setVisible={refRBSheet}
+                        />
+                      ) : <View />
                   )}
                 />
               )}
@@ -180,6 +186,8 @@ export function Files({ navigation }) {
         folder={filesstate.folder}
         refRBSheet={refRBSheet}
       />
+      <FileOptions refRBSheet={refRBSheet} />
+      <PlayAudioPage />
     </View>
   );
 }

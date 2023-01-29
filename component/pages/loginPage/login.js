@@ -94,6 +94,25 @@ export default function LoginPage({ navigation }) {
     });
   };
 
+  const SubmitDataGoogle = async () => {
+    setVisible(true);
+    const result = await promptAsync();
+    if (result.authentication.accessToken) {
+      setAccessToken(result.authentication.accessToken);
+      axios.post(`${backendapi
+      }/google`, {
+        token: result.authentication.accessToken,
+      }).then((res) => {
+        setVisible(false);
+        setAccessToken(res.data.token);
+        navigation.navigate('Mainpage');
+      }).catch((err) => {
+        setVisible(false);
+        Alert.alert('Invalid username or password');
+      });
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -126,13 +145,7 @@ export default function LoginPage({ navigation }) {
             <Text style={{ textAlign: 'center', marginTop: '10%' }}>OR</Text>
             <TouchableOpacity
               style={[styles.button, { backgroundColor: 'black' }]}
-              onPress={async () => {
-                const result = await promptAsync();
-                if (result.authentication.accessToken) {
-                  navigation.navigate('Mainpage');
-                  setAccessToken(result.authentication.accessToken);
-                }
-              }}
+              onPress={SubmitDataGoogle}
             >
               <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'center' }}>
                 <AntDesign name="google" size={28} style={{ color: 'white', marginTop: '3%', marginRight: '4%' }} />

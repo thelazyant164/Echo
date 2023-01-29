@@ -1,6 +1,6 @@
 import { React, useContext } from 'react';
 import {
-  View, Modal, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, r,
+  View, Modal, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, r, Alert,
 } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 import Feather from 'react-native-vector-icons/Feather';
@@ -49,15 +49,17 @@ export default function FileOptions(props) {
   const formstate = useSelector((state) => state.files.value);
 
   const DeleteFile = async () => {
-
+    const fileDir = FileSystem.documentDirectory + formstate.folder;
+    await FileSystem.deleteAsync(fileDir);
   };
 
   const UploadFile = async () => {
     axios.push(Configuration.backendAPI`/api/audios}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
       .then((response) => {
-
+        refRBSheet.current.close();
+        Alert.alert('Upload success!');
       })
-      .catch((err) => { console.log(err); });
+      .catch((err) => { console.error(err); });
   };
 
   const ShareFile = async () => {

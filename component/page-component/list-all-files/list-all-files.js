@@ -1,17 +1,17 @@
 import {
-  React, useState, useEffect, useRef,
+  React, useEffect, useRef,
 } from 'react';
 import {
   View, StyleSheet, Modal, Pressable, Text, FlatList,
 } from 'react-native';
-import axios from 'axios';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
 import Filebutton from '../file-button/file-button';
 import Folderbutton from '../folder-button/folder-button';
 import FolderOptions from '../folder-options/folder-options';
 import {
-  updateActiveDirectory, updateFiles, showLoading, hideLoading, showFilesList, hideFilesList,
+  updateActiveDirectory, updateFiles, hideFilesList,
 } from '../file-upload-form/file-upload-form-slider';
 
 const styles = StyleSheet.create({
@@ -41,7 +41,9 @@ export default function ListallFiles({
 
   const formstate = useSelector((state) => state.form.value);
 
-  useEffect(() => { }, [formstate.files]);
+  useEffect(() => {
+
+  }, [formstate.files]);
 
   if ((!formstate.isFilesListVisible)) {
     return (
@@ -69,11 +71,14 @@ export default function ListallFiles({
           data={formstate.files}
           renderItem={
                 ({ item }) => (
-                  <Folderbutton
-                    location="form"
-                    activeDirectory={item}
-                    setVisible={refRBSheet}
-                  />
+                  typeof item !== 'object'
+                    ? (
+                      <Folderbutton
+                        location="form"
+                        activeDirectory={item}
+                        setVisible={refRBSheet}
+                      />
+                    ) : <View />
                 )
               }
         />
@@ -87,41 +92,38 @@ export default function ListallFiles({
     );
   }
   if (formstate.files.length > 0 && formstate.files[0].name !== undefined) {
-    return (
-      <Modal style={styles.modal}>
-        <Pressable onPress={() => {
-          if (!formstate.activeDirectory) {
-            dispatch(hideFilesList());
-          }
-          dispatch(updateFiles([]));
-          dispatch(updateActiveDirectory(''));
-        }}
-        >
-          <View style={styles.buttonview}>
-            <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
-            <Text style={{ fontSize: 20 }}>Back</Text>
-          </View>
-        </Pressable>
-        <FlatList
-          numColumns={3}
-          data={formstate.files}
-          renderItem={
-              ({ item }) => (
-                <Filebutton file={item} source={source} mission={service} />
-              )
-            }
-        />
-
-      </Modal>
-
-    );
-  }
-  return (
-
     <Modal style={styles.modal}>
       <Pressable onPress={() => {
         if (!formstate.activeDirectory) {
-          dispatch(showFilesList());
+          dispatch(hideFilesList());
+        }
+        dispatch(updateFiles([]));
+        dispatch(updateActiveDirectory(''));
+      }}
+      >
+        <View style={styles.buttonview}>
+          <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+          <Text style={{ fontSize: 20 }}>Back</Text>
+        </View>
+      </Pressable>
+      <FlatList
+        numColumns={3}
+        data={formstate.files}
+        renderItem={
+          ({ item }) => (
+            <Filebutton file={item} source={source} mission={service} location="upload" />
+          )
+        }
+      />
+
+    </Modal>;
+  }
+
+  return (
+    <Modal style={styles.modal}>
+      <Pressable onPress={() => {
+        if (!formstate.activeDirectory) {
+          dispatch(hideFilesList());
         }
         dispatch(updateFiles([]));
         dispatch(updateActiveDirectory(''));
@@ -137,11 +139,10 @@ export default function ListallFiles({
         data={formstate.files}
         renderItem={
             ({ item }) => (
-              <Filebutton file={item} source={source} mission={service} />
+              <Filebutton file={item} source={source} mission={service} location="upload" />
             )
           }
       />
     </Modal>
-
   );
 }

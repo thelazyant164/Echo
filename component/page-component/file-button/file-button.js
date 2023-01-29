@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Asset } from 'expo-asset';
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
+import GDrive from 'expo-google-drive-api-wrapper';
 import { Accesstoken } from '../../state/AccessTokencontext';
 import LoadingEffect from '../loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
@@ -29,10 +30,9 @@ const styles = StyleSheet.create({
 });
 export default function Filebutton(props) {
   const {
-    file, source, mission,
+    file, source, mission, location,
   } = props;
 
-  console.log(file);
   const accesstoken = useContext(Accesstoken);
   // const [isVisible, setVisible] = useState(false);
   const [isLoading, setLoading] = useState(false);
@@ -52,31 +52,18 @@ export default function Filebutton(props) {
     return result;
   };
   const GetFileFromDrive = async () => {
-    // const queryParams = { acknowledgeAbuse: true, fields: '*' };
-    // const result = await GDrive.files.download(
-    //   file.id,
-    //   file.name,
-    //   queryParams,
-    // );
-    // const contain = await FileSystem.readAsStringAsync(result.uri);
-    // setAudiofile(file.id);
+    const queryParams = { acknowledgeAbuse: true, fields: '*' };
+    const result = await GDrive.files.download(
+      file.id,
+      file.name,
+      queryParams,
+    );
+    return result;
   };
 
-  // const GetFile = async () => {
-  //   if (source === 'drive') {
-  //     GetFileFromDrive();
-  //   } else if (source === 'cloud') {
-  //     GetFileFromCloud();
-  //   } else {
-  //     await GetFileFromDevice();
-  //   }
-  // };
   const FileProcessing = async (service) => {
     setLoading(true);
     if (source === 'cloud') {
-      // axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, {
-      //   headers: { Authorization: `Bearer ${accesstoken}` }, responseType: 'blob',
-      // })
       FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${`${FileSystem.documentDirectory}/Download`}`, {
         headers: { Authorization: `Bearer ${accesstoken}` },
       })
@@ -123,8 +110,9 @@ export default function Filebutton(props) {
       //     Alert.alert('Error while processing. Please try again.');
       //     setLoading(false);
       //   });
-      // eslint-disable-next-line max-len
-      // axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` }, responseType: 'blob' })
+      const result = await GetFileFromDrive();
+      const buffer = await FileSystem.readAsStringAsync(result.uri);
+      // setLoading(false);
       FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${FileSystem.documentDirectory}`, {
         headers: { Authorization: `Bearer ${accesstoken}` },
       })
@@ -138,6 +126,8 @@ export default function Filebutton(props) {
           setLoading(false);
         });
     } else {
+      const result = await GetFileFromDevice();
+      const bufffer = await FileSystem.readAsStringAsync(result);
       // eslint-disable-next-line max-len
       // axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` }, responseType: 'blob' })
       FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${FileSystem.documentDirectory}`, {
@@ -156,27 +146,26 @@ export default function Filebutton(props) {
   };
 
   const Operate = () => {
-    // GetFile();
-    switch (mission) {
-      case 'play':
-        // setVisible(true);
-        break;
-      case 'noisecancelling':
-        FileProcessing('denoise');
-        break;
-      case 'volumeadjust':
-        FileProcessing('volume');
-        break;
-      case 'speechtotext':
-        FileProcessing('transcribe');
-        break;
-      case 'normalization':
-        FileProcessing('normalize');
-        break;
-      default:
-        break;
+    if (location === 'upload') {
+      switch (mission) {
+        case 'noisecancelling':
+          FileProcessing('denoise');
+          break;
+        case 'volumeadjust':
+          FileProcessing('volume');
+          break;
+        case 'speechtotext':
+          FileProcessing('transcribe');
+          break;
+        case 'normalization':
+          FileProcessing('normalize');
+          break;
+        default:
+          break;
+      }
     }
   };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -185,13 +174,12 @@ export default function Filebutton(props) {
         onLongPress={ShowFileOption}
       >
         <FontAwesome name="file-audio-o" size={40} />
-
         <View>
-          {/* { if (file.item.filename !== undefined) {<Text>{file.item.filename}</Text> } <Text>{`${file.name.slice(0, 6)}...`}</Text>} */}
-          <Text>{`${file.name.slice(0, 6)}...`}</Text>
+          {location === 'file'
+            ? (<Text>{file.item.filename}</Text>)
+            : (<Text>{file.name}</Text>)}
         </View>
       </TouchableOpacity>
-      {/* {isVisible ? <PlayAudioPage audiofile={audiofile} /> : <View />} */}
       {isLoading ? <LoadingEffect /> : <View />}
     </View>
   );

@@ -62,7 +62,15 @@ export default function FileUploadForm(props) {
   const formstate = useSelector((state) => state.form.value);
   async function FetchFolderContent() {
     const result = await getFileContent(formstate.activeDirectory);
-    dispatch(updateFiles(result));
+    let files = [];
+    if (formstate.activeDirectory) {
+      result.assets.forEach((file) => {
+        files.push({ name: file.filename });
+      });
+    } else {
+      files = result;
+    }
+    dispatch(updateFiles(files));
   }
 
   const getFileCloud = () => {
@@ -72,9 +80,14 @@ export default function FileUploadForm(props) {
       .then((response) => {
         dispatch(showFilesList());
         dispatch(hideLoading());
-        dispatch(updateFiles(response.data));
+        const files = [];
+        response.data.forEach((file) => {
+          files.push({ name: file.name });
+        });
+        dispatch(updateFiles(files));
       }).catch((err) => { console.error(err); dispatch(hideLoading()); });
   };
+
   const getFileDevice = async () => {
     setSource('device');
     dispatch(showLoading());
@@ -84,6 +97,7 @@ export default function FileUploadForm(props) {
     dispatch(hideLoading());
     dispatch(showFilesList());
   };
+
   const getFileDrive = async (res) => {
     setSource('drive');
     GDrive.init();
@@ -96,7 +110,11 @@ export default function FileUploadForm(props) {
       const audioExtensions = ['.mp3', '.wav', '.pcm', 'aiff', '.aac', '.ogg', '.wma', 'flac', 'alac'];
       finalresult.files = finalresult.files.filter((file) =>
         _.includes(audioExtensions, file.name.slice(-4), 0));
-      dispatch(updateFiles(finalresult.files));
+      const files = [];
+      finalresult.files.forEach((file) => {
+        files.push({ name: file.name });
+      });
+      dispatch(updateFiles(files));
       dispatch(showFilesList());
     }
   };
@@ -107,6 +125,8 @@ export default function FileUploadForm(props) {
   }, [accesstoken]);
 
   useEffect(() => {
+    dispatch(hideLoading());
+    console.log(formstate.activeDirectory);
     FetchFolderContent();
   }, [formstate.activeDirectory]);
 
