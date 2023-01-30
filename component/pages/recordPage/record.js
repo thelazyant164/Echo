@@ -8,7 +8,7 @@ import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import Timer from '../../page-component/timer/timer';
+import CustomTimer from '../../page-component/timer/timer';
 import { Configuration } from '../../../configuration/configuration';
 import { Accesstoken } from '../../state/AccessTokencontext';
 
@@ -32,6 +32,7 @@ export function RecordPage({ navigation }) {
   const accesstoken = useContext(Accesstoken);
   const [recording, setRecording] = useState(null);
   const [state, setState] = useState('stop');
+  console.log(state);
   const dispatch = useDispatch();
   async function startRecording() {
     try {
@@ -56,7 +57,9 @@ export function RecordPage({ navigation }) {
   }
   async function stopRecording() {
     await recording.stopAndUnloadAsync();
+    setState('stop');
     const uri = recording.getURI();
+    console.log(uri);
     axios.get(`${Configuration.backendAPI}/api/audio/denoise`, { headers: { Authorization: `Bearer ${accesstoken}` } })
       .then((response) => {
 
@@ -64,7 +67,6 @@ export function RecordPage({ navigation }) {
       .catch((err) => {
         Alert.alert('Error while processing. Please try again.');
       });
-    setState('stop');
   }
 
   return (
@@ -85,15 +87,15 @@ export function RecordPage({ navigation }) {
         }
       }}
       >
-        { state !== 'play' ? <Feather name="play" size={50} style={{ marginTop: 200 }} /> : <Feather name="pause" size={50} style={{ marginTop: 200 }} />}
+        { state !== 'play' ? <Feather name="play" size={50} style={{ marginTop: '70%' }} /> : <Feather name="pause" size={50} style={{ marginTop: '70%' }} />}
       </TouchableOpacity>
-      <Timer recording={recording} setState={setState} state={state} />
+      <CustomTimer recording={recording} setState={setState} state={state} />
       <TouchableOpacity
         onPress={async () => {
           stopRecording();
         }}
         disabled={!recording}
-        style={recording ? styles.buttonactive : styles.buttondisable}
+        style={state !== 'stop' ? styles.buttonactive : styles.buttondisable}
       >
         <Text style={{
           textAlign: 'center', justifyContent: 'center', fontSize: 20, top: '20%',

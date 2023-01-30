@@ -1,41 +1,88 @@
-import { now } from 'lodash';
-import { React, useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { useInterval } from 'usehooks-ts';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+
+// import all the components we are going to use
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableHighlight,
+} from 'react-native';
+
+// importing library to use Stopwatch and Timer
+import { Stopwatch, Timer } from 'react-native-stopwatch-timer';
+import StopWatch from 'react-native-stopwatch-timer/lib/stopwatch';
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 80,
+    flex: 1,
+    padding: 10,
+    // justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 50,
   },
-  content: {
-    fontSize: 30,
+  title: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    padding: 20,
+  },
+  sectionStyle: {
+    flex: 1,
+    marginTop: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    fontSize: 20,
+    marginTop: 10,
   },
 });
-//
-export default function Timer(props) {
+
+const options = {
+  container: {
+    backgroundColor: 'rgb(37, 150, 190)',
+    padding: 5,
+    borderRadius: 5,
+    width: 200,
+    height: 50,
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 25,
+    color: '#FFF',
+    marginLeft: 7,
+  },
+};
+
+export default function CustomTimer(props) {
   const { state } = props;
-  const [counter, setCounter] = useState(0);
-  /* useEffect(() => {
-    if (recording && isPause) {
-      const newinterval = setInterval(() => {
-        if (!isPause) {
-          setCounter(new Date().getTime() - starttime);
-        }
-      }, 1000);
-      interval = newinterval;
-    }
-    return () => clearInterval(interval);
-  }, [isPause]); */
-  useEffect(() => {
-    if (state === 'stop') { setCounter(0); } else if (state === 'play') {
-      setCounter(counter + 1);
-    }
-  }, [state]);
+  const [isTimerStart, setIsTimerStart] = useState(false);
+  const [timerDuration, setTimerDuration] = useState(90000);
+  const [resetTimer, setResetTimer] = useState(false);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.content}>{`${Math.floor((counter % (60 * 60 * 24)) / (60 * 60))}:${Math.floor((counter % (60 * 60)) / (60))}:${Math.floor((counter % 60))}`}</Text>
+      <View style={styles.container}>
+        <View style={styles.sectionStyle}>
+          <Stopwatch
+            laps
+            msecs
+            // Time Duration
+            start={state === 'play'}
+            // To start
+            reset={state === 'stop'}
+            // To reset
+            options={options}
+            // options for the styling
+            // can call a function On finish of the time
+            getTime={(time) => {
+
+            }}
+          />
+        </View>
+      </View>
     </View>
   );
 }

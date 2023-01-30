@@ -8,6 +8,7 @@ export const fileSlice = createSlice({
       files: [],
       isVisible: false,
       folder: '',
+      audio: '',
     },
   },
   reducers: {
@@ -26,12 +27,15 @@ export const fileSlice = createSlice({
     hideModal: (state) => {
       state.value.isVisible = false;
     },
+    updateAudio: (state, action) => {
+      state.value.audio = action.payload;
+    },
   },
 });
 
 export const filestate = (state) => state.files.value;
 export const {
-  updateActiveDirectory, updateFiles, updateFolders, showModal, hideModal,
+  updateActiveDirectory, updateFiles, updateFolders, showModal, hideModal, updateAudio,
 } = fileSlice.actions;
 
 export default fileSlice.reducer;

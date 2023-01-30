@@ -16,6 +16,7 @@ import { Accesstoken } from '../../state/AccessTokencontext';
 import LoadingEffect from '../loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
 import { updateAudioFile } from '../file-upload-form/file-upload-form-slider';
+import { updateAudio } from '../../pages/filesStoragePage/files-slider';
 import { createAlbumAsync, createAssetsAsync, addAssettoAlbum } from '../../utils/albumHelper';
 
 const styles = StyleSheet.create({
@@ -68,28 +69,16 @@ export default function Filebutton(props) {
         headers: { Authorization: `Bearer ${accesstoken}` },
       })
         .then(async (response) => {
-          // const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-          // if (status !== 'granted') {
-          //   alert('...');
-          // }
-          // try {
-          //   const asset = await MediaLibrary.createAssetAsync(response.uri);
-          //   const album = await MediaLibrary.getAlbumAsync('Download');
-          //   if (album == null) {
-          //     await MediaLibrary.createAlbumAsync('Download', asset, false);
-          //   } else {
-          //     await MediaLibrary.addAssetsToAlbumAsync([asset], album, false);
-          //   }
-          // } catch (e) {
-          //   Alert.alert(e);
-          // }
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (status !== 'granted') {
+            Alert.alert('...');
+          }
           const asset = await createAssetsAsync(response.uri);
           const album = await createAlbumAsync('Download');
           if (album !== undefined && asset !== undefined) {
             await addAssettoAlbum(asset, album);
             dispatch(updateAudioFile(response));
           }
-          // setVisible(true);
           setLoading(false);
         })
         .catch((err) => {
@@ -97,22 +86,8 @@ export default function Filebutton(props) {
           setLoading(false);
         });
     } else if (source === 'drive') {
-      // const asset = new Asset();
-      // eslint-disable-next-line max-len
-      // asset.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${FileSystem.documentDirectory}`, {
-      //   headers: { Authorization: `Bearer ${accesstoken}` },
-      // }).then((response) => {
-      //   dispatch(updateAudioFile(response));
-      //   // setVisible(true);
-      //   setLoading(false);
-      // })
-      //   .catch((err) => {
-      //     Alert.alert('Error while processing. Please try again.');
-      //     setLoading(false);
-      //   });
       const result = await GetFileFromDrive();
       const buffer = await FileSystem.readAsStringAsync(result.uri);
-      // setLoading(false);
       FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${FileSystem.documentDirectory}`, {
         headers: { Authorization: `Bearer ${accesstoken}` },
       })
@@ -128,8 +103,7 @@ export default function Filebutton(props) {
     } else {
       const result = await GetFileFromDevice();
       const bufffer = await FileSystem.readAsStringAsync(result);
-      // eslint-disable-next-line max-len
-      // axios.get(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` }, responseType: 'blob' })
+
       FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${FileSystem.documentDirectory}`, {
         headers: { Authorization: `Bearer ${accesstoken}` },
       })
@@ -163,6 +137,8 @@ export default function Filebutton(props) {
         default:
           break;
       }
+    } else {
+      dispatch(updateAudio());
     }
   };
 

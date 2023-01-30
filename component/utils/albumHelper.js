@@ -36,7 +36,7 @@ export const createAlbumAsync = async (albumName) => {
 };
 export const listAllFilesAsync = async (album) => {
   const result = await MediaLibrary.getAssetsAsync({
-    album,
+    // album,
     mediaType: ['audio'],
   });
   return result;
@@ -48,4 +48,9 @@ export const createAssetsAsync = async (localUri) => {
 
 export const addAssettoAlbum = async (assets, album) => {
   await MediaLibrary.addAssetsToAlbumAsync(assets, album, false);
+};
+
+export const getAssetInfo = async (asset, options) => {
+  const result = await MediaLibrary.getAssetInfoAsync(asset, options);
+  return result;
 };

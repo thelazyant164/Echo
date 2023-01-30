@@ -60,6 +60,7 @@ export default function FileUploadForm(props) {
   const dispatch = useDispatch();
 
   const formstate = useSelector((state) => state.form.value);
+
   async function FetchFolderContent() {
     const result = await getFileContent(formstate.activeDirectory);
     let files = [];
@@ -118,6 +119,7 @@ export default function FileUploadForm(props) {
       dispatch(showFilesList());
     }
   };
+
   useEffect(() => {
     if (Googleresponse?.type === 'success') {
       setAccesstoken(Googleresponse.authentication.accessToken);
@@ -126,7 +128,6 @@ export default function FileUploadForm(props) {
 
   useEffect(() => {
     dispatch(hideLoading());
-    console.log(formstate.activeDirectory);
     FetchFolderContent();
   }, [formstate.activeDirectory]);
 

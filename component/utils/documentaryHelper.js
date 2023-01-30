@@ -11,7 +11,9 @@ export const useDocumentReadWritePermission = () => {
       return result;
     }
     const album = await getAlbum(activeDirectory);
-    const result = await listAllFilesAsync(album);
+    console.log('Album read:', album);
+    const result = await listAllFilesAsync(album.id);
+    console.log('Asset read:', result);
     return result;
   };
   // const readAllFiles = async (activeDirectory) => {
@@ -50,10 +52,23 @@ export const useDocumentReadWritePermission = () => {
       await cachePermission(newPermission);
     }
   };
+  const createNewFolder = async (newDirectory) => {
+    await FileSystem.makeDirectoryAsync(
+      `${FileSystem.documentDirectory}/${newDirectory}`,
+      { intermediates: true },
+    );
+  };
+
+  const deleteDirectory = async (directory) => {
+    await FileSystem.deleteAsync(directory);
+  };
+
   return {
     getPermissionFirstTime,
     getFileContent,
     readAllFiles,
+    deleteDirectory,
+    createNewFolder,
     // goToFolder,
   };
 };
