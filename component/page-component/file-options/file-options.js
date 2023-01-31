@@ -93,7 +93,7 @@ export default function FileOptions(props) {
           <Text style={styles.text}> Upload</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={ShareFile} style={styles.button}>
-          <Feather name="Share" size={30} style={styles.icon} />
+          <Feather name="share-2" size={30} style={styles.icon} />
           <Text style={styles.text}> Share</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => { refRBSheet.current.close(); }} style={styles.button}>

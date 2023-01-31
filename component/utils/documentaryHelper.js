@@ -37,12 +37,7 @@ export const useDocumentReadWritePermission = () => {
   // };
 
   const getFileContent = (activeDirectory) => readAllFiles(activeDirectory);
-  // const goToFolder = (path) => {
-  //   setActiveDirectory(path);
-  // };
-  // const gotoRoot = () => {
-  //   setActiveDirectory('');
-  // };
+
   const getPermissionFirstTime = async (activeDirectory) => {
     const permission = await getCachedPermission();
     if (!permission) {
@@ -63,11 +58,16 @@ export const useDocumentReadWritePermission = () => {
     await FileSystem.deleteAsync(directory);
   };
 
+  const renameDirectory = async (directory, newnName) => {
+    FileSystem.moveAsync({ from: directory, to: newnName });
+  };
+
   return {
     getPermissionFirstTime,
     getFileContent,
     readAllFiles,
     deleteDirectory,
+    renameDirectory,
     createNewFolder,
     // goToFolder,
   };

@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Filebutton from '../file-button/file-button';
 import Folderbutton from '../folder-button/folder-button';
 import FolderOptions from '../folder-options/folder-options';
+import FileOptions from '../file-options/file-options';
 import {
   updateActiveDirectory, updateFiles, hideFilesList,
 } from '../file-upload-form/file-upload-form-slider';
@@ -111,11 +112,11 @@ export default function ListallFiles({
         data={formstate.files}
         renderItem={
           ({ item }) => (
-            <Filebutton file={item} source={source} mission={service} location="upload" />
+            <Filebutton file={item} source={source} mission={service} location="upload" setVisible={refRBSheet} />
           )
         }
       />
-
+      <FileOptions />
     </Modal>;
   }
 
@@ -139,10 +140,11 @@ export default function ListallFiles({
         data={formstate.files}
         renderItem={
             ({ item }) => (
-              <Filebutton file={item} source={source} mission={service} location="upload" />
+              <Filebutton file={item} source={source} mission={service} location="upload" setVisible={refRBSheet} />
             )
           }
       />
+      <FileOptions refRBSheet={refRBSheet} />
     </Modal>
   );
 }

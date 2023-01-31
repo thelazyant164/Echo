@@ -90,6 +90,7 @@ export function Files({ navigation }) {
   }
 
   const refRBSheet = useRef();
+  const filesrefRBSheet = useRef();
   useEffect(() => {
     FirstTimeFetching();
   }, []);
@@ -136,6 +137,7 @@ export function Files({ navigation }) {
                     <Filebutton
                       file={item}
                       location="file"
+                      setVisible={filesrefRBSheet}
                     />
                   )}
                 />
@@ -186,8 +188,8 @@ export function Files({ navigation }) {
         folder={filesstate.folder}
         refRBSheet={refRBSheet}
       />
-      <FileOptions refRBSheet={refRBSheet} />
-      <PlayAudioPage />
+      <FileOptions refRBSheet={filesrefRBSheet} />
+      <PlayAudioPage location="file" />
     </View>
   );
 }

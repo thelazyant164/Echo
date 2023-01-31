@@ -8,7 +8,7 @@ export const fileSlice = createSlice({
       files: [],
       isVisible: false,
       folder: '',
-      audio: '',
+      audio: null,
     },
   },
   reducers: {

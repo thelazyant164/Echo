@@ -83,7 +83,7 @@ export default function FileUploadForm(props) {
         dispatch(hideLoading());
         const files = [];
         response.data.forEach((file) => {
-          files.push({ name: file.name });
+          files.push({ name: file.name, id: file.id });
         });
         dispatch(updateFiles(files));
       }).catch((err) => { console.error(err); dispatch(hideLoading()); });
@@ -162,7 +162,7 @@ export default function FileUploadForm(props) {
           </TouchableOpacity>
         </View>
       </View>
-      {service !== 'speechtotext' ? <PlayAudioPage /> : <ShowTextFilePage />}
+      {service !== 'speechtotext' ? <PlayAudioPage location="upload" /> : <ShowTextFilePage />}
       <ListallFiles
         service={service}
         source={source}

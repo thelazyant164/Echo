@@ -31,15 +31,15 @@ const styles = StyleSheet.create({
 });
 export default function Filebutton(props) {
   const {
-    file, source, mission, location,
+    file, source, mission, location, setVisible,
   } = props;
-
   const accesstoken = useContext(Accesstoken);
-  // const [isVisible, setVisible] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const ShowFileOption = () => {};
+  const ShowFileOption = () => {
+    setVisible.current.open();
+  };
   const GetFileFromCloud = () => {
     axios.get(Configuration.backendAPI`/api/audios/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
       .then((response) => {
@@ -138,7 +138,7 @@ export default function Filebutton(props) {
           break;
       }
     } else {
-      dispatch(updateAudio());
+      dispatch(updateAudio(file));
     }
   };
 
