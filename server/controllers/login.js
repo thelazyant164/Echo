@@ -36,7 +36,8 @@ loginRouter.post('/', async (request, response) => {
 });
 
 loginRouter.post('/google', async (request, response) => {
-  const { token }  = req.body;
+  const { token }  = request.body;
+  console.log(token);
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: process.env.CLIENT_ID
