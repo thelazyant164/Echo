@@ -3,7 +3,7 @@ const { promisify } = require('util');
 const Audio = require('../models/audio');
 const {
   S3RetrieveItem,
-} = require('./S3Storage');
+} = require('./s3Storage');
 
 const clearTempBuffer = async (filePath) => {
   const unlinkPromise = promisify(fs.unlink);
