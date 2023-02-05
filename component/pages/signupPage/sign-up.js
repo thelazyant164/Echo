@@ -5,12 +5,11 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import Purchases, { PurchasesOffering } from 'react-native-purchases';
-import { useSelector, useDispatch } from 'react-redux';
 import { Configuration } from '../../../configuration/configuration';
 
 const APIKeys = {
-  apple: 'your_revenuecat_apple_api_key',
-  google: 'your_revenuecat_google_api_key',
+  // apple: 'your_revenuecat_apple_api_key',
+  google: 'goog_pqalQAnQyNnZFTaJCyXUvNnJHIZ',
 };
 
 const styles = StyleSheet.create({

@@ -17,6 +17,8 @@ import FileOptions from '../../page-component/file-options/file-options';
 import FolderOptions from '../../page-component/folder-options/folder-options';
 import PlayAudioPage from '../audioPlayPage/audio-play';
 import { Configuration } from '../../../configuration/configuration';
+import BannerAds from '../../page-component/advertisement/BannerAds';
+
 import {
   showModal,
   updateActiveDirectory,
@@ -25,7 +27,7 @@ import {
 
 const style = StyleSheet.create({
   feature_container: {
-    marginTop: 70,
+    marginTop: 40,
     marginLeft: 10,
     marginRight: 10,
   },
@@ -105,7 +107,7 @@ export function Files({ navigation }) {
 
   return (
     <View style={filesstate.isVisible ? style.outer_container_faded : style.outer_container}>
-      <Header navigation={navigation} />
+      {/* <BannerAds /> */}
       <View style={{ marginTop: 60 }}>
         <Text style={{ textAlign: 'center', fontSize: 20 }}>Files Storage</Text>
         <View style={style.feature_container}>

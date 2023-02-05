@@ -37,7 +37,7 @@ export default function Folderbutton({ activeDirectory, setVisible, location }) 
           }
         }}
         onLongPress={() => {
-          setVisible.current.open();
+          setVisible.current.expand();
           if (location === 'files') { dispatch(updateActiveDirectory(activeDirectory)); } else {
             dispatch(FormUpdateActiveDirectory(activeDirectory));
           }

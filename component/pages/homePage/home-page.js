@@ -5,16 +5,17 @@ import {
 import { Featurebutton } from '../../page-component/feature-button/feature-button';
 import { Header } from '../../page-component/header/header';
 import { getCached, saveCached } from '../../utils/cacheHelper';
+import BannerAds from '../../page-component/advertisement/BannerAds';
 
 const style = StyleSheet.create({
   feature_container: {
-    marginTop: 70,
+    marginTop: 30,
     marginLeft: 10,
     marginRight: 10,
   },
   container: {
     borderRadius: 12,
-    marginTop: 30,
+    marginTop: 20,
   },
   list: {
     flexDirection: 'row',
@@ -40,9 +41,8 @@ export function Homepage({ navigation }) {
   }, []);
   return (
     <View>
-      <Header navigation={navigation} />
+      <BannerAds />
       <View style={{ marginTop: 60 }}>
-
         <Text style={{ textAlign: 'center', fontSize: 20 }}>Home</Text>
         <View style={style.feature_container}>
           <Text>Recently</Text>
@@ -72,7 +72,6 @@ export function Homepage({ navigation }) {
               }
             />
           </View>
-
         </View>
       </View>
     </View>

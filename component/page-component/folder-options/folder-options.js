@@ -6,6 +6,7 @@ import * as FileSystem from 'expo-file-system';
 import Feather from 'react-native-vector-icons/Feather';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { useSelector, useDispatch } from 'react-redux';
+// import BottomSheet from '@gorhom/bottom-sheet';
 import { updateFiles } from '../../pages/filesStoragePage/files-slider';
 
 const styles = StyleSheet.create({

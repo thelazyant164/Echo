@@ -14,7 +14,7 @@
     "slug": "Echo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/favicon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -49,7 +49,6 @@
     }
   },
   "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-2452578756262316~1433626315",
-    "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
+    "android_app_id": "ca-app-pub-2452578756262316~1433626315"
   }
 }

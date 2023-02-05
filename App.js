@@ -7,6 +7,8 @@ import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
 import AuthenticationNavigation from './component/page-component/authen-navigation/authen-navigation';
 import AccesstokenState from './component/state/AccessTokencontext';
 import { store, persistor } from './component/state/store';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'expo-dev-client';
 
 const styles = StyleSheet.create({
   container: {
