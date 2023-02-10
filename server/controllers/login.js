@@ -35,19 +35,28 @@ loginRouter.post('/', async (request, response) => {
     .send({ token });
 });
 
-loginRouter.post('/google', async (request, response) => {
-  const { token }  = request.body;
-  console.log(token);
-  const ticket = await client.verifyIdToken({
+loginRouter.post('/google', async (request, response, next) => {
+  const { token } = request.body;
+  client.verifyIdToken({
     idToken: token,
     audience: process.env.CLIENT_ID
-});
-const { name, email, picture } = ticket.getPayload();
-
-response
-.status(200)
-.send({ name,email,picture });
-
+  }, err => {
+    response.status(403).send({ error: 'Google authentication failed - invalid ID token' });
+  }, ticket => {
+    const { name, email, picture } = ticket.getPayload();
+    const userForToken = {
+      name,
+      email,
+    };
+    const token = jwt.sign(
+      userForToken,
+      process.env.SECRET,
+      { expiresIn: 60 * 60 }, // 1hr expiry
+    );
+    response
+      .status(200)
+      .send({ name, email, picture, token });
+  });
 });
 
 module.exports = loginRouter;
