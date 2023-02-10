@@ -7,7 +7,7 @@ const { getLoggedInUser, tryAuthorizeRequest } = require('../utils/authHelper');
 const { getBufferFileFromId } = require('../utils/bufferHelper');
 const {
   S3Delete, S3Insert, S3Update,
-} = require('../utils/S3Storage');
+} = require('../utils/s3Storage');
 
 const upload = multer();
 

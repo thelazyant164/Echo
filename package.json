@@ -20,6 +20,7 @@
     "express-async-errors": "^3.1.1",
     "ffmpeg": "^0.0.4",
     "ffmpeg-extract-audio": "^1.0.2",
+    "firebase-functions": "^4.2.1",
     "google-auth-library": "^8.7.0",
     "jsonwebtoken": "^9.0.0",
     "lodash": "^4.17.21",
@@ -39,11 +40,24 @@
     "eslint-plugin-jest": "^26.5.3",
     "eslint-plugin-jsx-a11y": "^6.6.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-native": "^4.0.0",
     "mongodb-memory-server": "^8.7.2",
     "nodemon": "^2.0.19"
   },
-  "private": true
+  "private": true,
+  "description": "![\"Echo\" logo](assets/logo.png)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thelazyant164/Echo.git"
+  },
+  "keywords": [
+    "echo-server"
+  ],
+  "author": "cygnius",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thelazyant164/Echo/issues"
+  },
+  "homepage": "https://github.com/thelazyant164/Echo#readme"
 }
