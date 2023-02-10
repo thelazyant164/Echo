@@ -37,17 +37,14 @@ loginRouter.post('/', async (request, response) => {
 
 loginRouter.post('/google', async (request, response) => {
   const { token }  = request.body;
-  console.log(token);
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: process.env.CLIENT_ID
-});
-const { name, email, picture } = ticket.getPayload();
-
-response
-.status(200)
-.send({ name,email,picture });
-
+  });
+  const { name, email, picture } = ticket.getPayload();
+  response
+  .status(200)
+  .send({ name, email, picture });
 });
 
 module.exports = loginRouter;
