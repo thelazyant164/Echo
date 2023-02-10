@@ -56,11 +56,10 @@ audiosRouter.delete('/:id', async (request, response, next) => {
 });
 
 audiosRouter.post('/', upload.single('test'), async (request, response, next) => {
-  const { name } = request.body;
   const { file } = request;
   const user = await getLoggedInUser(request, response);
   const audio = new Audio({
-    name,
+    name: file.fieldname,
     user: user._id,
     date: new Date(),
   });
