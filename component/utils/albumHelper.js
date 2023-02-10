@@ -34,6 +34,10 @@ export const createAlbumAsync = async (albumName) => {
     return result;
   }
 };
+export const listAllAlbumsAsync = async () => {
+  const result = await MediaLibrary.getAlbumsAsync();
+  return result;
+};
 export const listAllFilesAsync = async (album) => {
   const result = await MediaLibrary.getAssetsAsync({
     // album,

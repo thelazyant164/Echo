@@ -6,18 +6,30 @@ export const fileUploadFormSlice = createSlice({
     value: {
       activeDirectory: '',
       files: [],
+      albums: [],
+      album: '',
       isVisible: false,
       isFilesListVisible: false,
       folder: '',
       audioFile: null,
+      asset: null,
     },
   },
   reducers: {
+    updateAsset: (state, action) => {
+      state.value.asset = action.payload;
+    },
     updateActiveDirectory: (state, action) => {
       state.value.activeDirectory = action.payload;
     },
     updateFiles: (state, action) => {
       state.value.files = action.payload;
+    },
+    updateAlbums: (state, action) => {
+      state.value.albums = action.payload;
+    },
+    updateAlbum: (state, action) => {
+      state.value.album = action.payload;
     },
     updateFolder: (state, action) => {
       state.value.folder = action.payload;
@@ -46,6 +58,9 @@ export const {
   updateFiles,
   updateFolder,
   updateAudioFile,
+  updateAlbum,
+  updateAlbums,
+  updateAsset,
   showFilesList,
   hideFilesList,
   showLoading,

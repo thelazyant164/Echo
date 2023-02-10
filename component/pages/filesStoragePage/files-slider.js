@@ -6,14 +6,25 @@ export const fileSlice = createSlice({
     value: {
       activeDirectory: '',
       files: [],
+      albums: [],
+      album: '',
       isVisible: false,
-      folder: '',
       audio: null,
+      asset: null,
     },
   },
   reducers: {
+    updateAsset: (state, action) => {
+      state.value.asset = action.payload;
+    },
     updateActiveDirectory: (state, action) => {
       state.value.activeDirectory = action.payload;
+    },
+    updateAlbums: (state, action) => {
+      state.value.albums = action.payload;
+    },
+    updateAlbum: (state, action) => {
+      state.value.album = action.payload;
     },
     updateFiles: (state, action) => {
       state.value.files = action.payload;
@@ -35,7 +46,15 @@ export const fileSlice = createSlice({
 
 export const filestate = (state) => state.files.value;
 export const {
-  updateActiveDirectory, updateFiles, updateFolders, showModal, hideModal, updateAudio,
+  updateActiveDirectory,
+  updateFiles,
+  updateFolders,
+  showModal,
+  hideModal,
+  updateAudio,
+  updateAlbum,
+  updateAlbums,
+  updateAsset,
 } = fileSlice.actions;
 
 export default fileSlice.reducer;

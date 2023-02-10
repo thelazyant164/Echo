@@ -45,7 +45,7 @@ export default function ShowTextFilePage() {
   }
 
   return (
-    <Modal>
+    <Modal animationType="slide">
       <TouchableOpacity
         style={{
           display: 'flex',

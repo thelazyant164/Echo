@@ -20,6 +20,8 @@ export default function FeatureNavigation() {
         name="Home Screen"
         component={Homepage}
         options={({ navigation, route }) => ({
+          headerLeft: () => null,
+          headerTitle: 'Home',
           // eslint-disable-next-line react/no-unstable-nested-components
           headerRight: () => (
             <TouchableOpacity onPress={() => { navigation.navigate('Profile'); }}>

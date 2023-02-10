@@ -12,7 +12,7 @@ import Folderbutton from '../folder-button/folder-button';
 import FolderOptions from '../folder-options/folder-options';
 import FileOptions from '../file-options/file-options';
 import {
-  updateActiveDirectory, updateFiles, hideFilesList,
+  updateAlbum, updateFiles, hideFilesList,
 } from '../file-upload-form/file-upload-form-slider';
 
 const styles = StyleSheet.create({
@@ -43,23 +43,23 @@ export default function ListallFiles({
   const formstate = useSelector((state) => state.form.value);
 
   useEffect(() => {
-
-  }, [formstate.files]);
+    console.log(formstate.albums);
+  }, [formstate.files, formstate.album]);
 
   if ((!formstate.isFilesListVisible)) {
     return (
       <View />
     );
   }
-  if (formstate.files.length > 0 && formstate.files[0].name === undefined) {
+  if (formstate.files.length === 0) {
     return (
-      <Modal style={styles.modal}>
+      <Modal style={styles.modal} animationType="slide">
         <Pressable onPress={() => {
-          if (!formstate.activeDirectory) {
+          if (!formstate.album) {
             dispatch(hideFilesList());
           }
           dispatch(updateFiles([]));
-          dispatch(updateActiveDirectory(''));
+          dispatch(updateAlbum(''));
         }}
         >
           <View style={styles.buttonview}>
@@ -69,7 +69,7 @@ export default function ListallFiles({
         </Pressable>
         <FlatList
           numColumns={3}
-          data={formstate.files}
+          data={formstate.albums}
           renderItem={
                 ({ item }) => (
                   typeof item !== 'object'
@@ -85,21 +85,21 @@ export default function ListallFiles({
         />
 
         <FolderOptions
-          folder={formstate.folder}
+          folder={formstate.album}
           refRBSheet={refRBSheet}
         />
 
       </Modal>
     );
   }
-  if (formstate.files.length > 0 && formstate.files[0].name !== undefined) {
-    <Modal style={styles.modal}>
+  if (formstate.files.length > 0) {
+    <Modal style={styles.modal} animationType="slide">
       <Pressable onPress={() => {
-        if (!formstate.activeDirectory) {
+        if (!formstate.album) {
           dispatch(hideFilesList());
         }
         dispatch(updateFiles([]));
-        dispatch(updateActiveDirectory(''));
+        dispatch(updateAlbum(''));
       }}
       >
         <View style={styles.buttonview}>
@@ -116,18 +116,18 @@ export default function ListallFiles({
           )
         }
       />
-      <FileOptions />
+      <FileOptions refRBSheet={refRBSheet} location="upload" />
     </Modal>;
   }
 
   return (
-    <Modal style={styles.modal}>
+    <Modal style={styles.modal} animationType="slide">
       <Pressable onPress={() => {
-        if (!formstate.activeDirectory) {
+        if (!formstate.album) {
           dispatch(hideFilesList());
         }
         dispatch(updateFiles([]));
-        dispatch(updateActiveDirectory(''));
+        dispatch(updateAlbum(''));
       }}
       >
         <View style={styles.buttonview}>
@@ -144,7 +144,7 @@ export default function ListallFiles({
             )
           }
       />
-      <FileOptions refRBSheet={refRBSheet} />
+      <FileOptions refRBSheet={refRBSheet} location="upload" />
     </Modal>
   );
 }

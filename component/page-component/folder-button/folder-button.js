@@ -4,8 +4,8 @@ import {
   StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { updateActiveDirectory } from '../../pages/filesStoragePage/files-slider';
-import { updateActiveDirectory as FormUpdateActiveDirectory } from '../file-upload-form/file-upload-form-slider';
+import { updateAlbum } from '../../pages/filesStoragePage/files-slider';
+import { updateAlbum as FormUpdateAlbum } from '../file-upload-form/file-upload-form-slider';
 
 const style = StyleSheet.create({
   container: {
@@ -31,20 +31,20 @@ export default function Folderbutton({ activeDirectory, setVisible, location }) 
         style={style.folderbutton}
         onPress={async () => {
           if (location === 'files') {
-            dispatch(updateActiveDirectory(activeDirectory));
+            dispatch(updateAlbum(activeDirectory));
           } else {
-            dispatch(FormUpdateActiveDirectory(activeDirectory));
+            dispatch(FormUpdateAlbum(activeDirectory));
           }
         }}
         onLongPress={() => {
-          setVisible.current.expand();
-          if (location === 'files') { dispatch(updateActiveDirectory(activeDirectory)); } else {
-            dispatch(FormUpdateActiveDirectory(activeDirectory));
+          setVisible.current.open();
+          if (location === 'files') { dispatch(updateAlbum(activeDirectory)); } else {
+            dispatch(FormUpdateAlbum(activeDirectory));
           }
         }}
       >
         <AntDesign name="folder1" size={40} />
-        <Text>{activeDirectory.slice(0, 8)}</Text>
+        <Text>{activeDirectory.slice(0, 9)}</Text>
       </TouchableOpacity>
     </View>
   );

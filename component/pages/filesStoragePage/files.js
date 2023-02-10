@@ -2,32 +2,32 @@ import {
   React, useEffect, useContext, useState, useRef,
 } from 'react';
 import {
-  StyleSheet, Text, View, FlatList, TouchableOpacity, Alert,
+  StyleSheet, Text, View, FlatList, TouchableOpacity, Alert, Pressable,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
-import * as FileSystem from 'expo-file-system';
-import { Header } from '../../page-component/header/header';
+import SwitchCustom from 'expo-custom-switch';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { FolderInput } from '../../page-component/newfolder-input/newfolder-input';
-import { useDocumentReadWritePermission } from '../../utils/documentaryHelper';
 import Folderbutton from '../../page-component/folder-button/folder-button';
-import { Accesstoken } from '../../state/AccessTokencontext';
 import Filebutton from '../../page-component/file-button/file-button';
 import FileOptions from '../../page-component/file-options/file-options';
 import FolderOptions from '../../page-component/folder-options/folder-options';
 import PlayAudioPage from '../audioPlayPage/audio-play';
 import { Configuration } from '../../../configuration/configuration';
 import BannerAds from '../../page-component/advertisement/BannerAds';
-
+import { listAllAlbumsAsync, listAllFilesAsync } from '../../utils/albumHelper';
 import {
   showModal,
   updateActiveDirectory,
   updateFiles,
+  updateAlbum,
+  updateAlbums,
 } from './files-slider';
 
 const style = StyleSheet.create({
   feature_container: {
-    marginTop: 40,
+    marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
   },
@@ -62,136 +62,199 @@ const style = StyleSheet.create({
 
 });
 
-export function Files({ navigation }) {
-  const {
-    getPermissionFirstTime,
-    getFileContent,
-    // readAllFiles,
-  } = useDocumentReadWritePermission();
+export function Files() {
   const dispatch = useDispatch();
-
+  const [source, setSource] = useState(null);
   const filesstate = useSelector((state) => state.files.value);
 
   async function FirstTimeFetching() {
-    await getPermissionFirstTime(filesstate.activeDirectory);
-    const files = await getFileContent(filesstate.activeDirectory);
-    dispatch(updateFiles(files));
+    // await getPermissionFirstTime(filesstate.activeDirectory);
+    const files = await listAllAlbumsAsync();
+    const result = [];
+    files.forEach((file) => {
+      result.push(file.title);
+    });
+    dispatch(updateAlbums(result));
   }
-  async function FetchFolderContent() {
+  async function FetchContent() {
     try {
-      const files = await getFileContent(filesstate.activeDirectory);
-      if (files.assets !== undefined) {
-        dispatch(updateFiles(files.assets));
+      if (filesstate.album) {
+        const files = await listAllFilesAsync(filesstate.album);
+        if (files.assets !== undefined) {
+          dispatch(updateFiles(files.assets));
+        } else {
+          dispatch(updateFiles(files));
+        }
       } else {
-        dispatch(updateFiles(files));
+        const files = await listAllAlbumsAsync();
+        const result = [];
+        files.forEach((file) => {
+          result.push(file.title);
+        });
+        dispatch(updateAlbums(result));
       }
     } catch (err) {
       dispatch(updateFiles([]));
-      Alert.alert('Cannot read file from this directory');
+      console.log(err);
+      Alert.alert('Cannot read file from this album');
     }
   }
 
   const refRBSheet = useRef();
   const filesrefRBSheet = useRef();
   useEffect(() => {
+    dispatch(updateAlbum(''));
     FirstTimeFetching();
   }, []);
 
   useEffect(() => {
-    FetchFolderContent();
-  }, [filesstate.activeDirectory]);
+    FetchContent();
+  }, [filesstate.album]);
 
   useEffect(() => {
-
+    FetchContent();
   }, [filesstate.isVisible]);
 
-  return (
-    <View style={filesstate.isVisible ? style.outer_container_faded : style.outer_container}>
-      {/* <BannerAds /> */}
-      <View style={{ marginTop: 60 }}>
-        <Text style={{ textAlign: 'center', fontSize: 20 }}>Files Storage</Text>
-        <View style={style.feature_container}>
-          { filesstate.activeDirectory
-            ? (
-              <View style={{
-                display: 'flex',
-                width: '100%',
-                flexDirection: 'row',
-              }}
-              >
-                <TouchableOpacity onPress={() => { dispatch(updateActiveDirectory('')); }}>
-                  <Text style={{ fontSize: 20 }}>Root Folder/</Text>
-                </TouchableOpacity>
-                <Text style={{ fontSize: 20 }}>
-                  {filesstate.activeDirectory.replace('%20', ' ')}
-                </Text>
-              </View>
-            )
-
-            : <Text style={{ fontSize: 20 }}>Root Folder</Text>}
-          <View style={style.container}>
-            {filesstate.activeDirectory
+  if (source) {
+    return (
+      <View style={filesstate.isVisible ? style.outer_container_faded : style.outer_container}>
+        <BannerAds />
+        <View style={{ marginTop: 20, marginBottom: 100 }}>
+          <View style={style.feature_container}>
+            { filesstate.album
               ? (
-                <FlatList
-                  numColumns={3}
-                  data={filesstate.files}
-                  renderItem={(item) => (
-                    <Filebutton
-                      file={item}
-                      location="file"
-                      setVisible={filesrefRBSheet}
-                    />
-                  )}
-                />
-              ) : (
-                <FlatList
-                  numColumns={3}
-                  data={filesstate.files}
-                  renderItem={({ item }) => (
-                    typeof item !== 'object'
-                      ? (
-                        <Folderbutton
-                          location="files"
-                          activeDirectory={item}
-                          setVisible={refRBSheet}
-                        />
-                      ) : <View />
-                  )}
-                />
-              )}
-          </View>
-        </View>
-        {filesstate.activeDirectory ? (
-          <TouchableOpacity
-            style={style.addbutton}
-            onPress={() => {
-              navigation.navigate('Home');
-            }}
-          >
-            <AntDesign name="addfile" size={25} style={{ textAlign: 'center', justifyContent: 'center', marginTop: 10 }} />
-          </TouchableOpacity>
-        )
-          : (
-            <TouchableOpacity
-              style={style.addbutton}
-              onPress={() => dispatch(showModal())}
-            >
-              <Text style={{ fontSize: 30, textAlign: 'center', marginTop: 2 }}>+</Text>
-            </TouchableOpacity>
-          )}
+                <View style={{
+                  display: 'flex',
+                  width: '100%',
+                  flexDirection: 'row',
+                  marginBottom: 20,
+                }}
+                >
+                  <TouchableOpacity onPress={() => { dispatch(updateAlbum('')); }} style={{ display: 'flex', flexDirection: 'row' }}>
+                    <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+                    <Text style={{ fontSize: 20 }}>Back </Text>
+                  </TouchableOpacity>
+                </View>
+              )
 
-        {filesstate.isVisible && (
+              : (
+                <TouchableOpacity onPress={() => { setSource(null); }} style={{ display: 'flex', flexDirection: 'row' }}>
+                  <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+                  <Text style={{ fontSize: 20 }}>Back </Text>
+                </TouchableOpacity>
+              )}
+            <View style={style.container}>
+              {filesstate.album
+                ? (
+                  <FlatList
+                    numColumns={3}
+                    data={filesstate.files}
+                    renderItem={(item) => (
+                      <Filebutton
+                        file={item}
+                        location="file"
+                        setVisible={filesrefRBSheet}
+                      />
+                    )}
+                  />
+                ) : (
+                  <FlatList
+                    numColumns={3}
+                    data={filesstate.albums}
+                    renderItem={({ item }) => (
+                      typeof item !== 'object'
+                        ? (
+                          <Folderbutton
+                            location="files"
+                            activeDirectory={item}
+                            setVisible={refRBSheet}
+                          />
+                        ) : <View />
+                    )}
+                  />
+                )}
+            </View>
+          </View>
+          {filesstate.album ? (
+            <View />
+          )
+            : (
+              <TouchableOpacity
+                style={style.addbutton}
+                onPress={() => dispatch(showModal())}
+              >
+                <Text style={{ fontSize: 30, textAlign: 'center', marginTop: 2 }}>+</Text>
+              </TouchableOpacity>
+            )}
+
+          {filesstate.isVisible && (
           <FolderInput
             activeDirectory={filesstate.activeDirectory}
           />
-        )}
+          )}
+        </View>
+        <FolderOptions
+          folder={filesstate.album}
+          refRBSheet={refRBSheet}
+        />
+        <FileOptions refRBSheet={filesrefRBSheet} location="file" />
+        <PlayAudioPage location="file" />
       </View>
-      <FolderOptions
-        folder={filesstate.folder}
-        refRBSheet={refRBSheet}
-      />
-      <FileOptions refRBSheet={filesrefRBSheet} />
-      <PlayAudioPage location="file" />
+    );
+  }
+  return (
+    <View style={filesstate.isVisible ? style.outer_container_faded : style.outer_container}>
+      <BannerAds />
+      <Text style={{ fontSize: 20, textAlign: 'center', marginTop: '10%' }}> Choose the storage</Text>
+      <View style={{
+        flex: 1,
+        marginTop: '20%',
+        // justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      >
+        <Pressable
+          onPress={() => {
+            setSource('cloud');
+          }}
+          style={{
+            width: '70%',
+            height: 50,
+            borderRadius: 12,
+            backgroundColor: 'rgb(37, 150, 190)',
+            justifyContent: 'center',
+          }}
+        >
+          <Text style={{
+            fontSize: 20, textAlign: 'center', justifyContent: 'center', color: '#ffffff',
+          }}
+          >
+            Cloud
+          </Text>
+        </Pressable>
+
+        <Pressable
+          style={{
+            marginTop: '20%',
+            width: '70%',
+            height: 50,
+            borderRadius: 12,
+            backgroundColor: 'rgb(37, 150, 190)',
+            justifyContent: 'center',
+          }}
+          onPress={() => {
+            setSource('file');
+          }}
+        >
+          {/* <Entypo name="icloud" size={30} /> */}
+          <Text style={{
+            fontSize: 20, textAlign: 'center', justifyContent: 'center', color: '#ffffff',
+          }}
+          >
+            Local
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }

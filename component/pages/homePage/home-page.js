@@ -6,6 +6,7 @@ import { Featurebutton } from '../../page-component/feature-button/feature-butto
 import { Header } from '../../page-component/header/header';
 import { getCached, saveCached } from '../../utils/cacheHelper';
 import BannerAds from '../../page-component/advertisement/BannerAds';
+import InterstitialAds from '../../page-component/advertisement/InterstitialAds';
 
 const style = StyleSheet.create({
   feature_container: {
@@ -42,8 +43,8 @@ export function Homepage({ navigation }) {
   return (
     <View>
       <BannerAds />
+      {/* <InterstitialAds /> */}
       <View style={{ marginTop: 60 }}>
-        <Text style={{ textAlign: 'center', fontSize: 20 }}>Home</Text>
         <View style={style.feature_container}>
           <Text>Recently</Text>
           <View style={style.container}>

@@ -29,7 +29,7 @@ export default function Navigation() {
         }}
       />
       <Tab.Screen
-        name="Files storage"
+        name="Storage"
         component={Files}
         options={({ navigation, route }) => ({
           // eslint-disable-next-line react/no-unstable-nested-components
@@ -41,7 +41,7 @@ export default function Navigation() {
           headerStyle: {
             backgroundColor: '#D9D9D9',
           },
-          tabBarLabel: 'Files storage',
+          tabBarLabel: 'Storage',
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="devices" color={color} size={size} />

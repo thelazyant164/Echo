@@ -57,14 +57,40 @@ export default function Profilepage({ navigation }) {
   const backendapi = `${Configuration.backendAPI}/api/me`;
   const APIKeys = {
     apple: 'your_revenuecat_apple_api_key',
-    google: 'your_revenuecat_google_api_key',
+    google: 'goog_pqalQAnQyNnZFTaJCyXUvNnJHIZ',
   };
   const Payment = async () => {
     try {
-      const offerings = await Purchases.getOfferings();
       Purchases.setDebugLogsEnabled(true);
       if (Platform.OS === 'android') {
         Purchases.configure({ apiKey: APIKeys.google });
+        try {
+          const offerings = await Purchases.getOfferings();
+          if (offerings.current !== null) {
+            try {
+              const purchaseMade = await Purchases
+                .purchasePackage(offerings.current.availablePackages[1]);
+              if (typeof purchaseMade.customerInfo.entitlements.active.my_entitlement_identifier !== 'undefined') {
+                axios.post(`${backendapi
+                }/api/me/${id}`, {
+                  headers: { Authorization: `Bearer ${accesstoken}` },
+                }).then((res) => {
+                  Alert.alert('Upgrade plan successfully');
+                }).catch((err) => {
+                  Alert.alert('Invalid username or password');
+                });
+              }
+            } catch (e) {
+              if (!e.userCancelled) {
+                console.log(e);
+              }
+            }
+
+            // Display current offering with offerings.current
+          }
+        } catch (e) {
+          console.log(e);
+        }
       } else {
         Purchases.configure({ apiKey: APIKeys.apple });
       }

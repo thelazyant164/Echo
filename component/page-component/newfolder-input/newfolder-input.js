@@ -11,16 +11,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   modalView: {
     position: 'absolute',
-    width: '80%',
-    height: '50%',
+    width: '100%',
+    height: '100%',
     zIndex: 1000,
     margin: 20,
     backgroundColor: 'white',
-    borderRadius: 20,
     padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
@@ -41,11 +39,11 @@ const styles = StyleSheet.create({
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
-    width: 200,
+    width: '80%',
   },
   buttonClose: {
     backgroundColor: '#2196F3',
-    width: 200,
+    width: '80%',
   },
   textStyle: {
     color: 'white',
@@ -55,10 +53,11 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+    fontSize: 20,
   },
   input: {
     borderColor: 'gray',
-    width: 250,
+    width: '90%',
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,

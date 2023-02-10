@@ -18,9 +18,10 @@ import LoadingEffect from '../loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
 import PlayAudioPage from '../../pages/audioPlayPage/audio-play';
 import {
-  updateActiveDirectory, updateFiles, showLoading, hideLoading, showFilesList,
+  updateAlbums, updateFiles, showLoading, hideLoading, showFilesList,
 } from './file-upload-form-slider';
 import ShowTextFilePage from '../../pages/showTextFile/show-text-file';
+import { listAllFilesAsync, listAllAlbumsAsync } from '../../utils/albumHelper';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,16 +63,20 @@ export default function FileUploadForm(props) {
   const formstate = useSelector((state) => state.form.value);
 
   async function FetchFolderContent() {
-    const result = await getFileContent(formstate.activeDirectory);
-    let files = [];
-    if (formstate.activeDirectory) {
+    const files = [];
+    if (formstate.album) {
+      const result = await listAllFilesAsync(formstate.album);
       result.assets.forEach((file) => {
-        files.push({ name: file.filename });
+        files.push({ name: file.filename, uri: file.uri });
       });
+      dispatch(updateFiles(files));
     } else {
-      files = result;
+      const result = await listAllAlbumsAsync();
+      result.forEach((file) => {
+        files.push(file.title);
+      });
+      dispatch(updateAlbums(files));
     }
-    dispatch(updateFiles(files));
   }
 
   const getFileCloud = () => {
@@ -92,9 +97,13 @@ export default function FileUploadForm(props) {
   const getFileDevice = async () => {
     setSource('device');
     dispatch(showLoading());
-    await getPermissionFirstTime();
-    const result = await getFileContent(formstate.activeDirectory);
-    dispatch(updateFiles(result));
+    // await getPermissionFirstTime();
+    const albums = [];
+    const result = await listAllAlbumsAsync();
+    result.forEach((item) => {
+      albums.push(item.title);
+    });
+    dispatch(updateAlbums(albums));
     dispatch(hideLoading());
     dispatch(showFilesList());
   };
@@ -127,9 +136,10 @@ export default function FileUploadForm(props) {
   }, [accesstoken]);
 
   useEffect(() => {
+    dispatch(updateAlbums([]));
     dispatch(hideLoading());
     FetchFolderContent();
-  }, [formstate.activeDirectory]);
+  }, [formstate.album]);
 
   return (
     <View>

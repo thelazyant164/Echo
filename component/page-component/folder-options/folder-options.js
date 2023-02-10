@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useEffect } from 'react';
 import {
   View, Modal, Text, TouchableOpacity, StyleSheet, TouchableWithoutFeedback, r,
 } from 'react-native';
@@ -7,7 +7,9 @@ import Feather from 'react-native-vector-icons/Feather';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { useSelector, useDispatch } from 'react-redux';
 // import BottomSheet from '@gorhom/bottom-sheet';
+import { deleteAlbumsAsync } from 'expo-media-library';
 import { updateFiles } from '../../pages/filesStoragePage/files-slider';
+import { getAlbum } from '../../utils/albumHelper';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,11 +45,10 @@ export default function FolderOptions(props) {
   const dispatch = useDispatch();
 
   const filesstate = useSelector((state) => state.files.value);
+
   const DeleteFolder = async () => {
-    const folderDir = FileSystem.documentDirectory + filesstate.folder;
-    await FileSystem.deleteAsync(folderDir);
-    const newFiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-    dispatch(updateFiles(newFiles));
+    const album = await getAlbum(filesstate.album);
+    await deleteAlbumsAsync([album.id]);
     refRBSheet.current.close();
   };
 

@@ -97,7 +97,7 @@ export default function PlayAudioPage({ location }) {
       return <View />;
     }
     return (
-      <Modal>
+      <Modal animationType="slide">
         <TouchableOpacity
           style={{
             display: 'flex',
@@ -163,7 +163,7 @@ export default function PlayAudioPage({ location }) {
     return <View />;
   }
   return (
-    <Modal>
+    <Modal animationType="slide">
       <TouchableOpacity
         style={{
           display: 'flex',

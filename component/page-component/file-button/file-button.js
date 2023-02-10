@@ -15,8 +15,8 @@ import GDrive from 'expo-google-drive-api-wrapper';
 import { Accesstoken } from '../../state/AccessTokencontext';
 import LoadingEffect from '../loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
-import { updateAudioFile } from '../file-upload-form/file-upload-form-slider';
-import { updateAudio } from '../../pages/filesStoragePage/files-slider';
+import { updateAudioFile, updateActiveDirectory as FormUpdateActiveDirectory, updateAsset as FormUpdateAsset } from '../file-upload-form/file-upload-form-slider';
+import { updateActiveDirectory, updateAudio, updateAsset } from '../../pages/filesStoragePage/files-slider';
 import { createAlbumAsync, createAssetsAsync, addAssettoAlbum } from '../../utils/albumHelper';
 
 const styles = StyleSheet.create({
@@ -33,11 +33,15 @@ export default function Filebutton(props) {
   const {
     file, source, mission, location, setVisible,
   } = props;
+
   const accesstoken = useContext(Accesstoken);
   const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const ShowFileOption = () => {
+    if (location === 'file') { dispatch(updateActiveDirectory(file.item.uri)); } else {
+      dispatch(FormUpdateActiveDirectory(file.uri));
+    }
     setVisible.current.open();
   };
   const GetFileFromCloud = () => {

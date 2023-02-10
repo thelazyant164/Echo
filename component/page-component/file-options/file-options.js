@@ -8,6 +8,8 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import * as Sharing from 'expo-sharing';
+import { deleteAssetsAsync } from 'expo-media-library';
+import { uploadAsync } from 'expo-file-system';
 import { Configuration } from '../../../configuration/configuration';
 import { updateFiles } from '../file-upload-form/file-upload-form-slider';
 import { Accesstoken } from '../../state/AccessTokencontext';
@@ -42,30 +44,61 @@ const styles = StyleSheet.create({
   },
 });
 export default function FileOptions(props) {
-  const { refRBSheet } = props;
+  const { refRBSheet, location } = props;
   const accesstoken = useContext(Accesstoken);
   const dispatch = useDispatch();
 
-  const formstate = useSelector((state) => state.files.value);
+  const filestate = useSelector((state) => state.files.value);
+  const formstate = useSelector((state) => state.form.value);
 
   const DeleteFile = async () => {
-    const fileDir = FileSystem.documentDirectory + formstate.folder;
-    await FileSystem.deleteAsync(fileDir);
+    if (location === 'file') {
+      deleteAssetsAsync(filestate.asset);
+    } else {
+      deleteAssetsAsync(formstate.asset);
+    }
   };
 
   const UploadFile = async () => {
-    axios.push(Configuration.backendAPI`/api/audios}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
-      .then((response) => {
-        refRBSheet.current.close();
-        Alert.alert('Upload success!');
+    if (location === 'file') {
+      uploadAsync(`${Configuration.backendAPI}/api/audios`, filestate.activeDirectory, {
+        fieldName: 'test', // TODO: give user option to name audio file? or take name from file system
+        httpMethod: 'POST',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        headers: {
+          Authorization: `Bearer ${accesstoken}`,
+        },
       })
-      .catch((err) => { console.error(err); });
+        .then((response) => {
+          refRBSheet.current.close();
+          Alert.alert('Upload success!');
+        })
+        .catch((err) => { console.error(err); });
+    } else {
+      uploadAsync(`${Configuration.backendAPI}/api/audios`, formstate.activeDirectory, {
+        fieldName: 'test',
+        httpMethod: 'POST',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        headers: {
+          Authorization: `Bearer ${accesstoken}`,
+        },
+      })
+        .then((response) => {
+          refRBSheet.current.close();
+          Alert.alert('Upload success!');
+        })
+        .catch((err) => { console.error(err); });
+    }
   };
 
   const ShareFile = async () => {
     const condition = await Sharing.isAvailableAsync();
     if (condition) {
-      Sharing.shareAsync(FileSystem.documentDirectory + formstate.folder);
+      if (location === 'file') {
+        Sharing.shareAsync(filestate.activeDirectory);
+      } else {
+        Sharing.shareAsync(formstate.activeDirectory);
+      }
     }
   };
 
