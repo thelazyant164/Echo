@@ -1,6 +1,8 @@
-import { React, useState, useEffect } from 'react';
 import {
-  Text, View, StyleSheet, Modal, TouchableOpacity,
+  React, useState, useEffect, useContext,
+} from 'react';
+import {
+  Text, View, StyleSheet, Modal, TouchableOpacity, Alert,
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
@@ -8,8 +10,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Sharing from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system';
+import { Configuration } from '../../../configuration/configuration';
 import { updateAudioFile } from '../../page-component/file-upload-form/file-upload-form-slider';
 import { updateAudio } from '../filesStoragePage/files-slider';
+import { Accesstoken } from '../../state/AccessTokencontext';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,6 +42,7 @@ const styles = StyleSheet.create({
 export default function PlayAudioPage({ location }) {
   const [isPlaying, setPlaying] = useState(true);
   const [audio, setAudio] = useState(null);
+  const accesstoken = useContext(Accesstoken);
   const dispatch = useDispatch();
   const formstate = useSelector((state) => state.form.value);
   const filesstate = useSelector((state) => state.files.value);
@@ -90,7 +96,35 @@ export default function PlayAudioPage({ location }) {
     }
   };
 
-  const UploadAudio = async () => {};
+  const UploadAudio = async () => {
+    if (location === 'upload') {
+      FileSystem.uploadAsync(`${Configuration.backendAPI}/api/audios`, formstate.audioFile.uri, {
+        fieldName: 'test', // TODO: give user option to name audio file? or take name from file system
+        httpMethod: 'POST',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        headers: {
+          Authorization: `Bearer ${accesstoken}`,
+        },
+      })
+        .then((response) => {
+          Alert.alert('Upload success!');
+        })
+        .catch((err) => { console.error(err); });
+    } else {
+      FileSystem.uploadAsync(`${Configuration.backendAPI}/api/audios`, filesstate.audio.item.uri, {
+        fieldName: 'test', // TODO: give user option to name audio file? or take name from file system
+        httpMethod: 'POST',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        headers: {
+          Authorization: `Bearer ${accesstoken}`,
+        },
+      })
+        .then((response) => {
+          Alert.alert('Upload success!');
+        })
+        .catch((err) => { console.error(err); });
+    }
+  };
 
   if (location === 'upload') {
     if (formstate.audioFile === null) {

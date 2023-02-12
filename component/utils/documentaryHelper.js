@@ -11,9 +11,9 @@ export const useDocumentReadWritePermission = () => {
       return result;
     }
     const album = await getAlbum(activeDirectory);
-    console.log('Album read:', album);
+
     const result = await listAllFilesAsync(album.id);
-    console.log('Asset read:', result);
+
     return result;
   };
   // const readAllFiles = async (activeDirectory) => {

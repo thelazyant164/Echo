@@ -43,7 +43,7 @@ export default function ListallFiles({
   const formstate = useSelector((state) => state.form.value);
 
   useEffect(() => {
-    console.log(formstate.albums);
+
   }, [formstate.files, formstate.album]);
 
   if ((!formstate.isFilesListVisible)) {
@@ -87,6 +87,7 @@ export default function ListallFiles({
         <FolderOptions
           folder={formstate.album}
           refRBSheet={refRBSheet}
+          location="upload"
         />
 
       </Modal>

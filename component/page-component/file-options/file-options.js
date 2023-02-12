@@ -102,9 +102,6 @@ export default function FileOptions(props) {
     }
   };
 
-  const RenameFile = () => {
-    refRBSheet.current.close();
-  };
   return (
     <RBSheet
       ref={refRBSheet}
@@ -113,10 +110,6 @@ export default function FileOptions(props) {
       closeOnPressMask
     >
       <View style={styles.container}>
-        <TouchableOpacity onPress={RenameFile} style={styles.button}>
-          <Feather name="edit" size={30} style={styles.icon} />
-          <Text style={styles.text}> Rename</Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={DeleteFile} style={styles.button}>
           <Feather name="trash-2" size={30} style={styles.icon} />
           <Text style={styles.text}> Delete</Text>

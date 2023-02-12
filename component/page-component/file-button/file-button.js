@@ -34,6 +34,8 @@ export default function Filebutton(props) {
     file, source, mission, location, setVisible,
   } = props;
 
+  const filestate = useSelector((state) => state.files.value);
+
   const accesstoken = useContext(Accesstoken);
   const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -44,13 +46,15 @@ export default function Filebutton(props) {
     }
     setVisible.current.open();
   };
+
   const GetFileFromCloud = () => {
-    axios.get(Configuration.backendAPI`/api/audios/${file.id}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
-      .then((response) => {
-        dispatch(updateAudioFile(response.data.content.buffer));
+    FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audios/${file.item.id}`, `${FileSystem.documentDirectory}Download/${file.item.filename}`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+      .then(({ uri }) => {
+        dispatch(updateAudio({ item: { uri } }));
       })
       .catch((err) => { console.log(err); });
   };
+
   const GetFileFromDevice = async () => {
     const fileDir = `${FileSystem.documentDirectory}/${file}`;
     const result = await FileSystem.readAsStringAsync(fileDir);
@@ -107,7 +111,6 @@ export default function Filebutton(props) {
     } else {
       const result = await GetFileFromDevice();
       const bufffer = await FileSystem.readAsStringAsync(result);
-
       FileSystem.downloadAsync(`${Configuration.backendAPI}/api/audio/${service}/${file.id}`, `${FileSystem.documentDirectory}`, {
         headers: { Authorization: `Bearer ${accesstoken}` },
       })
@@ -117,6 +120,7 @@ export default function Filebutton(props) {
           setLoading(false);
         })
         .catch((err) => {
+          // GetFileFromCloud();
           Alert.alert('Error while processing. Please try again.');
           setLoading(false);
         });
@@ -141,6 +145,8 @@ export default function Filebutton(props) {
         default:
           break;
       }
+    } else if (!filestate.album) {
+      GetFileFromCloud();
     } else {
       dispatch(updateAudio(file));
     }

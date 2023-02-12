@@ -6,8 +6,8 @@ import {
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
-import SwitchCustom from 'expo-custom-switch';
 import Entypo from 'react-native-vector-icons/Entypo';
+import axios from 'axios';
 import { FolderInput } from '../../page-component/newfolder-input/newfolder-input';
 import Folderbutton from '../../page-component/folder-button/folder-button';
 import Filebutton from '../../page-component/file-button/file-button';
@@ -16,6 +16,7 @@ import FolderOptions from '../../page-component/folder-options/folder-options';
 import PlayAudioPage from '../audioPlayPage/audio-play';
 import { Configuration } from '../../../configuration/configuration';
 import BannerAds from '../../page-component/advertisement/BannerAds';
+import LoadingEffect from '../../page-component/loading-effect/loading-effect';
 import { listAllAlbumsAsync, listAllFilesAsync } from '../../utils/albumHelper';
 import {
   showModal,
@@ -24,6 +25,7 @@ import {
   updateAlbum,
   updateAlbums,
 } from './files-slider';
+import { Accesstoken } from '../../state/AccessTokencontext';
 
 const style = StyleSheet.create({
   feature_container: {
@@ -65,57 +67,76 @@ const style = StyleSheet.create({
 export function Files() {
   const dispatch = useDispatch();
   const [source, setSource] = useState(null);
+  const [isLoading, setLoading] = useState(false);
   const filesstate = useSelector((state) => state.files.value);
+  const backendapi = `${Configuration.backendAPI}/api/audios`;
+  const DBaccesstoken = useContext(Accesstoken);
 
-  async function FirstTimeFetching() {
-    // await getPermissionFirstTime(filesstate.activeDirectory);
-    const files = await listAllAlbumsAsync();
-    const result = [];
-    files.forEach((file) => {
-      result.push(file.title);
-    });
-    dispatch(updateAlbums(result));
-  }
   async function FetchContent() {
-    try {
-      if (filesstate.album) {
-        const files = await listAllFilesAsync(filesstate.album);
-        if (files.assets !== undefined) {
-          dispatch(updateFiles(files.assets));
+    setLoading(true);
+    if (source === 'local') {
+      try {
+        if (filesstate.album) {
+          const files = await listAllFilesAsync(filesstate.album);
+          if (files.assets !== undefined) {
+            dispatch(updateFiles(files.assets));
+            setLoading(false);
+          } else {
+            dispatch(updateFiles(files));
+            setLoading(false);
+          }
         } else {
-          dispatch(updateFiles(files));
+          const files = await listAllAlbumsAsync();
+          const result = [];
+          files.forEach((file) => {
+            result.push(file.title);
+          });
+          dispatch(updateAlbums(result));
+          setLoading(false);
         }
-      } else {
-        const files = await listAllAlbumsAsync();
-        const result = [];
-        files.forEach((file) => {
-          result.push(file.title);
-        });
-        dispatch(updateAlbums(result));
+      } catch (err) {
+        dispatch(updateFiles([]));
+        setLoading(false);
+        console.log(err);
+        Alert.alert('Cannot read file from this album');
       }
-    } catch (err) {
-      dispatch(updateFiles([]));
-      console.log(err);
-      Alert.alert('Cannot read file from this album');
+    } else if (source === 'cloud') {
+      axios.get(backendapi, { headers: { Authorization: `Bearer ${DBaccesstoken}` } })
+        .then((response) => {
+          const files = [];
+          response.data.forEach((file) => {
+            files.push({ filename: file.name, id: file.id });
+          });
+          dispatch(updateFiles(files));
+          setLoading(false);
+        }).catch((err) => { console.error(err); setLoading(false); });
     }
   }
 
   const refRBSheet = useRef();
   const filesrefRBSheet = useRef();
+
   useEffect(() => {
+    setLoading(false);
+    dispatch(updateAlbums([]));
     dispatch(updateAlbum(''));
-    FirstTimeFetching();
+    dispatch(updateFiles([]));
+    // FirstTimeFetching();
   }, []);
 
   useEffect(() => {
+    if (source === null) {
+      dispatch(updateAlbums([]));
+      dispatch(updateFiles([]));
+    }
     FetchContent();
-  }, [filesstate.album]);
+  }, [filesstate.album, source]);
 
   useEffect(() => {
     FetchContent();
   }, [filesstate.isVisible]);
 
-  if (source) {
+  if (source === 'local') {
     return (
       <View style={filesstate.isVisible ? style.outer_container_faded : style.outer_container}>
         <BannerAds />
@@ -196,9 +217,64 @@ export function Files() {
         <FolderOptions
           folder={filesstate.album}
           refRBSheet={refRBSheet}
+          location="file"
         />
         <FileOptions refRBSheet={filesrefRBSheet} location="file" />
         <PlayAudioPage location="file" />
+        {isLoading ? <LoadingEffect /> : <View />}
+      </View>
+    );
+  }
+  if (source === 'cloud') {
+    return (
+      <View style={filesstate.isVisible ? style.outer_container_faded : style.outer_container}>
+        <BannerAds />
+        <View style={{ marginTop: 20, marginBottom: 100 }}>
+          <View style={style.feature_container}>
+            <TouchableOpacity onPress={() => { setSource(null); }} style={{ display: 'flex', flexDirection: 'row' }}>
+              <AntDesign name="arrowleft" size={30} style={{ marginLeft: 5, marginRight: 5 }} />
+              <Text style={{ fontSize: 20 }}>Back </Text>
+            </TouchableOpacity>
+            <View style={style.container}>
+              <FlatList
+                numColumns={3}
+                data={filesstate.files}
+                renderItem={(item) => (
+                  <Filebutton
+                    file={item}
+                    location="file"
+                    setVisible={filesrefRBSheet}
+                  />
+                )}
+              />
+            </View>
+          </View>
+          {/* {filesstate.album ? (
+            <View />
+          )
+            : (
+              <TouchableOpacity
+                style={style.addbutton}
+                onPress={() => dispatch(showModal())}
+              >
+                <Text style={{ fontSize: 30, textAlign: 'center', marginTop: 2 }}>+</Text>
+              </TouchableOpacity>
+            )}
+
+          {filesstate.isVisible && (
+          <FolderInput
+            activeDirectory={filesstate.activeDirectory}
+          />
+          )} */}
+        </View>
+        {/* <FolderOptions
+          folder={filesstate.album}
+          refRBSheet={refRBSheet}
+          location="file"
+        /> */}
+        <FileOptions refRBSheet={filesrefRBSheet} location="file" />
+        <PlayAudioPage location="file" />
+        {isLoading ? <LoadingEffect /> : <View />}
       </View>
     );
   }
@@ -225,12 +301,17 @@ export function Files() {
             justifyContent: 'center',
           }}
         >
-          <Text style={{
-            fontSize: 20, textAlign: 'center', justifyContent: 'center', color: '#ffffff',
-          }}
-          >
-            Cloud
-          </Text>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+            <View style={{ width: '20%' }}>
+              <Entypo name="icloud" size={30} style={{ color: '#ffffff' }} />
+            </View>
+            <Text style={{
+              fontSize: 20, textAlign: 'center', justifyContent: 'center', color: '#ffffff', marginRight: '18%',
+            }}
+            >
+              Cloud
+            </Text>
+          </View>
         </Pressable>
 
         <Pressable
@@ -243,16 +324,20 @@ export function Files() {
             justifyContent: 'center',
           }}
           onPress={() => {
-            setSource('file');
+            setSource('local');
           }}
         >
-          {/* <Entypo name="icloud" size={30} /> */}
-          <Text style={{
-            fontSize: 20, textAlign: 'center', justifyContent: 'center', color: '#ffffff',
-          }}
-          >
-            Local
-          </Text>
+          <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+            <View style={{ width: '20%' }}>
+              <Entypo name="mobile" size={30} style={{ color: '#ffffff' }} />
+            </View>
+            <Text style={{
+              fontSize: 20, textAlign: 'center', justifyContent: 'center', color: '#ffffff', marginRight: '18%',
+            }}
+            >
+              Local
+            </Text>
+          </View>
         </Pressable>
       </View>
     </View>

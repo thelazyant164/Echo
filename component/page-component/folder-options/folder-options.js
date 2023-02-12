@@ -41,15 +41,22 @@ const styles = StyleSheet.create({
   },
 });
 export default function FolderOptions(props) {
-  const { refRBSheet } = props;
+  const { refRBSheet, location } = props;
   const dispatch = useDispatch();
 
   const filesstate = useSelector((state) => state.files.value);
+  const formstate = useSelector((state) => state.form.value);
 
   const DeleteFolder = async () => {
-    const album = await getAlbum(filesstate.album);
-    await deleteAlbumsAsync([album.id]);
-    refRBSheet.current.close();
+    if (location === 'file') {
+      const album = await getAlbum(filesstate.activeDirectory);
+      await deleteAlbumsAsync([album.id]);
+      refRBSheet.current.close();
+    } else {
+      const album = await getAlbum(formstate.activeDirectory);
+      await deleteAlbumsAsync([album.id]);
+      refRBSheet.current.close();
+    }
   };
 
   const RenameFolder = () => {

@@ -4,8 +4,8 @@ import {
   StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { updateAlbum } from '../../pages/filesStoragePage/files-slider';
-import { updateAlbum as FormUpdateAlbum } from '../file-upload-form/file-upload-form-slider';
+import { updateAlbum, updateActiveDirectory } from '../../pages/filesStoragePage/files-slider';
+import { updateAlbum as FormUpdateAlbum, updateActiveDirectory as FormUpdateActiveDirectory } from '../file-upload-form/file-upload-form-slider';
 
 const style = StyleSheet.create({
   container: {
@@ -38,8 +38,8 @@ export default function Folderbutton({ activeDirectory, setVisible, location }) 
         }}
         onLongPress={() => {
           setVisible.current.open();
-          if (location === 'files') { dispatch(updateAlbum(activeDirectory)); } else {
-            dispatch(FormUpdateAlbum(activeDirectory));
+          if (location === 'files') { dispatch(updateActiveDirectory(activeDirectory)); } else {
+            dispatch(FormUpdateActiveDirectory(activeDirectory));
           }
         }}
       >
