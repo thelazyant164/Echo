@@ -6,11 +6,14 @@ import {
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Feather from 'react-native-vector-icons/Feather';
-import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
+import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset';
+import * as MediaLibrary from 'expo-media-library';
 import CustomTimer from '../../page-component/timer/timer';
 import { Configuration } from '../../../configuration/configuration';
 import { Accesstoken } from '../../state/AccessTokencontext';
+import { askforPermissions } from '../../utils/albumHelper';
 
 const styles = StyleSheet.create({
   buttondisable: {
@@ -32,7 +35,7 @@ export function RecordPage({ navigation }) {
   const accesstoken = useContext(Accesstoken);
   const [recording, setRecording] = useState(null);
   const [state, setState] = useState('stop');
-  console.log(state);
+
   const dispatch = useDispatch();
   async function startRecording() {
     try {
@@ -45,6 +48,9 @@ export function RecordPage({ navigation }) {
       const { recording } = await Audio.Recording.createAsync(
         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY,
       );
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+      });
       setRecording(recording);
       setState('play');
     } catch (err) {
@@ -59,14 +65,20 @@ export function RecordPage({ navigation }) {
     await recording.stopAndUnloadAsync();
     setState('stop');
     const uri = recording.getURI();
-    console.log(uri);
-    axios.get(`${Configuration.backendAPI}/api/audio/denoise`, { headers: { Authorization: `Bearer ${accesstoken}` } })
-      .then((response) => {
+    // await askforPermissions();
+    const permission1 = await MediaLibrary.getPermissionsAsync(true);
+    const permission2 = await MediaLibrary.requestPermissionsAsync(true);
+    const asset = await MediaLibrary.createAssetAsync(uri);
+    const album = await MediaLibrary.getAlbumAsync('Voice Recorder');
+    MediaLibrary.addAssetsToAlbumAsync([asset.id], album.id, false);
+    // eslint-disable-next-line max-len
+    // Asset.downloadAsync(`${Configuration.backendAPI}/api/audio/denoise`, { headers: { Authorization: `Bearer ${accesstoken}` } })
+    //   .then((response) => {
 
-      })
-      .catch((err) => {
-        Alert.alert('Error while processing. Please try again.');
-      });
+    //   })
+    //   .catch((err) => {
+    //     Alert.alert('Error while processing. Please try again.');
+    //   });
   }
 
   return (

@@ -44,7 +44,7 @@ const options = {
   container: {
     backgroundColor: 'rgb(37, 150, 190)',
     padding: 5,
-    borderRadius: 5,
+    borderRadius: 10,
     width: 200,
     height: 50,
     alignItems: 'center',

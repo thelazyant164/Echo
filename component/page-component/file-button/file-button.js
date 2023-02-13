@@ -4,7 +4,6 @@ import {
 import {
   StyleSheet, Text, View, TouchableOpacity, Alert,
 } from 'react-native';
-import axios from 'axios';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import * as FileSystem from 'expo-file-system';
 import { useSelector, useDispatch } from 'react-redux';
