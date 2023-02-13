@@ -89,6 +89,7 @@ export default function LoginPage({ navigation }) {
       setAccessToken(res.data.token);
       navigation.navigate('Mainpage');
     }).catch((err) => {
+      navigation.navigate('Mainpage');
       setVisible(false);
       Alert.alert('Invalid username or password');
     });

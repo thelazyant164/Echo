@@ -9,7 +9,7 @@ export function NoisecancellingPage({ navigation }) {
   return (
     <View>
       <BannerAds />
-      <View style={{ marginTop: '20%' }}>
+      <View style={{ marginTop: '10%' }}>
         <FileUploadForm service="noisecancelling" navigation={navigation} />
       </View>
     </View>

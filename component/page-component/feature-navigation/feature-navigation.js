@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import { Homepage } from '../../pages/homePage/home-page';
 import { RecordPage } from '../../pages/recordPage/record';
-import { VolumeAdjustPage } from '../../pages/volumeAdjust/volume-adjust';
 import { NoisecancellingPage } from '../../pages/noiseCancellingPage/noise-cancelling';
 import { SpeechToTextPage } from '../../pages/speechToTextPage/speech-to-text';
 import { NormalizationPage } from '../../pages/normalizationPage/normalization';
@@ -32,16 +31,6 @@ export default function FeatureNavigation() {
             backgroundColor: '#D9D9D9',
           },
         })}
-      />
-      <Stack.Screen
-        key="Volume adjust"
-        name="Volume adjust"
-        component={VolumeAdjustPage}
-        options={{
-          headerStyle: {
-            backgroundColor: '#D9D9D9',
-          },
-        }}
       />
       <Stack.Screen
         key="Noise cancelling"

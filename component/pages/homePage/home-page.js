@@ -25,21 +25,18 @@ const style = StyleSheet.create({
 });
 
 export function Homepage({ navigation }) {
-  const [data, setData] = useState(['Noise cancelling', 'Volume adjust']);
-  const allfeature = ['Noise cancelling', 'Volume adjust', 'Speech to text', 'Normalization', 'Noise reduction record', 'Silence'];
+  const [data, setData] = useState(['Noise cancelling']);
+  const allfeature = ['Noise cancelling', 'Speech to text', 'Normalization', 'Noise reduction record', 'Silence'];
 
   const getRecentFeature = async () => {
     const result = await getCached();
     setData(result);
   };
 
-  const saveRecentFeature = async (features) => {
-    saveCached(features);
-  };
   useEffect(() => {
-    saveRecentFeature(data);
     getRecentFeature();
   }, []);
+
   return (
     <View>
       <BannerAds />
@@ -53,7 +50,7 @@ export function Homepage({ navigation }) {
               data={data}
               renderItem={
                 ({ item, key }) => (
-                  <Featurebutton feature={item} navigation={navigation} />
+                  <Featurebutton feature={item} navigation={navigation} setData={setData} />
                 )
               }
             />
@@ -68,7 +65,7 @@ export function Homepage({ navigation }) {
               data={allfeature}
               renderItem={
                 ({ item, key }) => (
-                  <Featurebutton feature={item} navigation={navigation} />
+                  <Featurebutton feature={item} navigation={navigation} setData={setData} />
                 )
               }
             />
