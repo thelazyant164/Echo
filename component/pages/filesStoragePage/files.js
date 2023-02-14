@@ -8,6 +8,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import axios from 'axios';
+import * as MediaLibrary from 'expo-media-library';
 import { FolderInput } from '../../page-component/newfolder-input/newfolder-input';
 import Folderbutton from '../../page-component/folder-button/folder-button';
 import Filebutton from '../../page-component/file-button/file-button';
@@ -68,6 +69,7 @@ export function Files() {
   const dispatch = useDispatch();
   const [source, setSource] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
   const filesstate = useSelector((state) => state.files.value);
   const backendapi = `${Configuration.backendAPI}/api/audios`;
   const DBaccesstoken = useContext(Accesstoken);

@@ -5,6 +5,7 @@ import {
 import * as FileSystem from 'expo-file-system';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideModal } from '../../pages/filesStoragePage/files-slider';
+import { createAlbumAsync } from '../../utils/albumHelper';
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -66,17 +67,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export function FolderInput({ setShowModal }) {
+export function FolderInput() {
   const [newDirectory, setNewDirectory] = useState('New folder');
   // Create new folder in current active directory
   const dispatch = useDispatch();
 
-  const createNewFolder = async () => {
-    await FileSystem.makeDirectoryAsync(
-      `${FileSystem.documentDirectory}/${newDirectory}`,
-      { intermediates: true },
-    );
-  };
+  // const createNewFolder = async () => {
+  //   await FileSystem.makeDirectoryAsync(
+  //     `${FileSystem.documentDirectory}/${newDirectory}`,
+  //     { intermediates: true },
+  //   );
+  // };
 
   return (
     <View style={styles.centeredView}>
@@ -99,8 +100,7 @@ export function FolderInput({ setShowModal }) {
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => {
-                createNewFolder()
-                  // .then(setActiveDirectory(newDirectory))
+                createAlbumAsync(newDirectory)
                   .then(dispatch(hideModal()))
                   .catch(({ message }) => { Alert.alert(message); });
               }}

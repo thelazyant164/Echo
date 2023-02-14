@@ -3,10 +3,8 @@ import {
   StyleSheet, Text, View, FlatList,
 } from 'react-native';
 import { Featurebutton } from '../../page-component/feature-button/feature-button';
-import { Header } from '../../page-component/header/header';
 import { getCached, saveCached } from '../../utils/cacheHelper';
 import BannerAds from '../../page-component/advertisement/BannerAds';
-import InterstitialAds from '../../page-component/advertisement/InterstitialAds';
 
 const style = StyleSheet.create({
   feature_container: {

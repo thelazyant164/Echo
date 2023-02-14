@@ -36,6 +36,7 @@ export function Featurebutton(props) {
           result.unshift(feature);
           result.pop(result[result.length - 1]);
           saveCached(result);
+          setData(result);
         }}
         style={style.button}
       >

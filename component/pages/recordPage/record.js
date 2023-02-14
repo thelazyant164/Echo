@@ -66,11 +66,16 @@ export function RecordPage({ navigation }) {
     setState('stop');
     const uri = recording.getURI();
     // await askforPermissions();
-    const permission1 = await MediaLibrary.getPermissionsAsync(true);
-    const permission2 = await MediaLibrary.requestPermissionsAsync(true);
+    await askforPermissions();
     const asset = await MediaLibrary.createAssetAsync(uri);
     const album = await MediaLibrary.getAlbumAsync('Voice Recorder');
-    MediaLibrary.addAssetsToAlbumAsync([asset.id], album.id, false);
+    const isMigrate = await MediaLibrary.albumNeedsMigrationAsync(album.id);
+    if (isMigrate) {
+      await MediaLibrary.migrateAlbumIfNeededAsync(album.id);
+    }
+    MediaLibrary.addAssetsToAlbumAsync([asset.id], album.id)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
     // eslint-disable-next-line max-len
     // Asset.downloadAsync(`${Configuration.backendAPI}/api/audio/denoise`, { headers: { Authorization: `Bearer ${accesstoken}` } })
     //   .then((response) => {

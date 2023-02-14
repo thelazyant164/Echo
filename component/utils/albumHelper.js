@@ -23,25 +23,32 @@ export const askforPermissions = async () => {
   }
 };
 
+export const createDefaultAsset = async () => {
+  // MediaLibrary.createAssetAsync();
+};
+
 export const getAlbum = async (albumName) => {
+  await askforPermissions();
   const result = await MediaLibrary.getAlbumAsync(albumName);
   return result;
 };
 export const createAlbumAsync = async (albumName) => {
-  const album = await getAlbum('Download');
+  const album = await getAlbum(albumName);
   if (album == null) {
     const result = await MediaLibrary.createAlbumAsync(albumName);
     return result;
   }
+  return album;
 };
 export const listAllAlbumsAsync = async () => {
   const result = await MediaLibrary.getAlbumsAsync();
   return result;
 };
 export const listAllFilesAsync = async (album) => {
+  const { id } = await getAlbum(album);
   const result = await MediaLibrary.getAssetsAsync({
-    // album,
-    mediaType: ['audio'],
+    album: id,
+    mediaType: MediaLibrary.MediaType.audio,
   });
   return result;
 };

@@ -9,7 +9,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 // import * as AppAuth from 'expo-app-auth';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import * as Google from 'expo-auth-session/providers/google';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SetAccesstoken } from '../../state/AccessTokencontext';
 import LoadingEffect from '../../page-component/loading-effect/loading-effect';
 import { Configuration } from '../../../configuration/configuration';
@@ -89,7 +88,6 @@ export default function LoginPage({ navigation }) {
       setAccessToken(res.data.token);
       navigation.navigate('Mainpage');
     }).catch((err) => {
-      navigation.navigate('Mainpage');
       setVisible(false);
       Alert.alert('Invalid username or password');
     });
@@ -97,20 +95,24 @@ export default function LoginPage({ navigation }) {
 
   const SubmitDataGoogle = async () => {
     setVisible(true);
-    const result = await promptAsync();
-    if (result.authentication.accessToken) {
-      setAccessToken(result.authentication.accessToken);
-      axios.post(`${backendapi
-      }/google`, {
-        token: result.authentication.accessToken,
-      }).then((res) => {
-        setVisible(false);
-        setAccessToken(res.data.token);
-        navigation.navigate('Mainpage');
-      }).catch((err) => {
-        setVisible(false);
-        Alert.alert('Invalid username or password');
-      });
+    try {
+      const result = await promptAsync();
+      if (result.authentication.accessToken) {
+        setAccessToken(result.authentication.accessToken);
+        axios.post(`${backendapi
+        }/google`, {
+          token: result.authentication.accessToken,
+        }).then((res) => {
+          setVisible(false);
+          setAccessToken(res.data.token);
+          navigation.navigate('Mainpage');
+        }).catch((err) => {
+          setVisible(false);
+          Alert.alert('Invalid username or password');
+        });
+      }
+    } catch (err) {
+      setVisible(false);
     }
   };
 
