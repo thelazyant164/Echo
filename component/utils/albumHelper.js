@@ -48,7 +48,8 @@ export const listAllFilesAsync = async (album) => {
   const { id } = await getAlbum(album);
   const result = await MediaLibrary.getAssetsAsync({
     album: id,
-    mediaType: MediaLibrary.MediaType.audio,
+    mediaType: [MediaLibrary.MediaType.audio,
+      MediaLibrary.MediaType.video],
   });
   return result;
 };

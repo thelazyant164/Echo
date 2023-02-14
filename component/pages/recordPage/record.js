@@ -14,6 +14,7 @@ import CustomTimer from '../../page-component/timer/timer';
 import { Configuration } from '../../../configuration/configuration';
 import { Accesstoken } from '../../state/AccessTokencontext';
 import { askforPermissions } from '../../utils/albumHelper';
+import LoadingEffect from '../../page-component/loading-effect/loading-effect';
 
 const styles = StyleSheet.create({
   buttondisable: {
@@ -34,7 +35,12 @@ const styles = StyleSheet.create({
 export function RecordPage({ navigation }) {
   const accesstoken = useContext(Accesstoken);
   const [recording, setRecording] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [state, setState] = useState('stop');
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
 
   const dispatch = useDispatch();
   async function startRecording() {
@@ -62,20 +68,32 @@ export function RecordPage({ navigation }) {
     setState('pause');
   }
   async function stopRecording() {
+    setIsLoading(true);
     await recording.stopAndUnloadAsync();
     setState('stop');
     const uri = recording.getURI();
     // await askforPermissions();
     await askforPermissions();
     const asset = await MediaLibrary.createAssetAsync(uri);
-    const album = await MediaLibrary.getAlbumAsync('Voice Recorder');
+    const album = await MediaLibrary.getAlbumAsync('Echo recorder');
+    const assets = await MediaLibrary.getAssetsAsync({ album: album.id, mediaType: ['audio', 'video', 'photo', 'unknown'] });
     const isMigrate = await MediaLibrary.albumNeedsMigrationAsync(album.id);
     if (isMigrate) {
-      await MediaLibrary.migrateAlbumIfNeededAsync(album.id);
+      try {
+        await MediaLibrary.migrateAlbumIfNeededAsync(album.id);
+      } catch (err) {
+        setIsLoading(false);
+      }
+      console.log('Here');
     }
-    MediaLibrary.addAssetsToAlbumAsync([asset.id], album.id)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    try {
+      await MediaLibrary.addAssetsToAlbumAsync([asset.id], album.id);
+      setIsLoading(false);
+      Alert.alert('Saving success');
+    } catch (err) {
+      setIsLoading(false);
+      Alert.alert('There was an error saving the files. Please try again');
+    }
     // eslint-disable-next-line max-len
     // Asset.downloadAsync(`${Configuration.backendAPI}/api/audio/denoise`, { headers: { Authorization: `Bearer ${accesstoken}` } })
     //   .then((response) => {
@@ -121,7 +139,7 @@ export function RecordPage({ navigation }) {
           Save
         </Text>
       </TouchableOpacity>
-
+      {isLoading ? <LoadingEffect /> : <View />}
     </View>
   );
 }
