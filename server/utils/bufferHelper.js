@@ -4,6 +4,7 @@ const Audio = require('../models/audio');
 const {
   S3RetrieveItem,
 } = require('./s3Storage');
+const { convertToWAV } = require('./audioConverter');
 
 const clearTempBuffer = async (filePath) => {
   const unlinkPromise = promisify(fs.unlink);
@@ -28,6 +29,7 @@ const tryBufferFileFromId = async (request, response, out) => {
   const filePath = `./server/temp/files/${audio.name}.wav`;
   // write file to FS
   const err = await writeFilePromise(filePath, result.Body, 'ascii');
+  convertToWAV(filePath);
   if (err) {
     response.status(500).send({ error: 'cannot write file to temporary buffer for download' });
     return false;
@@ -58,6 +60,7 @@ const tryBufferFileFromRequest = async (request, response, out) => {
   const filePath = `./server/temp/files/${audioFile.name}.wav`;
   // write file to FS
   const err = await writeFilePromise(filePath, audioFile.buffer, 'ascii');
+  convertToWAV(filePath);
   if (err) {
     response.status(500).send({ error: 'cannot write file to temporary buffer for download' });
     return false;

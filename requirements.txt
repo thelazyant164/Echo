@@ -1,5 +1,0 @@
-noisereduce==2.0.1
-pydub==0.25.1
-scipy==1.5.4
-SoundFile==0.10.3.post1
-SpeechRecognition==3.8.1

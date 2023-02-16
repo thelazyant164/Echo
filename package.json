@@ -2,6 +2,7 @@
   "name": "echo-server",
   "version": "1.0.0",
   "main": "server/index.js",
+  "type": "commonjs",
   "scripts": {
     "server-dev": "cross-env NODE_ENV=development nodemon server/index.js",
     "server": "cross-env NODE_ENV=production nodemon server/index.js",
@@ -26,6 +27,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.4.4",
     "mongoose-unique-validator": "^3.1.0",
+    "mp3-to-wav": "^0.1.11",
     "multer": "^1.4.5-lts.1",
     "normalize-volume": "^1.0.8",
     "wav": "^1.0.2",

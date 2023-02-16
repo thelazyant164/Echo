@@ -20,7 +20,7 @@ def Transcribe(file):
     f = open(f"server/temp/results/{file}-transcribed.txt", "w")
     f.write(text)
     f.close()
-    print(f"server\\temp\\results\\{file}-transcribed.txt")
+    print(f"server/temp/results/{file}-transcribed.txt")
 
 
 Transcribe(sys.argv[1])

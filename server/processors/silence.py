@@ -15,7 +15,7 @@ def Silence(file):
         combined += chunk
     combined.export(
         f'server/temp/results/{file}-silenceRemoved.wav', format="wav")
-    print(f'server\\temp\\results\\{file}-silenceRemoved.wav')
+    print(f'server/temp/results/{file}-silenceRemoved.wav')
 
 
 Silence(sys.argv[1])
